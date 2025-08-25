@@ -1,0 +1,135 @@
+.apolice-list-container {
+  padding: 24px;
+  max-width: 1200px; /* Ou a largura que você desejar */
+  margin: 0 auto;
+  font-family: 'Roboto', sans-serif;
+  // Certifique-se de que este container pai não está restringindo o crescimento do filho
+}
+
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto; /* Mantenha para scroll em telas pequenas */
+}
+
+mat-table {
+  width: 100%;
+  // **CHAVE:** Use table-layout: fixed;
+  table-layout: fixed; /* Isso fará com que as larguras de coluna sejam respeitadas */
+  min-width: 800px; /* Garante que a tabela não fique muito espremida em telas pequenas */
+}
+
+.mat-column-apolice {
+  width: 10%; /* Exemplo: 10% da largura total da tabela */
+}
+.mat-column-clienteNome {
+  width: 20%;
+}
+.mat-column-seguradora {
+  width: 15%;
+}
+.mat-column-produto {
+  width: 20%;
+}
+.mat-column-dataEmissao {
+  width: 15%;
+}
+.mat-column-situacao {
+  width: 10%;
+}
+.mat-column-acoes {
+  width: 10%; /* Última coluna pode pegar o restante ou ter um tamanho fixo */
+  text-align: center;
+}
+
+.mat-content{
+  align-items: center;
+}
+
+/* OU, se você quer que uma coluna preencha o espaço restante sem porcentagens exatas */
+/* Remova as larguras acima e use flex-grow nos cabeçalhos e células */
+/* Ex: mat-header-cell e mat-cell podem ter flex-grow */
+/* .mat-column-clienteNome {
+  flex-grow: 2; // Cresce o dobro das outras
+}
+.mat-column-apolice, .mat-column-seguradora, .mat-column-produto, .mat-column-dataEmissao, .mat-column-situacao, .mat-column-acoes {
+  flex-grow: 1;
+}
+*/
+
+mat-header-cell, mat-cell {
+  padding: 12px 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  // Garanta que não há um `min-width` excessivo aqui que impeça o encolhimento
+  overflow: hidden; // Evita que o conteúdo vaze se for maior que a célula
+  text-overflow: ellipsis; // Adiciona reticências se o texto for cortado
+  white-space: nowrap; // Evita que o texto quebre linha
+}
+
+mat-header-cell {
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 0.85em;
+}
+
+.mat-row {
+  &:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+  }
+}
+
+.mat-paginator {
+  background: white;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+/* Estilos para quando não há dados */
+.mat-no-data-row {
+  td {
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+    color: rgba(0, 0, 0, 0.54);
+  }
+}
+
+.filter-panel {
+  margin-bottom: 24px;
+  // Opcional: Remova o background-color padrão do header se quiser um visual mais limpo
+  .mat-expansion-panel-header {
+    background-color: transparent; // Fundo transparente
+    height: auto; // Permite que a altura se ajuste ao conteúdo
+    padding: 8px 16px; // Ajuste o padding para o conteúdo do header
+      .mat-content{
+        align-items: center;
+      }
+  }
+
+  .custom-expansion-header {
+    display: flex;
+    align-items: center;
+    // Remova o flex-grow padrão para não ocupar toda a largura se você só quer o ícone
+    // Este `flex-basis` de 0 impede que o conteúdo cresça demais se houver outro conteúdo.
+    // O `flex-shrink` de 0 impede que encolha.
+    // O `flex-grow` de 0 impede que cresça para preencher espaço.
+    // Isso em conjunto faz com que o header ocupe apenas o espaço necessário para o ícone e texto.
+    flex: 0 0 auto;
+
+    .header-text {
+        margin-left: 8px; // Espaço entre o ícone e o texto
+        font-weight: bold;
+        color: #3f51b5; // Cor que você já usa para títulos
+    }
+  }
+
+  // Se você quiser que o header pareça apenas o ícone, você pode esconder o texto do header por padrão
+  // e exibi-lo apenas quando o painel estiver expandido ou em hover.
+  // Neste exemplo, o texto estará sempre visível ao lado do ícone.
+}

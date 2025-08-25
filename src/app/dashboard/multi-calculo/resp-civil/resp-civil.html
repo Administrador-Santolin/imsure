@@ -1,0 +1,42 @@
+<mat-card>
+  <mat-card-title>
+  <h1>Responsabilidade Civil Profissional</h1>
+    </mat-card-title>
+
+  <div class="form-group">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Especialidade:</mat-label>
+      <input type="text" aria-label="Especialidade" matInput [matAutocomplete]="auto"
+        [formControl]="filtroEspecialidade">
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="especialidadeSelecionada = $event.option.value">
+        <mat-option *ngFor="let option of especialidadesFiltradas" [value]="option">
+          {{ option }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <div>
+      <label>Cobertura: R$ {{ coberturaSelecionada | number:'1.2-2':'pt-BR' }}</label>
+      <mat-slider class="slider-full-width" min="50000" max="500000" step="50000" showTickMarks>
+        <input matSliderThumb [(ngModel)]="coberturaSelecionada">
+      </mat-slider>
+    </div>
+  </div>
+
+  <div>
+    <mat-slide-toggle [(ngModel)]="temChefe" labelPosition="before">Possui chefe de equipe: </mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="temDiretor" labelPosition="before">É diretor técnico: </mat-slide-toggle>
+  </div>
+
+  <mat-card-actions>
+    <button matButton (click)="calcularPreco()" [disabled]="!especialidadeSelecionada || !coberturaSelecionada">Calcular</button>
+  </mat-card-actions>
+
+
+  <div *ngIf="precosCalculados" class="resultado">
+    <h2>Valores da Simulação</h2>
+    <p>Total à vista: <strong>R$ {{ precosCalculados.totalAVista | number:'1.2-2':'pt-BR' }}</strong></p>
+    <p>6x de: <strong>R$ {{ precosCalculados.parcelas6x | number:'1.2-2':'pt-BR' }}</strong></p>
+    <p>10x de: <strong>R$ {{ precosCalculados.parcelas10x | number:'1.2-2':'pt-BR' }}</strong></p>
+  </div>
+</mat-card>

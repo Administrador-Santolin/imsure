@@ -1,0 +1,32 @@
+.clientes-container {
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.clientes-card {
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-column-actions {
+  width: 120px;
+  text-align: center;
+}
+
+.no-data-message {
+  text-align: center;
+  margin-top: 30px;
+  color: #616161;
+  font-style: italic;
+}

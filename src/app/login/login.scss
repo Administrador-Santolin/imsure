@@ -1,0 +1,41 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; // Garante que ocupa a altura total da tela
+  background-color: #f0f2f5; // Um fundo claro para destacar o card
+}
+
+.login-card {
+  width: 350px; // Largura fixa para o card de login
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Sombra suave
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; // Espaçamento entre os campos do formulário
+}
+
+mat-form-field {
+  width: 100%; // Faz os campos de input ocuparem 100% da largura do card
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end; // Alinha o botão à direita
+  padding-top: 20px;
+}
+
+.login-actions {
+  display: flex;
+  justify-content: space-between; // Alinha os botões nas extremidades
+  padding-top: 20px;
+}
+
+.error-message {
+  color: #f44336; // Cor vermelha para erros
+  margin-top: 10px;
+  text-align: center;
+}

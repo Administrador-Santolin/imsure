@@ -1,0 +1,61 @@
+<div class="cliente-detalhes-container">
+  <mat-card class="cliente-detalhes-card">
+    <mat-card-header>
+      <mat-card-title>
+        Detalhes do Cliente: {{ cliente?.nome || 'Carregando...' }}
+      </mat-card-title>
+      <div class="card-header-actions">
+        <button mat-raised-button color="accent" (click)="goToEdit()">
+          <mat-icon>edit</mat-icon> Editar
+        </button>
+        <button mat-raised-button (click)="goBackToList()">
+          <mat-icon>arrow_back</mat-icon> Voltar
+        </button>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <div *ngIf="isLoading" class="loading-spinner">
+        <mat-spinner></mat-spinner>
+        <p>Carregando detalhes do cliente...</p>
+      </div>
+
+      <div *ngIf="!isLoading && cliente">
+        <mat-tab-group animationDuration="500ms">
+          <!-- Aba 1: Dados Pessoais -->
+          <mat-tab label="Dados Pessoais">
+            <div class="tab-content">
+              <h3>Informações Pessoais</h3>
+              <p><strong>Nome:</strong> {{ cliente.nome }}</p>
+              <p><strong>E-mail:</strong> {{ cliente.email }}</p>
+              <p><strong>Telefone:</strong> {{ cliente.telefone }}</p>
+              <p *ngIf="cliente.cpf"><strong>CPF:</strong> {{ cliente.cpf }}</p>
+              <p *ngIf="cliente.dataNascimento"><strong>Data de Nasc.:</strong> {{ cliente.dataNascimento }}</p>
+              <p *ngIf="cliente.endereco"><strong>Endereço:</strong> {{ cliente.endereco }}</p>
+              <!-- Adicione mais campos aqui -->
+            </div>
+          </mat-tab>
+
+          <!-- Aba 2: Apólices -->
+          <mat-tab label="Apólices">
+            <div class="tab-content">
+              <h3>Apólices do Cliente</h3>
+              <p>Tabela de apólices virá aqui futuramente.</p>
+              <!-- Aqui você pode integrar um componente de tabela de apólices -->
+            </div>
+          </mat-tab>
+
+          <!-- Aba 3: Sinistros -->
+          <mat-tab label="Sinistros">
+            <div class="tab-content">
+              <h3>Sinistros do Cliente</h3>
+              <p>Tabela de sinistros virá aqui futuramente.</p>
+              <!-- Aqui você pode integrar um componente de tabela de sinistros -->
+            </div>
+          </mat-tab>
+
+          <!-- Adicione mais abas conforme necessário -->
+        </mat-tab-group>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

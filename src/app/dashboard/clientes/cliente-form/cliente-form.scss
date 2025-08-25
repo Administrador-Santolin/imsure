@@ -1,0 +1,36 @@
+.cliente-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; // Alinha no topo, não no centro vertical total
+  padding: 20px;
+  margin-top: 20px;
+  min-height: calc(100vh - 64px - 40px); // Ajusta a altura considerando toolbar e padding
+}
+
+.cliente-form-card {
+  width: 100%;
+  max-width: 600px; // Limita a largura do formulário
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+mat-card-header {
+  padding-bottom: 20px;
+  text-align: center;
+  justify-content: center; // Centraliza o título
+}
+
+.full-width-input {
+  width: 100%;
+  margin-bottom: 15px; // Espaçamento entre campos
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end; // Alinha os botões à direita
+  gap: 10px; // Espaçamento entre os botões
+  margin-top: 20px;
+}
+
+button mat-icon {
+  margin-right: 5px; // Espaçamento entre ícone e texto do botão
+}

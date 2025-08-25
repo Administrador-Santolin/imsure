@@ -1,0 +1,1052 @@
+{
+  "tabelaPrecos": [
+    {
+      "grupo": "G1",
+      "cobertura": 50000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 262.90, "parcelas6x": 273.79, "parcelas10x": 282.72 },
+        "comChefeSemDiretor": { "totalAVista": 277.47, "parcelas6x": 288.97, "parcelas10x": 298.40 },
+        "semChefeComDiretor": { "totalAVista": 292.05, "parcelas6x": 304.15, "parcelas10x": 314.07 },
+        "comChefeComDiretor": { "totalAVista": 309.54, "parcelas6x": 322.37, "parcelas10x": 332.88 }
+      }
+    },
+    {
+      "grupo": "G1",
+      "cobertura": 70000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 321.20, "parcelas6x": 334.51, "parcelas10x": 345.42 },
+        "comChefeSemDiretor": { "totalAVista": 341.61, "parcelas6x": 355.77, "parcelas10x": 367.36 },
+        "semChefeComDiretor": { "totalAVista": 362.01, "parcelas6x": 377.02, "parcelas10x": 389.31 },
+        "comChefeComDiretor": { "totalAVista": 386.50, "parcelas6x": 402.52, "parcelas10x": 415.64 }
+      }
+    },
+    {
+      "grupo": "G1",
+      "cobertura": 100000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 408.66, "parcelas6x": 425.59, "parcelas10x": 439.47 },
+        "comChefeSemDiretor": { "totalAVista": 437.81, "parcelas6x": 455.95, "parcelas10x": 470.82 },
+        "semChefeComDiretor": { "totalAVista": 466.96, "parcelas6x": 486.31, "parcelas10x": 502.17 },
+        "comChefeComDiretor": { "totalAVista": 501.94, "parcelas6x": 522.74, "parcelas10x": 539.79 }
+      }
+    },
+    {
+      "grupo": "G1",
+      "cobertura": 150000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 554.41, "parcelas6x": 577.39, "parcelas10x": 596.22 },
+        "comChefeSemDiretor": { "totalAVista": 598.14, "parcelas6x": 622.93, "parcelas10x": 643.24 },
+        "semChefeComDiretor": { "totalAVista": 641.87, "parcelas6x": 668.47, "parcelas10x": 690.26 },
+        "comChefeComDiretor": { "totalAVista": 694.34, "parcelas6x": 723.12, "parcelas10x": 746.69 }
+      }
+    },
+    {
+      "grupo": "G1",
+      "cobertura": 200000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 697.26, "parcelas6x": 726.15, "parcelas10x": 749.83 },
+        "comChefeSemDiretor": { "totalAVista": 755.27, "parcelas6x": 786.57, "parcelas10x": 812.21 },
+        "semChefeComDiretor": { "totalAVista": 813.28, "parcelas6x": 846.98, "parcelas10x": 874.60 },
+        "comChefeComDiretor": { "totalAVista": 882.89, "parcelas6x": 919.48, "parcelas10x": 949.46 }
+      }
+    },
+    {
+      "grupo": "G1",
+      "cobertura": 250000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 746.81, "parcelas6x": 777.76, "parcelas10x": 803.12 },
+        "comChefeSemDiretor": { "totalAVista": 809.78, "parcelas6x": 843.34, "parcelas10x": 870.84 },
+        "semChefeComDiretor": { "totalAVista": 872.75, "parcelas6x": 908.92, "parcelas10x": 938.55 },
+        "comChefeComDiretor": { "totalAVista": 948.31, "parcelas6x": 987.61, "parcelas10x": 1019.81 }
+      }
+    },
+    {
+      "grupo": "G1",
+      "cobertura": 300000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 793.46, "parcelas6x": 826.34, "parcelas10x": 853.28 },
+        "comChefeSemDiretor": { "totalAVista": 861.09, "parcelas6x": 896.77, "parcelas10x": 926.01 },
+        "semChefeComDiretor": { "totalAVista": 928.72, "parcelas6x": 967.21, "parcelas10x": 998.74 },
+        "comChefeComDiretor": { "totalAVista": 1009.88, "parcelas6x": 1051.73, "parcelas10x": 1086.02 }
+      }
+    },
+    {
+      "grupo": "G1",
+      "cobertura": 350000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 854.67, "parcelas6x": 890.09, "parcelas10x": 919.11 },
+        "comChefeSemDiretor": { "totalAVista": 928.43, "parcelas6x": 966.90, "parcelas10x": 998.43 },
+        "semChefeComDiretor": { "totalAVista": 1002.18, "parcelas6x": 1043.71, "parcelas10x": 1077.74 },
+        "comChefeComDiretor": { "totalAVista": 1090.68, "parcelas6x": 1135.89, "parcelas10x": 1172.92 }
+      }
+    },
+    {
+      "grupo": "G1",
+      "cobertura": 400000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 915.89, "parcelas6x": 953.85, "parcelas10x": 984.95 },
+        "comChefeSemDiretor": { "totalAVista": 995.77, "parcelas6x": 1037.04, "parcelas10x": 1070.85 },
+        "semChefeComDiretor": { "totalAVista": 1075.64, "parcelas6x": 1120.22, "parcelas10x": 1156.74 },
+        "comChefeComDiretor": { "totalAVista": 1171.49, "parcelas6x": 1220.04, "parcelas10x": 1259.82 }
+      }
+    },
+    {
+      "grupo": "G1",
+      "cobertura": 450000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 968.37, "parcelas6x": 1008.50, "parcelas10x": 1041.38 },
+        "comChefeSemDiretor": { "totalAVista": 1053.49, "parcelas6x": 1097.15, "parcelas10x": 1132.92 },
+        "semChefeComDiretor": { "totalAVista": 1138.61, "parcelas6x": 1185.80, "parcelas10x": 1224.46 },
+        "comChefeComDiretor": { "totalAVista": 1240.76, "parcelas6x": 1292.18, "parcelas10x": 1334.31 }
+      }
+    },
+    {
+      "grupo": "G1",
+      "cobertura": 500000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1017.92, "parcelas6x": 1060.11, "parcelas10x": 1094.67 },
+        "comChefeSemDiretor": { "totalAVista": 1108.00, "parcelas6x": 1153.92, "parcelas10x": 1191.54 },
+        "semChefeComDiretor": { "totalAVista": 1198.08, "parcelas6x": 1247.73, "parcelas10x": 1288.41 },
+        "comChefeComDiretor": { "totalAVista": 1306.17, "parcelas6x": 1360.30, "parcelas10x": 1404.65 }
+      }
+    },
+    {
+      "grupo": "G1",
+      "cobertura": 600000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1105.38, "parcelas6x": 1151.19, "parcelas10x": 1188.72 },
+        "comChefeSemDiretor": { "totalAVista": 1204.20, "parcelas6x": 1254.11, "parcelas10x": 1294.99 },
+        "semChefeComDiretor": { "totalAVista": 1303.02, "parcelas6x": 1357.03, "parcelas10x": 1401.27 },
+        "comChefeComDiretor": { "totalAVista": 1421.61, "parcelas6x": 1480.53, "parcelas10x": 1528.80 }
+      }
+    },
+    {
+      "grupo": "G2",
+      "cobertura": 50000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 302.65, "parcelas6x": 315.19, "parcelas10x": 325.47 },
+        "comChefeSemDiretor": { "totalAVista": 321.20, "parcelas6x": 334.51, "parcelas10x": 345.42 },
+        "semChefeComDiretor": { "totalAVista": 339.75, "parcelas6x": 353.83, "parcelas10x": 365.37 },
+        "comChefeComDiretor": { "totalAVista": 362.01, "parcelas6x": 377.02, "parcelas10x": 389.31 }
+      }
+    },
+    {
+      "grupo": "G2",
+      "cobertura": 70000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 376.85, "parcelas6x": 392.47, "parcelas10x": 405.27 },
+        "comChefeSemDiretor": { "totalAVista": 402.83, "parcelas6x": 419.52, "parcelas10x": 433.20 },
+        "semChefeComDiretor": { "totalAVista": 428.80, "parcelas6x": 446.57, "parcelas10x": 461.13 },
+        "comChefeComDiretor": { "totalAVista": 459.96, "parcelas6x": 479.03, "parcelas10x": 494.64 }
+      }
+    },
+    {
+      "grupo": "G2",
+      "cobertura": 100000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 488.16, "parcelas6x": 508.39, "parcelas10x": 524.97 },
+        "comChefeSemDiretor": { "totalAVista": 525.26, "parcelas6x": 547.03, "parcelas10x": 564.87 },
+        "semChefeComDiretor": { "totalAVista": 562.36, "parcelas6x": 585.67, "parcelas10x": 604.77 },
+        "comChefeComDiretor": { "totalAVista": 606.89, "parcelas6x": 632.04, "parcelas10x": 652.64 }
+      }
+    },
+    {
+      "grupo": "G2",
+      "cobertura": 150000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 673.67, "parcelas6x": 701.59, "parcelas10x": 724.46 },
+        "comChefeSemDiretor": { "totalAVista": 729.32, "parcelas6x": 759.55, "parcelas10x": 784.31 },
+        "semChefeComDiretor": { "totalAVista": 784.98, "parcelas6x": 817.51, "parcelas10x": 844.16 },
+        "comChefeComDiretor": { "totalAVista": 851.76, "parcelas6x": 887.06, "parcelas10x": 915.98 }
+      }
+    },
+    {
+      "grupo": "G2",
+      "cobertura": 200000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 855.47, "parcelas6x": 890.92, "parcelas10x": 919.97 },
+        "comChefeSemDiretor": { "totalAVista": 929.30, "parcelas6x": 967.82, "parcelas10x": 999.37 },
+        "semChefeComDiretor": { "totalAVista": 1003.13, "parcelas6x": 1044.71, "parcelas10x": 1078.77 },
+        "comChefeComDiretor": { "totalAVista": 1091.73, "parcelas6x": 1136.98, "parcelas10x": 1174.05 }
+      }
+    },
+    {
+      "grupo": "G2",
+      "cobertura": 250000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 918.54, "parcelas6x": 956.61, "parcelas10x": 987.80 },
+        "comChefeSemDiretor": { "totalAVista": 998.68, "parcelas6x": 1040.07, "parcelas10x": 1073.98 },
+        "semChefeComDiretor": { "totalAVista": 1078.82, "parcelas6x": 1123.53, "parcelas10x": 1160.16 },
+        "comChefeComDiretor": { "totalAVista": 1174.99, "parcelas6x": 1223.69, "parcelas10x": 1263.58 }
+      }
+    },
+    {
+      "grupo": "G2",
+      "cobertura": 300000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 977.91, "parcelas6x": 1018.43, "parcelas10x": 1051.64 },
+        "comChefeSemDiretor": { "totalAVista": 1063.98, "parcelas6x": 1108.08, "parcelas10x": 1144.20 },
+        "semChefeComDiretor": { "totalAVista": 1150.06, "parcelas6x": 1197.72, "parcelas10x": 1236.77 },
+        "comChefeComDiretor": { "totalAVista": 1253.35, "parcelas6x": 1305.29, "parcelas10x": 1347.85 }
+      }
+    },
+    {
+      "grupo": "G2",
+      "cobertura": 350000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1055.82, "parcelas6x": 1099.58, "parcelas10x": 1135.43 },
+        "comChefeSemDiretor": { "totalAVista": 1149.69, "parcelas6x": 1197.33, "parcelas10x": 1236.37 },
+        "semChefeComDiretor": { "totalAVista": 1243.55, "parcelas6x": 1295.09, "parcelas10x": 1337.32 },
+        "comChefeComDiretor": { "totalAVista": 1356.20, "parcelas6x": 1412.40, "parcelas10x": 1458.45 }
+      }
+    },
+    {
+      "grupo": "G2",
+      "cobertura": 400000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1133.73, "parcelas6x": 1180.72, "parcelas10x": 1219.21 },
+        "comChefeSemDiretor": { "totalAVista": 1235.39, "parcelas6x": 1286.59, "parcelas10x": 1328.54 },
+        "semChefeComDiretor": { "totalAVista": 1337.05, "parcelas6x": 1392.46, "parcelas10x": 1437.86 },
+        "comChefeComDiretor": { "totalAVista": 1459.04, "parcelas6x": 1519.51, "parcelas10x": 1569.05 }
+      }
+    },
+    {
+      "grupo": "G2",
+      "cobertura": 450000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1200.52, "parcelas6x": 1250.27, "parcelas10x": 1291.03 },
+        "comChefeSemDiretor": { "totalAVista": 1308.85, "parcelas6x": 1363.10, "parcelas10x": 1407.54 },
+        "semChefeComDiretor": { "totalAVista": 1417.19, "parcelas6x": 1475.93, "parcelas10x": 1524.04 },
+        "comChefeComDiretor": { "totalAVista": 1547.20, "parcelas6x": 1611.32, "parcelas10x": 1663.85 }
+      }
+    },
+    {
+      "grupo": "G2",
+      "cobertura": 500000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1263.59, "parcelas6x": 1315.96, "parcelas10x": 1358.86 },
+        "comChefeSemDiretor": { "totalAVista": 1378.23, "parcelas6x": 1435.35, "parcelas10x": 1482.15 },
+        "semChefeComDiretor": { "totalAVista": 1492.88, "parcelas6x": 1554.75, "parcelas10x": 1605.44 },
+        "comChefeComDiretor": { "totalAVista": 1630.45, "parcelas6x": 1698.03, "parcelas10x": 1753.39 }
+      }
+    },
+    {
+      "grupo": "G2",
+      "cobertura": 600000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1374.90, "parcelas6x": 1431.88, "parcelas10x": 1478.56 },
+        "comChefeSemDiretor": { "totalAVista": 1500.67, "parcelas6x": 1562.86, "parcelas10x": 1613.82 },
+        "semChefeComDiretor": { "totalAVista": 1626.45, "parcelas6x": 1693.85, "parcelas10x": 1749.08 },
+        "comChefeComDiretor": { "totalAVista": 1777.38, "parcelas6x": 1851.04, "parcelas10x": 1911.39 }
+      }
+    },
+    {
+      "grupo": "G3",
+      "cobertura": 50000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 384.36, "parcelas6x": 400.29, "parcelas10x": 413.34 },
+        "comChefeSemDiretor": { "totalAVista": 411.09, "parcelas6x": 428.12, "parcelas10x": 442.08 },
+        "semChefeComDiretor": { "totalAVista": 437.81, "parcelas6x": 455.95, "parcelas10x": 470.82 },
+        "comChefeComDiretor": { "totalAVista": 469.87, "parcelas6x": 489.35, "parcelas10x": 505.30 }
+      }
+    },
+    {
+      "grupo": "G3",
+      "cobertura": 70000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 491.25, "parcelas6x": 511.61, "parcelas10x": 528.29 },
+        "comChefeSemDiretor": { "totalAVista": 528.66, "parcelas6x": 550.57, "parcelas10x": 568.52 },
+        "semChefeComDiretor": { "totalAVista": 566.07, "parcelas6x": 589.53, "parcelas10x": 608.76 },
+        "comChefeComDiretor": { "totalAVista": 610.97, "parcelas6x": 636.29, "parcelas10x": 657.03 }
+      }
+    },
+    {
+      "grupo": "G3",
+      "cobertura": 100000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 651.59, "parcelas6x": 678.59, "parcelas10x": 700.71 },
+        "comChefeSemDiretor": { "totalAVista": 705.03, "parcelas6x": 734.25, "parcelas10x": 758.19 },
+        "semChefeComDiretor": { "totalAVista": 758.47, "parcelas6x": 789.91, "parcelas10x": 815.66 },
+        "comChefeComDiretor": { "totalAVista": 822.61, "parcelas6x": 856.70, "parcelas10x": 884.63 }
+      }
+    },
+    {
+      "grupo": "G3",
+      "cobertura": 150000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 918.81, "parcelas6x": 956.89, "parcelas10x": 988.08 },
+        "comChefeSemDiretor": { "totalAVista": 998.97, "parcelas6x": 1040.38, "parcelas10x": 1074.29 },
+        "semChefeComDiretor": { "totalAVista": 1079.14, "parcelas6x": 1123.86, "parcelas10x": 1160.51 },
+        "comChefeComDiretor": { "totalAVista": 1175.34, "parcelas6x": 1224.05, "parcelas10x": 1263.96 }
+      }
+    },
+    {
+      "grupo": "G3",
+      "cobertura": 200000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1180.68, "parcelas6x": 1229.62, "parcelas10x": 1269.71 },
+        "comChefeSemDiretor": { "totalAVista": 1287.04, "parcelas6x": 1340.38, "parcelas10x": 1384.08 },
+        "semChefeComDiretor": { "totalAVista": 1393.39, "parcelas6x": 1451.14, "parcelas10x": 1498.45 },
+        "comChefeComDiretor": { "totalAVista": 1521.02, "parcelas6x": 1584.06, "parcelas10x": 1635.70 }
+      }
+    },
+    {
+      "grupo": "G3",
+      "cobertura": 250000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1271.54, "parcelas6x": 1324.24, "parcelas10x": 1367.41 },
+        "comChefeSemDiretor": { "totalAVista": 1386.98, "parcelas6x": 1444.46, "parcelas10x": 1491.56 },
+        "semChefeComDiretor": { "totalAVista": 1502.42, "parcelas6x": 1564.69, "parcelas10x": 1615.70 },
+        "comChefeComDiretor": { "totalAVista": 1640.95, "parcelas6x": 1708.95, "parcelas10x": 1764.67 }
+      }
+    },
+    {
+      "grupo": "G3",
+      "cobertura": 300000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1357.05, "parcelas6x": 1413.29, "parcelas10x": 1459.37 },
+        "comChefeSemDiretor": { "totalAVista": 1481.04, "parcelas6x": 1542.42, "parcelas10x": 1592.71 },
+        "semChefeComDiretor": { "totalAVista": 1605.03, "parcelas6x": 1671.55, "parcelas10x": 1726.05 },
+        "comChefeComDiretor": { "totalAVista": 1753.82, "parcelas6x": 1826.51, "parcelas10x": 1886.06 }
+      }
+    },
+    {
+      "grupo": "G3",
+      "cobertura": 350000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1469.28, "parcelas6x": 1530.18, "parcelas10x": 1580.07 },
+        "comChefeSemDiretor": { "totalAVista": 1604.50, "parcelas6x": 1670.99, "parcelas10x": 1725.47 },
+        "semChefeComDiretor": { "totalAVista": 1739.71, "parcelas6x": 1811.81, "parcelas10x": 1870.88 },
+        "comChefeComDiretor": { "totalAVista": 1901.97, "parcelas6x": 1980.79, "parcelas10x": 2045.37 }
+      }
+    },
+    {
+      "grupo": "G3",
+      "cobertura": 400000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1581.52, "parcelas6x": 1647.06, "parcelas10x": 1700.76 },
+        "comChefeSemDiretor": { "totalAVista": 1727.96, "parcelas6x": 1799.57, "parcelas10x": 1858.24 },
+        "semChefeComDiretor": { "totalAVista": 1874.39, "parcelas6x": 1952.07, "parcelas10x": 2015.72 },
+        "comChefeComDiretor": { "totalAVista": 2050.12, "parcelas6x": 2135.08, "parcelas10x": 2204.69 }
+      }
+    },
+    {
+      "grupo": "G3",
+      "cobertura": 450000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1677.72, "parcelas6x": 1747.25, "parcelas10x": 1804.21 },
+        "comChefeSemDiretor": { "totalAVista": 1833.78, "parcelas6x": 1909.77, "parcelas10x": 1972.04 },
+        "semChefeComDiretor": { "totalAVista": 1989.83, "parcelas6x": 2072.30, "parcelas10x": 2139.86 },
+        "comChefeComDiretor": { "totalAVista": 2177.10, "parcelas6x": 2267.33, "parcelas10x": 2341.25 }
+      }
+    },
+    {
+      "grupo": "G3",
+      "cobertura": 500000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1768.57, "parcelas6x": 1841.87, "parcelas10x": 1901.92 },
+        "comChefeSemDiretor": { "totalAVista": 1933.72, "parcelas6x": 2013.86, "parcelas10x": 2079.51 },
+        "semChefeComDiretor": { "totalAVista": 2098.86, "parcelas6x": 2185.84, "parcelas10x": 2257.11 },
+        "comChefeComDiretor": { "totalAVista": 2297.03, "parcelas6x": 2392.23, "parcelas10x": 2470.22 }
+      }
+    },
+    {
+      "grupo": "G3",
+      "cobertura": 600000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1928.91, "parcelas6x": 2008.85, "parcelas10x": 2074.34 },
+        "comChefeSemDiretor": { "totalAVista": 2110.08, "parcelas6x": 2197.53, "parcelas10x": 2269.18 },
+        "semChefeComDiretor": { "totalAVista": 2291.26, "parcelas6x": 2386.22, "parcelas10x": 2464.02 },
+        "comChefeComDiretor": { "totalAVista": 2508.67, "parcelas6x": 2612.64, "parcelas10x": 2697.82 }
+      }
+    },
+    {
+      "grupo": "G4",
+      "cobertura": 50000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 437.37, "parcelas6x": 455.49, "parcelas10x": 470.34 },
+        "comChefeSemDiretor": { "totalAVista": 469.39, "parcelas6x": 488.84, "parcelas10x": 504.78 },
+        "semChefeComDiretor": { "totalAVista": 501.41, "parcelas6x": 522.19, "parcelas10x": 539.22 },
+        "comChefeComDiretor": { "totalAVista": 539.84, "parcelas6x": 562.21, "parcelas10x": 580.54 }
+      }
+    },
+    {
+      "grupo": "G4",
+      "cobertura": 70000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 565.46, "parcelas6x": 588.89, "parcelas10x": 608.09 },
+        "comChefeSemDiretor": { "totalAVista": 610.29, "parcelas6x": 635.58, "parcelas10x": 656.30 },
+        "semChefeComDiretor": { "totalAVista": 655.12, "parcelas6x": 682.27, "parcelas10x": 704.51 },
+        "comChefeComDiretor": { "totalAVista": 708.92, "parcelas6x": 738.30, "parcelas10x": 762.37 }
+      }
+    },
+    {
+      "grupo": "G4",
+      "cobertura": 100000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 757.59, "parcelas6x": 788.99, "parcelas10x": 814.71 },
+        "comChefeSemDiretor": { "totalAVista": 821.64, "parcelas6x": 855.69, "parcelas10x": 883.59 },
+        "semChefeComDiretor": { "totalAVista": 885.68, "parcelas6x": 922.39, "parcelas10x": 952.46 },
+        "comChefeComDiretor": { "totalAVista": 962.53, "parcelas6x": 1002.43, "parcelas10x": 1035.11 }
+      }
+    },
+    {
+      "grupo": "G4",
+      "cobertura": 150000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1077.82, "parcelas6x": 1122.48, "parcelas10x": 1159.08 },
+        "comChefeSemDiretor": { "totalAVista": 1173.88, "parcelas6x": 1222.53, "parcelas10x": 1262.39 },
+        "semChefeComDiretor": { "totalAVista": 1269.95, "parcelas6x": 1322.58, "parcelas10x": 1365.70 },
+        "comChefeComDiretor": { "totalAVista": 1385.23, "parcelas6x": 1442.64, "parcelas10x": 1489.67 }
+      }
+    },
+    {
+      "grupo": "G4",
+      "cobertura": 200000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1391.64, "parcelas6x": 1449.31, "parcelas10x": 1496.56 },
+        "comChefeSemDiretor": { "totalAVista": 1519.09, "parcelas6x": 1582.04, "parcelas10x": 1633.62 },
+        "semChefeComDiretor": { "totalAVista": 1646.53, "parcelas6x": 1714.77, "parcelas10x": 1770.68 },
+        "comChefeComDiretor": { "totalAVista": 1799.47, "parcelas6x": 1874.05, "parcelas10x": 1935.15 }
+      }
+    },
+    {
+      "grupo": "G4",
+      "cobertura": 250000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1500.51, "parcelas6x": 1562.70, "parcelas10x": 1613.65 },
+        "comChefeSemDiretor": { "totalAVista": 1638.85, "parcelas6x": 1706.77, "parcelas10x": 1762.41 },
+        "semChefeComDiretor": { "totalAVista": 1777.19, "parcelas6x": 1850.84, "parcelas10x": 1911.18 },
+        "comChefeComDiretor": { "totalAVista": 1943.19, "parcelas6x": 2023.72, "parcelas10x": 2089.70 }
+      }
+    },
+    {
+      "grupo": "G4",
+      "cobertura": 300000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1602.98, "parcelas6x": 1669.42, "parcelas10x": 1723.85 },
+        "comChefeSemDiretor": { "totalAVista": 1751.57, "parcelas6x": 1824.16, "parcelas10x": 1883.63 },
+        "semChefeComDiretor": { "totalAVista": 1900.15, "parcelas6x": 1978.90, "parcelas10x": 2043.42 },
+        "comChefeComDiretor": { "totalAVista": 2078.45, "parcelas6x": 2164.59, "parcelas10x": 2235.16 }
+      }
+    },
+    {
+      "grupo": "G4",
+      "cobertura": 350000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1737.48, "parcelas6x": 1809.49, "parcelas10x": 1868.48 },
+        "comChefeSemDiretor": { "totalAVista": 1899.51, "parcelas6x": 1978.23, "parcelas10x": 2042.73 },
+        "semChefeComDiretor": { "totalAVista": 2061.55, "parcelas6x": 2146.98, "parcelas10x": 2216.98 },
+        "comChefeComDiretor": { "totalAVista": 2255.99, "parcelas6x": 2349.48, "parcelas10x": 2426.08 }
+      }
+    },
+    {
+      "grupo": "G4",
+      "cobertura": 400000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1871.97, "parcelas6x": 1949.55, "parcelas10x": 2013.12 },
+        "comChefeSemDiretor": { "totalAVista": 2047.46, "parcelas6x": 2132.31, "parcelas10x": 2201.83 },
+        "semChefeComDiretor": { "totalAVista": 2222.94, "parcelas6x": 2315.07, "parcelas10x": 2390.54 },
+        "comChefeComDiretor": { "totalAVista": 2433.52, "parcelas6x": 2534.37, "parcelas10x": 2617.00 }
+      }
+    },
+    {
+      "grupo": "G4",
+      "cobertura": 450000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1987.25, "parcelas6x": 2069.61, "parcelas10x": 2137.09 },
+        "comChefeSemDiretor": { "totalAVista": 2174.26, "parcelas6x": 2264.37, "parcelas10x": 2338.20 },
+        "semChefeComDiretor": { "totalAVista": 2361.28, "parcelas6x": 2459.14, "parcelas10x": 2539.31 },
+        "comChefeComDiretor": { "totalAVista": 2585.69, "parcelas6x": 2692.85, "parcelas10x": 2780.64 }
+      }
+    },
+    {
+      "grupo": "G4",
+      "cobertura": 500000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 2096.13, "parcelas6x": 2183.00, "parcelas10x": 2254.17 },
+        "comChefeSemDiretor": { "totalAVista": 2294.03, "parcelas6x": 2389.10, "parcelas10x": 2466.99 },
+        "semChefeComDiretor": { "totalAVista": 2491.93, "parcelas6x": 2595.20, "parcelas10x": 2679.81 },
+        "comChefeComDiretor": { "totalAVista": 2729.41, "parcelas6x": 2842.52, "parcelas10x": 2935.20 }
+      }
+    },
+    {
+      "grupo": "G4",
+      "cobertura": 600000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 2288.26, "parcelas6x": 2383.10, "parcelas10x": 2460.79 },
+        "comChefeSemDiretor": { "totalAVista": 2505.38, "parcelas6x": 2609.21, "parcelas10x": 2694.28 },
+        "semChefeComDiretor": { "totalAVista": 2722.49, "parcelas6x": 2835.32, "parcelas10x": 2927.76 },
+        "comChefeComDiretor": { "totalAVista": 2983.02, "parcelas6x": 3106.65, "parcelas10x": 3207.94 }
+      }
+    },
+    {
+      "grupo": "G5",
+      "cobertura": 50000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 664.84, "parcelas6x": 692.39, "parcelas10x": 714.96 },
+        "comChefeSemDiretor": { "totalAVista": 719.61, "parcelas6x": 749.43, "parcelas10x": 773.86 },
+        "semChefeComDiretor": { "totalAVista": 774.38, "parcelas6x": 806.47, "parcelas10x": 832.76 },
+        "comChefeComDiretor": { "totalAVista": 840.10, "parcelas6x": 874.92, "parcelas10x": 903.44 }
+      }
+    },
+    {
+      "grupo": "G5",
+      "cobertura": 70000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 883.91, "parcelas6x": 920.55, "parcelas10x": 950.56 },
+        "comChefeSemDiretor": { "totalAVista": 960.59, "parcelas6x": 1000.40, "parcelas10x": 1033.02 },
+        "semChefeComDiretor": { "totalAVista": 1037.27, "parcelas6x": 1080.26, "parcelas10x": 1115.48 },
+        "comChefeComDiretor": { "totalAVista": 1129.28, "parcelas6x": 1176.08, "parcelas10x": 1214.43 }
+      }
+    },
+    {
+      "grupo": "G5",
+      "cobertura": 100000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1212.53, "parcelas6x": 1262.78, "parcelas10x": 1303.95 },
+        "comChefeSemDiretor": { "totalAVista": 1322.07, "parcelas6x": 1376.86, "parcelas10x": 1421.75 },
+        "semChefeComDiretor": { "totalAVista": 1431.61, "parcelas6x": 1490.94, "parcelas10x": 1539.55 },
+        "comChefeComDiretor": { "totalAVista": 1563.06, "parcelas6x": 1627.83, "parcelas10x": 1680.91 }
+      }
+    },
+    {
+      "grupo": "G5",
+      "cobertura": 150000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1760.23, "parcelas6x": 1833.18, "parcelas10x": 1892.94 },
+        "comChefeSemDiretor": { "totalAVista": 1924.53, "parcelas6x": 2004.29, "parcelas10x": 2069.64 },
+        "semChefeComDiretor": { "totalAVista": 2088.84, "parcelas6x": 2175.41, "parcelas10x": 2246.34 },
+        "comChefeComDiretor": { "totalAVista": 2286.01, "parcelas6x": 2380.75, "parcelas10x": 2458.37 }
+      }
+    },
+    {
+      "grupo": "G5",
+      "cobertura": 200000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 2296.97, "parcelas6x": 2392.16, "parcelas10x": 2470.15 },
+        "comChefeSemDiretor": { "totalAVista": 2514.95, "parcelas6x": 2619.18, "parcelas10x": 2704.57 },
+        "semChefeComDiretor": { "totalAVista": 2732.93, "parcelas6x": 2846.19, "parcelas10x": 2938.99 },
+        "comChefeComDiretor": { "totalAVista": 2994.51, "parcelas6x": 3118.61, "parcelas10x": 3220.29 }
+      }
+    },
+    {
+      "grupo": "G5",
+      "cobertura": 250000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 2483.18, "parcelas6x": 2586.09, "parcelas10x": 2670.41 },
+        "comChefeSemDiretor": { "totalAVista": 2719.79, "parcelas6x": 2832.50, "parcelas10x": 2924.85 },
+        "semChefeComDiretor": { "totalAVista": 2956.39, "parcelas6x": 3078.91, "parcelas10x": 3179.30 },
+        "comChefeComDiretor": { "totalAVista": 3240.31, "parcelas6x": 3374.60, "parcelas10x": 3484.63 }
+      }
+    },
+    {
+      "grupo": "G5",
+      "cobertura": 300000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 2658.44, "parcelas6x": 2768.62, "parcelas10x": 2858.88 },
+        "comChefeSemDiretor": { "totalAVista": 2912.57, "parcelas6x": 3033.28, "parcelas10x": 3132.18 },
+        "semChefeComDiretor": { "totalAVista": 3166.70, "parcelas6x": 3297.94, "parcelas10x": 3405.47 },
+        "comChefeComDiretor": { "totalAVista": 3471.66, "parcelas6x": 3615.54, "parcelas10x": 3733.42 }
+      }
+    },
+    {
+      "grupo": "G5",
+      "cobertura": 350000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 2888.48, "parcelas6x": 3008.18, "parcelas10x": 3106.26 },
+        "comChefeSemDiretor": { "totalAVista": 3165.61, "parcelas6x": 3296.80, "parcelas10x": 3404.29 },
+        "semChefeComDiretor": { "totalAVista": 3442.74, "parcelas6x": 3585.42, "parcelas10x": 3702.32 },
+        "comChefeComDiretor": { "totalAVista": 3775.30, "parcelas6x": 3931.76, "parcelas10x": 4059.95 }
+      }
+    },
+    {
+      "grupo": "G5",
+      "cobertura": 400000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 3118.51, "parcelas6x": 3247.75, "parcelas10x": 3353.64 },
+        "comChefeSemDiretor": { "totalAVista": 3418.64, "parcelas6x": 3560.32, "parcelas10x": 3676.40 },
+        "semChefeComDiretor": { "totalAVista": 3718.78, "parcelas6x": 3872.90, "parcelas10x": 3999.17 },
+        "comChefeComDiretor": { "totalAVista": 4078.94, "parcelas6x": 4247.99, "parcelas10x": 4386.49 }
+      }
+    },
+    {
+      "grupo": "G5",
+      "cobertura": 450000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 3315.68, "parcelas6x": 3453.09, "parcelas10x": 3565.67 },
+        "comChefeSemDiretor": { "totalAVista": 3635.53, "parcelas6x": 3786.20, "parcelas10x": 3909.64 },
+        "semChefeComDiretor": { "totalAVista": 3955.38, "parcelas6x": 4119.31, "parcelas10x": 4253.61 },
+        "comChefeComDiretor": { "totalAVista": 4339.21, "parcelas6x": 4519.04, "parcelas10x": 4666.38 }
+      }
+    },
+    {
+      "grupo": "G5",
+      "cobertura": 500000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 3501.89, "parcelas6x": 3647.02, "parcelas10x": 3765.93 },
+        "comChefeSemDiretor": { "totalAVista": 3840.37, "parcelas6x": 3999.53, "parcelas10x": 4129.92 },
+        "semChefeComDiretor": { "totalAVista": 4178.84, "parcelas6x": 4352.03, "parcelas10x": 4493.92 },
+        "comChefeComDiretor": { "totalAVista": 4585.01, "parcelas6x": 4775.03, "parcelas10x": 4930.71 }
+      }
+    },
+    {
+      "grupo": "G5",
+      "cobertura": 600000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 3830.51, "parcelas6x": 3989.26, "parcelas10x": 4119.32 },
+        "comChefeSemDiretor": { "totalAVista": 4201.85, "parcelas6x": 4375.99, "parcelas10x": 4518.66 },
+        "semChefeComDiretor": { "totalAVista": 4573.18, "parcelas6x": 4762.71, "parcelas10x": 4917.99 },
+        "comChefeComDiretor": { "totalAVista": 5018.79, "parcelas6x": 5226.78, "parcelas10x": 5397.19 }
+      }
+    },
+    {
+      "grupo": "G6",
+      "cobertura": 50000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 720.05, "parcelas6x": 749.89, "parcelas10x": 774.34 },
+        "comChefeSemDiretor": { "totalAVista": 780.34, "parcelas6x": 812.68, "parcelas10x": 839.17 },
+        "semChefeComDiretor": { "totalAVista": 840.63, "parcelas6x": 875.47, "parcelas10x": 904.01 },
+        "comChefeComDiretor": { "totalAVista": 912.98, "parcelas6x": 950.81, "parcelas10x": 981.81 }
+      }
+    },
+    {
+      "grupo": "G6",
+      "cobertura": 70000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 961.21, "parcelas6x": 1001.05, "parcelas10x": 1033.68 },
+        "comChefeSemDiretor": { "totalAVista": 1045.62, "parcelas6x": 1088.95, "parcelas10x": 1124.45 },
+        "semChefeComDiretor": { "totalAVista": 1130.02, "parcelas6x": 1176.86, "parcelas10x": 1215.22 },
+        "comChefeComDiretor": { "totalAVista": 1231.31, "parcelas6x": 1282.34, "parcelas10x": 1324.15 }
+      }
+    },
+    {
+      "grupo": "G6",
+      "cobertura": 100000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1322.95, "parcelas6x": 1377.78, "parcelas10x": 1422.70 },
+        "comChefeSemDiretor": { "totalAVista": 1443.53, "parcelas6x": 1503.36, "parcelas10x": 1552.37 },
+        "semChefeComDiretor": { "totalAVista": 1564.12, "parcelas6x": 1628.94, "parcelas10x": 1682.05 },
+        "comChefeComDiretor": { "totalAVista": 1708.81, "parcelas6x": 1779.63, "parcelas10x": 1837.65 }
+      }
+    },
+    {
+      "grupo": "G6",
+      "cobertura": 150000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1925.86, "parcelas6x": 2005.67, "parcelas10x": 2071.06 },
+        "comChefeSemDiretor": { "totalAVista": 2106.73, "parcelas6x": 2194.04, "parcelas10x": 2265.57 },
+        "semChefeComDiretor": { "totalAVista": 2287.60, "parcelas6x": 2382.41, "parcelas10x": 2460.08 },
+        "comChefeComDiretor": { "totalAVista": 2504.65, "parcelas6x": 2608.45, "parcelas10x": 2693.49 }
+      }
+    },
+    {
+      "grupo": "G6",
+      "cobertura": 200000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 2516.71, "parcelas6x": 2621.01, "parcelas10x": 2706.46 },
+        "comChefeSemDiretor": { "totalAVista": 2756.66, "parcelas6x": 2870.91, "parcelas10x": 2964.51 },
+        "semChefeComDiretor": { "totalAVista": 2996.62, "parcelas6x": 3120.81, "parcelas10x": 3222.56 },
+        "comChefeComDiretor": { "totalAVista": 3284.57, "parcelas6x": 3420.69, "parcelas10x": 3532.22 }
+      }
+    },
+    {
+      "grupo": "G6",
+      "cobertura": 250000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 2721.69, "parcelas6x": 2834.49, "parcelas10x": 2926.90 },
+        "comChefeSemDiretor": { "totalAVista": 2982.15, "parcelas6x": 3105.74, "parcelas10x": 3207.00 },
+        "semChefeComDiretor": { "totalAVista": 3242.60, "parcelas6x": 3376.99, "parcelas10x": 3487.09 },
+        "comChefeComDiretor": { "totalAVista": 3555.15, "parcelas6x": 3702.49, "parcelas10x": 3823.20 }
+      }
+    },
+    {
+      "grupo": "G6",
+      "cobertura": 300000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 2914.62, "parcelas6x": 3035.42, "parcelas10x": 3134.38 },
+        "comChefeSemDiretor": { "totalAVista": 3194.37, "parcelas6x": 3326.76, "parcelas10x": 3435.22 },
+        "semChefeComDiretor": { "totalAVista": 3474.12, "parcelas6x": 3618.10, "parcelas10x": 3736.06 },
+        "comChefeComDiretor": { "totalAVista": 3809.82, "parcelas6x": 3967.71, "parcelas10x": 4097.07 }
+      }
+    },
+    {
+      "grupo": "G6",
+      "cobertura": 350000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 3167.84, "parcelas6x": 3299.13, "parcelas10x": 3406.69 },
+        "comChefeSemDiretor": { "totalAVista": 3472.91, "parcelas6x": 3616.84, "parcelas10x": 3734.76 },
+        "semChefeComDiretor": { "totalAVista": 3777.98, "parcelas6x": 3934.56, "parcelas10x": 4062.84 },
+        "comChefeComDiretor": { "totalAVista": 4144.07, "parcelas6x": 4315.81, "parcelas10x": 4456.52 }
+      }
+    },
+    {
+      "grupo": "G6",
+      "cobertura": 400000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 3421.06, "parcelas6x": 3562.85, "parcelas10x": 3679.01 },
+        "comChefeSemDiretor": { "totalAVista": 3751.46, "parcelas6x": 3906.93, "parcelas10x": 4034.31 },
+        "semChefeComDiretor": { "totalAVista": 4081.85, "parcelas6x": 4251.02, "parcelas10x": 4389.61 },
+        "comChefeComDiretor": { "totalAVista": 4478.32, "parcelas6x": 4663.92, "parcelas10x": 4815.98 }
+      }
+    },
+    {
+      "grupo": "G6",
+      "cobertura": 450000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 3638.11, "parcelas6x": 3788.89, "parcelas10x": 3912.42 },
+        "comChefeSemDiretor": { "totalAVista": 3990.21, "parcelas6x": 4155.58, "parcelas10x": 4291.06 },
+        "semChefeComDiretor": { "totalAVista": 4342.30, "parcelas6x": 4522.26, "parcelas10x": 4669.70 },
+        "comChefeComDiretor": { "totalAVista": 4764.82, "parcelas6x": 4962.29, "parcelas10x": 5124.08 }
+      }
+    },
+    {
+      "grupo": "G6",
+      "cobertura": 500000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 3843.10, "parcelas6x": 4002.37, "parcelas10x": 4132.86 },
+        "comChefeSemDiretor": { "totalAVista": 4215.69, "parcelas6x": 4390.41, "parcelas10x": 4533.55 },
+        "semChefeComDiretor": { "totalAVista": 4588.29, "parcelas6x": 4778.44, "parcelas10x": 4934.24 },
+        "comChefeComDiretor": { "totalAVista": 5035.40, "parcelas6x": 5244.09, "parcelas10x": 5415.06 }
+      }
+    },
+    {
+      "grupo": "G6",
+      "cobertura": 600000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 4204.84, "parcelas6x": 4379.11, "parcelas10x": 4521.88 },
+        "comChefeSemDiretor": { "totalAVista": 4613.61, "parcelas6x": 4804.82, "parcelas10x": 4961.47 },
+        "semChefeComDiretor": { "totalAVista": 5022.38, "parcelas6x": 5230.53, "parcelas10x": 5401.06 },
+        "comChefeComDiretor": { "totalAVista": 5512.91, "parcelas6x": 5741.38, "parcelas10x": 5928.57 }
+      }
+    },
+    {
+      "grupo": "G6A",
+      "cobertura": 50000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1108.73, "parcelas6x": 1154.68, "parcelas10x": 1192.33 },
+        "comChefeSemDiretor": { "totalAVista": 1207.89, "parcelas6x": 1257.95, "parcelas10x": 1298.97 },
+        "semChefeComDiretor": { "totalAVista": 1307.05, "parcelas6x": 1361.22, "parcelas10x": 1405.60 },
+        "comChefeComDiretor": { "totalAVista": 1426.04, "parcelas6x": 1485.14, "parcelas10x": 1533.56 }
+      }
+    },
+    {
+      "grupo": "G6A",
+      "cobertura": 70000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 1505.37, "parcelas6x": 1567.76, "parcelas10x": 1618.87 },
+        "comChefeSemDiretor": { "totalAVista": 1644.19, "parcelas6x": 1712.33, "parcelas10x": 1768.16 },
+        "semChefeComDiretor": { "totalAVista": 1783.02, "parcelas6x": 1856.91, "parcelas10x": 1917.45 },
+        "comChefeComDiretor": { "totalAVista": 1949.60, "parcelas6x": 2030.40, "parcelas10x": 2096.60 }
+      }
+    },
+    {
+      "grupo": "G6A",
+      "cobertura": 100000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 2100.33, "parcelas6x": 2187.37, "parcelas10x": 2258.69 },
+        "comChefeSemDiretor": { "totalAVista": 2298.64, "parcelas6x": 2393.91, "parcelas10x": 2471.96 },
+        "semChefeComDiretor": { "totalAVista": 2496.96, "parcelas6x": 2600.45, "parcelas10x": 2685.23 },
+        "comChefeComDiretor": { "totalAVista": 2734.94, "parcelas6x": 2848.29, "parcelas10x": 2941.15 }
+      }
+    },
+    {
+      "grupo": "G6A",
+      "cobertura": 150000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 3091.92, "parcelas6x": 3220.06, "parcelas10x": 3325.04 },
+        "comChefeSemDiretor": { "totalAVista": 3389.40, "parcelas6x": 3529.86, "parcelas10x": 3644.95 },
+        "semChefeComDiretor": { "totalAVista": 3686.87, "parcelas6x": 3839.67, "parcelas10x": 3964.86 },
+        "comChefeComDiretor": { "totalAVista": 4043.85, "parcelas6x": 4211.44, "parcelas10x": 4348.74 }
+      }
+    },
+    {
+      "grupo": "G6A",
+      "cobertura": 200000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 4063.68, "parcelas6x": 4232.09, "parcelas10x": 4370.07 },
+        "comChefeSemDiretor": { "totalAVista": 4458.33, "parcelas6x": 4643.10, "parcelas10x": 4794.48 },
+        "semChefeComDiretor": { "totalAVista": 4852.99, "parcelas6x": 5054.11, "parcelas10x": 5218.89 },
+        "comChefeComDiretor": { "totalAVista": 5326.57, "parcelas6x": 5547.32, "parcelas10x": 5728.18 }
+      }
+    },
+    {
+      "grupo": "G6A",
+      "cobertura": 250000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 4400.82, "parcelas6x": 4583.20, "parcelas10x": 4732.63 },
+        "comChefeSemDiretor": { "totalAVista": 4829.19, "parcelas6x": 5029.33, "parcelas10x": 5193.30 },
+        "semChefeComDiretor": { "totalAVista": 5257.55, "parcelas6x": 5475.45, "parcelas10x": 5653.96 },
+        "comChefeComDiretor": { "totalAVista": 5771.60, "parcelas6x": 6010.79, "parcelas10x": 6206.76 }
+      }
+    },
+    {
+      "grupo": "G6A",
+      "cobertura": 300000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 4718.13, "parcelas6x": 4913.66, "parcelas10x": 5073.87 },
+        "comChefeSemDiretor": { "totalAVista": 5178.23, "parcelas6x": 5392.83, "parcelas10x": 5568.65 },
+        "semChefeComDiretor": { "totalAVista": 5638.33, "parcelas6x": 5872.00, "parcelas10x": 6063.44 },
+        "comChefeComDiretor": { "totalAVista": 6190.44, "parcelas6x": 6447.00, "parcelas10x": 6657.19 }
+      }
+    },
+    {
+      "grupo": "G6A",
+      "cobertura": 350000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 5134.60, "parcelas6x": 5347.39, "parcelas10x": 5521.73 },
+        "comChefeSemDiretor": { "totalAVista": 5636.34, "parcelas6x": 5869.93, "parcelas10x": 6061.31 },
+        "semChefeComDiretor": { "totalAVista": 6138.09, "parcelas6x": 6392.47, "parcelas10x": 6600.89 },
+        "comChefeComDiretor": { "totalAVista": 6740.18, "parcelas6x": 7019.52, "parcelas10x": 7248.38 }
+      }
+    },
+    {
+      "grupo": "G6A",
+      "cobertura": 400000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 5551.07, "parcelas6x": 5781.12, "parcelas10x": 5969.60 },
+        "comChefeSemDiretor": { "totalAVista": 6094.46, "parcelas6x": 6347.03, "parcelas10x": 6553.97 },
+        "semChefeComDiretor": { "totalAVista": 6637.85, "parcelas6x": 6912.95, "parcelas10x": 7138.33 },
+        "comChefeComDiretor": { "totalAVista": 7289.92, "parcelas6x": 7592.04, "parcelas10x": 7839.57 }
+      }
+    },
+    {
+      "grupo": "G6A",
+      "cobertura": 450000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 5908.04, "parcelas6x": 6152.89, "parcelas10x": 6353.49 },
+        "comChefeSemDiretor": { "totalAVista": 6487.13, "parcelas6x": 6755.98, "parcelas10x": 6976.24 },
+        "semChefeComDiretor": { "totalAVista": 7066.22, "parcelas6x": 7359.07, "parcelas10x": 7599.00 },
+        "comChefeComDiretor": { "totalAVista": 7761.13, "parcelas6x": 8082.77, "parcelas10x": 8346.30 }
+      }
+    },
+    {
+      "grupo": "G6A",
+      "cobertura": 500000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 6245.18, "parcelas6x": 6504.00, "parcelas10x": 6716.05 },
+        "comChefeSemDiretor": { "totalAVista": 6857.98, "parcelas6x": 7142.20, "parcelas10x": 7375.06 },
+        "semChefeComDiretor": { "totalAVista": 7470.79, "parcelas6x": 7780.40, "parcelas10x": 8034.07 },
+        "comChefeComDiretor": { "totalAVista": 8206.15, "parcelas6x": 8546.24, "parcelas10x": 8824.88 }
+      }
+    },
+    {
+      "grupo": "G6A",
+      "cobertura": 600000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 6840.14, "parcelas6x": 7123.61, "parcelas10x": 7355.87 },
+        "comChefeSemDiretor": { "totalAVista": 7512.43, "parcelas6x": 7823.78, "parcelas10x": 8078.86 },
+        "semChefeComDiretor": { "totalAVista": 8184.73, "parcelas6x": 8523.94, "parcelas10x": 8801.85 },
+        "comChefeComDiretor": { "totalAVista": 8991.49, "parcelas6x": 9364.13, "parcelas10x": 9669.43 }
+      }
+    },
+    {
+      "grupo": "G6B",
+      "cobertura": 50000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 2424.97, "parcelas6x": 2525.47, "parcelas10x": 2607.80 },
+        "comChefeSemDiretor": { "totalAVista": 2655.75, "parcelas6x": 2765.81, "parcelas10x": 2855.99 },
+        "semChefeComDiretor": { "totalAVista": 2886.53, "parcelas6x": 3006.16, "parcelas10x": 3104.17 },
+        "comChefeComDiretor": { "totalAVista": 3163.47, "parcelas6x": 3294.58, "parcelas10x": 3401.99 }
+      }
+    },
+    {
+      "grupo": "G6B",
+      "cobertura": 70000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 3348.10, "parcelas6x": 3486.85, "parcelas10x": 3600.54 },
+        "comChefeSemDiretor": { "totalAVista": 3671.19, "parcelas6x": 3823.34, "parcelas10x": 3947.99 },
+        "semChefeComDiretor": { "totalAVista": 3994.29, "parcelas6x": 4159.83, "parcelas10x": 4295.45 },
+        "comChefeComDiretor": { "totalAVista": 4382.00, "parcelas6x": 4563.61, "parcelas10x": 4712.40 }
+      }
+    },
+    {
+      "grupo": "G6B",
+      "cobertura": 100000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 4732.79, "parcelas6x": 4928.94, "parcelas10x": 5089.63 },
+        "comChefeSemDiretor": { "totalAVista": 5194.36, "parcelas6x": 5409.63, "parcelas10x": 5586.00 },
+        "semChefeComDiretor": { "totalAVista": 5655.92, "parcelas6x": 5890.32, "parcelas10x": 6082.37 },
+        "comChefeComDiretor": { "totalAVista": 6209.80, "parcelas6x": 6467.16, "parcelas10x": 6678.01 }
+      }
+    },
+    {
+      "grupo": "G6B",
+      "cobertura": 150000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 7040.62, "parcelas6x": 7332.41, "parcelas10x": 7571.47 },
+        "comChefeSemDiretor": { "totalAVista": 7732.97, "parcelas6x": 8053.45, "parcelas10x": 8316.01 },
+        "semChefeComDiretor": { "totalAVista": 8425.31, "parcelas6x": 8774.49, "parcelas10x": 9060.56 },
+        "comChefeComDiretor": { "totalAVista": 9256.13, "parcelas6x": 9639.74, "parcelas10x": 9954.02 }
+      }
+    },
+    {
+      "grupo": "G6B",
+      "cobertura": 200000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 9302.29, "parcelas6x": 9687.81, "parcelas10x": 10003.66 },
+        "comChefeSemDiretor": { "totalAVista": 10220.80, "parcelas6x": 10644.39, "parcelas10x": 10991.43 },
+        "semChefeComDiretor": { "totalAVista": 11139.32, "parcelas6x": 11600.97, "parcelas10x": 11979.20 },
+        "comChefeComDiretor": { "totalAVista": 12241.53, "parcelas6x": 12748.87, "parcelas10x": 13164.52 }
+      }
+    },
+    {
+      "grupo": "G6B",
+      "cobertura": 250000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 10086.95, "parcelas6x": 10504.99, "parcelas10x": 10847.48 },
+        "comChefeSemDiretor": { "totalAVista": 11083.93, "parcelas6x": 11543.28, "parcelas10x": 11919.63 },
+        "semChefeComDiretor": { "totalAVista": 12080.91, "parcelas6x": 12581.58, "parcelas10x": 12991.78 },
+        "comChefeComDiretor": { "totalAVista": 13277.29, "parcelas6x": 13827.54, "parcelas10x": 14278.36 }
+      }
+    },
+    {
+      "grupo": "G6B",
+      "cobertura": 300000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 10825.45, "parcelas6x": 11274.10, "parcelas10x": 11641.67 },
+        "comChefeSemDiretor": { "totalAVista": 11896.28, "parcelas6x": 12389.31, "parcelas10x": 12793.24 },
+        "semChefeComDiretor": { "totalAVista": 12967.11, "parcelas6x": 13504.52, "parcelas10x": 13944.81 },
+        "comChefeComDiretor": { "totalAVista": 14252.11, "parcelas6x": 14842.77, "parcelas10x": 15326.69 }
+      }
+    },
+    {
+      "grupo": "G6B",
+      "cobertura": 350000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 11794.74, "parcelas6x": 12283.55, "parcelas10x": 12684.04 },
+        "comChefeSemDiretor": { "totalAVista": 12962.50, "parcelas6x": 13499.71, "parcelas10x": 13939.84 },
+        "semChefeComDiretor": { "totalAVista": 14130.26, "parcelas6x": 14715.87, "parcelas10x": 15195.65 },
+        "comChefeComDiretor": { "totalAVista": 15531.57, "parcelas6x": 16175.25, "parcelas10x": 16702.62 }
+      }
+    },
+    {
+      "grupo": "G6B",
+      "cobertura": 400000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 12764.03, "parcelas6x": 13293.01, "parcelas10x": 13726.40 },
+        "comChefeSemDiretor": { "totalAVista": 14028.71, "parcelas6x": 14610.11, "parcelas10x": 15086.45 },
+        "semChefeComDiretor": { "totalAVista": 15293.40, "parcelas6x": 15927.21, "parcelas10x": 16446.49 },
+        "comChefeComDiretor": { "totalAVista": 16811.03, "parcelas6x": 17507.74, "parcelas10x": 18078.54 }
+      }
+    },
+    {
+      "grupo": "G6B",
+      "cobertura": 450000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 13594.84, "parcelas6x": 14158.26, "parcelas10x": 14619.86 },
+        "comChefeSemDiretor": { "totalAVista": 14942.61, "parcelas6x": 15561.89, "parcelas10x": 16069.25 },
+        "semChefeComDiretor": { "totalAVista": 16290.38, "parcelas6x": 16965.51, "parcelas10x": 17518.64 },
+        "comChefeComDiretor": { "totalAVista": 17907.71, "parcelas6x": 18649.86, "parcelas10x": 19257.91 }
+      }
+    },
+    {
+      "grupo": "G6B",
+      "cobertura": 500000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 14379.50, "parcelas6x": 14975.44, "parcelas10x": 15463.69 },
+        "comChefeSemDiretor": { "totalAVista": 15805.74, "parcelas6x": 16460.78, "parcelas10x": 16997.46 },
+        "semChefeComDiretor": { "totalAVista": 17231.98, "parcelas6x": 17946.13, "parcelas10x": 18531.23 },
+        "comChefeComDiretor": { "totalAVista": 18943.46, "parcelas6x": 19728.54, "parcelas10x": 20371.75 }
+      }
+    },
+    {
+      "grupo": "G6B",
+      "cobertura": 600000,
+      "precos": {
+        "semChefeSemDiretor": { "totalAVista": 15764.20, "parcelas6x": 16417.52, "parcelas10x": 16952.78 },
+        "comChefeSemDiretor": { "totalAVista": 17328.90, "parcelas6x": 18047.07, "parcelas10x": 18635.47 },
+        "semChefeComDiretor": { "totalAVista": 18893.61, "parcelas6x": 19676.63, "parcelas10x": 20318.15 },
+        "comChefeComDiretor": { "totalAVista": 20771.26, "parcelas6x": 21632.09, "parcelas10x": 22337.36 }
+      }
+    }
+  ],
+  "legendasEspecialidades": {
+    "acupuntura": "G2",
+    "alergologia e imunologia": "G2",
+    "anestesiologia": "G6",
+    "biólogo": "G1",
+    "biomedicina com estética": "G5",
+    "biomedicina sem estética": "G2",
+    "bioquímica": "G1",
+    "cardiologia clínica e pediátrica": "G2",
+    "cardiologia intervencionista": "G3",
+    "cirurgia bariátrica": "G6A",
+    "cirurgia bucomaxilofacial (médico)": "G5",
+    "cirurgia cardiovascular": "G6",
+    "cirurgia de cabeça e pescoço": "G6",
+    "cirurgia do aparelho digestivo": "G6",
+    "cirurgia geral": "G5",
+    "cirurgia pediátrica": "G6",
+    "cirurgia plástica": null,
+    "cirurgia torácica": "G5",
+    "cirurgia vascular": "G5",
+    "clínica médica": "G2",
+    "coloproctologia com cirurgia": "G5",
+    "coloproctologia sem cirurgia": "G2",
+    "dermatologia com cirurgia": "G5",
+    "dermatologia sem cirurgia": "G2",
+    "endocrinologia": "G2",
+    "endoscopia": "G3",
+    "enfermagem": "G2",
+    "enfermagem obstétrica - neonatal - uti": "G4",
+    "farmárcia sem estética": "G2",
+    "farmárcia com estética": "G5",
+    "fisioterapia sem estética": "G2",
+    "fisioterapia com estética": "G5",
+    "fonoaudiologia": "G1",
+    "gastroenterologia": "G2",
+    "genética médica": "G2",
+    "geriatria": "G2",
+    "ginecologia com obstetrícia": "G6B",
+    "ginecologia com cirurgia": "G6",
+    "ginecologia sem cirurgia": "G4",
+    "hematologia e hemoterapia": "G3",
+    "homeopatia": "G2",
+    "infectologia": "G3",
+    "instrumentação cirúrgica": "G2",
+    "mastologia com cirurgia": "G5",
+    "mastologia sem cirurgia": "G4",
+    "medicina de família e comunidade": "G2",
+    "medicina de tráfego": "G2",
+    "medicina de emergência": "G4",
+    "medicina do trabalho": "G2",
+    "medicina esportiva": "G2",
+    "medicina física e reabilitação": "G2",
+    "medicina intensiva": "G3",
+    "medicina legal e perícia médica": "G2",
+    "medicina nuclear": "G3",
+    "medicina preventiva e social": "G2",
+    "nefrologia": "G3",
+    "neurocirurgia": "G6A",
+    "neurologia": "G2",
+    "nutrição": "G2",
+    "nutrologia": "G2",
+    "oftalmologia com cirurgia": "G6A",
+    "oftalmologia sem cirurgia": "G3",
+    "oncologia com cirurgia": "G5",
+    "oncologia sem cirurgia": "G2",
+    "ortopedia e traumatologia com cirurgia": "G6",
+    "ortopedia e traumatologia sem cirurgia": "G5",
+    "otorrinolaringologia com cirurgia": "G6A",
+    "otorrinolaringologia sem cirurgia": "G3",
+    "patologia clínica | medicina laboratorial": "G2",
+    "patologia": "G2",
+    "pediatria": "G2",
+    "pneumologia": "G2",
+    "psicologia": "G2",
+    "psiquiatria": "G2",
+    "radiologia e diagnóstico por imagem": "G3",
+    "radioterapia": "G4",
+    "reumatologia": "G2",
+    "técnico em enfermagem": "G1",
+    "terapia ocupacional": "G1",
+    "urologia com cirurgia": "G5",
+    "urologia sem cirurgia": "G3",
+    "veterinária": "G3",
+    "cirurgia bucomaxilofacial e odontologia com prática estética": "G5",
+    "odontologia com implante ou cirurgia e ortodontia": "G3",
+    "odontologia: demais especialidades": "G2",
+    "odontologia com harmonização facial e/ou aplicação de toxina botulínica": "G6"
+  }
+}
