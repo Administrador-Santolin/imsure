@@ -1,5 +1,5 @@
 import { RouterOutlet } from '@angular/router';
-import { Component, OnInit, OnDestroy, inject, Inject, signal } from '@angular/core'; // Adicione OnInit, OnDestroy
+import { Component, OnInit, OnDestroy, signal } from '@angular/core'; // Adicione OnInit, OnDestroy
 import { CommonModule, AsyncPipe } from '@angular/common'; // Adicione AsyncPipe
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -146,11 +146,10 @@ export class App implements OnInit, OnDestroy {
     );
   }
 
-
   onClienteSelected(event: any) {
     const selectedCliente: Cliente = event.option.value;
     if (selectedCliente && selectedCliente.id) {
-      this.router.navigate(['/dashboard/clientes', selectedCliente.id]); // Navega para a tela de detalhes
+      this.router.navigate(['/clientes', selectedCliente.id]); // Navega para a tela de detalhes
       this.searchControl.setValue(''); // Limpa o campo de pesquisa após a seleção
     }
   }

@@ -1,0 +1,18 @@
+.card-calculo {
+    background-color: gray;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    border-radius: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+
+    mat-icon {
+        font-size: 100px;
+        width: fit-content;
+        height: fit-content;
+    }
+}
