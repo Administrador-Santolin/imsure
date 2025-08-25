@@ -108,6 +108,6 @@ export class ClienteForm implements OnInit {
   }
 
   onCancel() {
-    this.router.navigate(['/dashboard/clientes']); // Volta para a lista de clientes
+    this.router.navigate(['/clientes']); // Volta para a lista de clientes
   }
 }

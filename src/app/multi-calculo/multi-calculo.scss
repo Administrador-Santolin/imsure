@@ -1,18 +1,30 @@
+@use '../../styles.scss' as *;
+
 .card-calculo {
-    background-color: gray;
+    background-color: $blue;
     width: fit-content;
+    min-width: 280px;
     display: flex;
     flex-direction: column;
     padding: 15px;
     border-radius: 8px;
     flex-wrap: wrap;
     align-items: center;
-    color: white;
+    color: $surface;
     text-decoration: none;
 
     mat-icon {
-        font-size: 100px;
+        color: $yellow;
+        font-size: clamp(50px, 75px, 100px );
         width: fit-content;
         height: fit-content;
     }
+}
+
+.multicalculo-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
 }

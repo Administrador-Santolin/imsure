@@ -8,28 +8,35 @@
         <mat-form-field appearance="outline" class="full-width-input">
           <mat-label>Nome</mat-label>
           <input matInput formControlName="nome" placeholder="Ex: Maria Souza" required>
-          <mat-error *ngIf="clienteForm.get('nome')?.hasError('required')">
+          @if (clienteForm.get('nome')?.hasError('required')) {
+          <mat-error>
             Nome é obrigatório.
           </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width-input">
           <mat-label>Email</mat-label>
           <input matInput formControlName="email" type="email" placeholder="Ex: maria.souza@example.com" required>
-          <mat-error *ngIf="clienteForm.get('email')?.hasError('required')">
+          @if (clienteForm.get('email')?.hasError('required')) {
+          <mat-error>
             Email é obrigatório.
           </mat-error>
-          <mat-error *ngIf="clienteForm.get('email')?.hasError('email')">
+          } @else if (clienteForm.get('email')?.hasError('email')){
+          <mat-error>
             Email inválido.
           </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width-input">
           <mat-label>Telefone</mat-label>
           <input matInput formControlName="telefone" placeholder="Ex: (99) 99999-9999" required>
-          <mat-error *ngIf="clienteForm.get('telefone')?.hasError('required')">
+          @if (clienteForm.get('telefone')?.hasError('required')) {
+          <mat-error>
             Telefone é obrigatório.
           </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width-input">

@@ -8,19 +8,22 @@
 
   <mat-accordion class="filter-panel">
     <mat-expansion-panel #filterExpansionPanel class="custom-expansion-panel">
-    <mat-expansion-panel-header class="custom-expansion-header">
-        <button mat-icon-button (click)="filterExpansionPanel.toggle(); $event.stopPropagation()" aria-label="Toggle filtros">
-            <mat-icon>{{ filterExpansionPanel.expanded ? 'filter_alt_off' : 'filter_alt' }}</mat-icon>
+      <mat-expansion-panel-header class="custom-expansion-header">
+        <button mat-icon-button (click)="filterExpansionPanel.toggle(); $event.stopPropagation()"
+          aria-label="Toggle filtros">
+          <mat-icon>{{ filterExpansionPanel.expanded ? 'filter_alt_off' : 'filter_alt' }}</mat-icon>
         </button>
         <span class="header-text">Filtros de Busca</span>
-    </mat-expansion-panel-header>
+      </mat-expansion-panel-header>
 
       <form [formGroup]="filterForm" class="filter-form">
         <mat-form-field appearance="outline">
           <mat-label>Tipo de Seguro</mat-label>
           <mat-select formControlName="tipoSeguro">
             <mat-option value="">-- Todos --</mat-option>
-            <mat-option *ngFor="let option of tipoSeguroOptions" [value]="option">{{ option }}</mat-option>
+            @for (option of tipoSeguroOptions; track option) {
+              <mat-option [value]="option">{{ option }}</mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
@@ -28,7 +31,9 @@
           <mat-label>Seguradora</mat-label>
           <mat-select formControlName="seguradora">
             <mat-option value="">-- Todas --</mat-option>
-            <mat-option *ngFor="let option of seguradoraOptions" [value]="option">{{ option }}</mat-option>
+            @for (option of seguradoraOptions; track option) {
+            <mat-option [value]="option">{{ option }}</mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
@@ -36,7 +41,9 @@
           <mat-label>Produto</mat-label>
           <mat-select formControlName="produto">
             <mat-option value="">-- Todos --</mat-option>
-            <mat-option *ngFor="let option of produtoOptions" [value]="option">{{ option }}</mat-option>
+            @for (option of produtoOptions ; track option) {
+            <mat-option [value]="option">{{ option }}</mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
@@ -44,7 +51,9 @@
           <mat-label>Situação do Seguro</mat-label>
           <mat-select formControlName="situacao">
             <mat-option value="">-- Todas --</mat-option>
-            <mat-option *ngFor="let option of situacaoOptions" [value]="option">{{ option }}</mat-option>
+            @for (option of situacaoOptions; track option) {
+            <mat-option [value]="option">{{ option }}</mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
@@ -140,7 +149,8 @@
       </tr>
     </mat-table>
 
-    <mat-paginator [length]="apolicesLength" [pageSize]="20" [pageSizeOptions]="[5, 10, 20, 50, 100]" aria-label="Selecionar página de apólices">
+    <mat-paginator [length]="apolicesLength" [pageSize]="20" [pageSizeOptions]="[5, 10, 20, 50, 100]"
+      aria-label="Selecionar página de apólices">
     </mat-paginator>
   </div>
 </div>
