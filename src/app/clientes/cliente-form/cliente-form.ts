@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'; // Adicione
+
 import { MatFormFieldModule } from '@angular/material/form-field'; // Adicione
 import { MatInputModule } from '@angular/material/input';       // Adicione
 import { MatButtonModule } from '@angular/material/button';     // Adicione
 import { MatCardModule } from '@angular/material/card';         // Adicione
 import { MatIconModule } from '@angular/material/icon';         // Adicione
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar'; // Para mensagens de feedback
+import { MatRadioModule } from '@angular/material/radio';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 // Imports do Firestore e Roteamento
 import { Firestore, collection, doc, addDoc, updateDoc, getDoc } from '@angular/fire/firestore'; // Adicione
@@ -30,10 +33,12 @@ interface Cliente {
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatRadioModule,
     MatButtonModule,
     MatCardModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatExpansionModule
   ],
   templateUrl: './cliente-form.html',
   styleUrl: './cliente-form.scss'

@@ -1,71 +1,92 @@
-<div class="cliente-form-container">
-  <mat-card class="cliente-form-card">
-    <mat-card-header>
-      <mat-card-title>{{ isEditing ? 'Editar Cliente' : 'Novo Cliente' }}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline" class="full-width-input">
-          <mat-label>Nome</mat-label>
-          <input matInput formControlName="nome" placeholder="Ex: Maria Souza" required>
-          @if (clienteForm.get('nome')?.hasError('required')) {
-          <mat-error>
-            Nome é obrigatório.
-          </mat-error>
-          }
-        </mat-form-field>
+<div>
+  <h2>{{ isEditing ? 'Editar Cliente' : 'Novo Cliente' }}</h2>
+  <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()" class="form-grid">
+    <mat-form-field appearance="outline" class="span-6">
+      <mat-label>Nome Completo</mat-label>
+      <input matInput formControlName="nome" placeholder="Ex: Maria Souza" required>
+      @if (clienteForm.get('nome')?.hasError('required')) {
+      <mat-error>
+        Nome é obrigatório.
+      </mat-error>
+      }
+    </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width-input">
-          <mat-label>Email</mat-label>
-          <input matInput formControlName="email" type="email" placeholder="Ex: maria.souza@example.com" required>
-          @if (clienteForm.get('email')?.hasError('required')) {
-          <mat-error>
-            Email é obrigatório.
-          </mat-error>
-          } @else if (clienteForm.get('email')?.hasError('email')){
-          <mat-error>
-            Email inválido.
-          </mat-error>
-          }
-        </mat-form-field>
+    <mat-form-field appearance="outline" class="span-3">
+      <mat-label>CPF</mat-label>
+      <input matInput formControlName="cpf" placeholder="Ex: 123.456.789-00">
+    </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width-input">
-          <mat-label>Telefone</mat-label>
-          <input matInput formControlName="telefone" placeholder="Ex: (99) 99999-9999" required>
-          @if (clienteForm.get('telefone')?.hasError('required')) {
-          <mat-error>
-            Telefone é obrigatório.
-          </mat-error>
-          }
-        </mat-form-field>
+    <mat-form-field appearance="outline" class="span-3">
+      <mat-label>Data de Nascimento</mat-label>
+      <input matInput formControlName="dataNascimento" placeholder="Ex: DD/MM/AAAA">
+      <!-- Para um seletor de data mais robusto, usaria <input matInput [matDatepicker]="picker"> e MatDatepickerModule -->
+    </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width-input">
-          <mat-label>CPF</mat-label>
-          <input matInput formControlName="cpf" placeholder="Ex: 123.456.789-00">
-        </mat-form-field>
+    <mat-form-field appearance="outline" class="span-6">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" placeholder="Ex: maria.souza@example.com" required>
+      @if (clienteForm.get('email')?.hasError('required')) {
+      <mat-error>
+        Email é obrigatório.
+      </mat-error>
+      } @else if (clienteForm.get('email')?.hasError('email')){
+      <mat-error>
+        Email inválido.
+      </mat-error>
+      }
+    </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width-input">
-          <mat-label>Endereço</mat-label>
-          <input matInput formControlName="endereco" placeholder="Ex: Rua Exemplo, 123 - Cidade">
-        </mat-form-field>
+    <mat-form-field appearance="outline" class="span-4">
+      <mat-label>Telefone</mat-label>
+      <input matInput formControlName="telefone" placeholder="Ex: (99) 99999-9999" required>
+      @if (clienteForm.get('telefone')?.hasError('required')) {
+      <mat-error>
+        Telefone é obrigatório.
+      </mat-error>
+      }
+    </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width-input">
-          <mat-label>Data de Nascimento</mat-label>
-          <input matInput formControlName="dataNascimento" placeholder="Ex: DD/MM/AAAA">
-          <!-- Para um seletor de data mais robusto, usaria <input matInput [matDatepicker]="picker"> e MatDatepickerModule -->
-        </mat-form-field>
+    <mat-radio-group class="span-4">
+      <mat-radio-button value="masculino">Masculino</mat-radio-button>
+      <mat-radio-button value="feminino">Feminino</mat-radio-button>
+    </mat-radio-group>
 
-        <div class="form-actions">
-          <button mat-raised-button color="primary" type="submit" [disabled]="clienteForm.invalid">
-            <mat-icon>{{ isEditing ? 'save' : 'add' }}</mat-icon>
-            {{ isEditing ? 'Salvar Alterações' : 'Adicionar Cliente' }}
-          </button>
-          <button mat-raised-button color="warn" type="button" (click)="onCancel()">
-            <mat-icon>cancel</mat-icon>
-            Cancelar
-          </button>
-        </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+
+    <mat-expansion-panel class="span-12">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>location_pin</mat-icon>
+          Endereço
+        </mat-panel-title>
+
+      </mat-expansion-panel-header>
+
+      <mat-form-field>
+        <mat-label>First name</mat-label>
+        <input matInput />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width-input">
+        <mat-label>Endereço</mat-label>
+        <input matInput formControlName="endereco" placeholder="Ex: Rua Exemplo, 123 - Cidade">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Age</mat-label>
+        <input matInput type="number" min="1" />
+      </mat-form-field>
+    </mat-expansion-panel>
+
+
+    <div class="form-actions">
+      <button mat-raised-button color="primary" type="submit" [disabled]="clienteForm.invalid">
+        <mat-icon>{{ isEditing ? 'save' : 'add' }}</mat-icon>
+        {{ isEditing ? 'Salvar Alterações' : 'Adicionar Cliente' }}
+      </button>
+      <button mat-raised-button color="warn" type="button" (click)="onCancel()">
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
+    </div>
+  </form>
 </div>
