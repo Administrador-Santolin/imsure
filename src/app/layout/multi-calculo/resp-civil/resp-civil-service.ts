@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { SimulacaoData, TabelaPrecoItem, Precos } from './models'; // Ajuste o caminho conforme necessário
+import { catchError } from 'rxjs/operators';
+import { SimulacaoData } from './models'; // Ajuste o caminho conforme necessário
 
 @Injectable({
   providedIn: 'root'

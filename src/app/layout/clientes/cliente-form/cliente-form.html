@@ -75,11 +75,11 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <div class="form-grid">
+      <div class="form-grid" formGroupName="endereco">
         <mat-form-field appearance="outline" class="span-6">
           <mat-label>Rua</mat-label>
           <input matInput formControlName="rua" placeholder="Ex: Rua Exemplo, 123 - Cidade">
-          @if (clienteForm.get('rua')?.hasError('required')) {
+          @if (clienteForm.get('endereco.rua')?.hasError('required')) {
           <mat-error>
             O nome da rua é obrigatório.
           </mat-error>
@@ -89,7 +89,7 @@
         <mat-form-field appearance="outline" class="span-2">
           <mat-label>Número</mat-label>
           <input matInput formControlName="numero" type="number" />
-          @if (clienteForm.get('numero')?.hasError('required')) {
+          @if (clienteForm.get('endereco.numero')?.hasError('required')) {
           <mat-error>
             O número da rua é obrigatório.
           </mat-error>
@@ -104,7 +104,7 @@
         <mat-form-field appearance="outline" class="span-3">
           <mat-label>CEP</mat-label>
           <input matInput formControlName="cep" type="text" mask="00000-000" />
-          @if (clienteForm.get('cep')?.hasError('required')) {
+          @if (clienteForm.get('endereco.cep')?.hasError('required')) {
           <mat-error>
             O CEP é obrigatório.
           </mat-error>
@@ -114,7 +114,7 @@
         <mat-form-field appearance="outline" class="span-3">
           <mat-label>Bairro</mat-label>
           <input matInput formControlName="bairro" type="text" />
-          @if (clienteForm.get('bairro')?.hasError('required')) {
+          @if (clienteForm.get('endereco.bairro')?.hasError('required')) {
             <mat-error>
               O bairro é obrigatório.
             </mat-error>
@@ -124,7 +124,7 @@
         <mat-form-field appearance="outline" class="span-3">
           <mat-label>Cidade</mat-label>
           <input matInput formControlName="cidade" type="text" />
-          @if (clienteForm.get('cidade')?.hasError('required')) {
+          @if (clienteForm.get('endereco.cidade')?.hasError('required')) {
             <mat-error>
               A cidade é obrigatório.
             </mat-error>
@@ -134,7 +134,7 @@
         <mat-form-field appearance="outline" class="span-2">
           <mat-label>Estado</mat-label>
           <input matInput type="text" formControlName="estado" />
-          @if (clienteForm.get('estado')?.hasError('required')) {
+          @if (clienteForm.get('endereco.estado')?.hasError('required')) {
             <mat-error>
               O Estado é obrigatório.
             </mat-error>

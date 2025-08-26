@@ -6,10 +6,10 @@ import { RespCivilService } from './resp-civil-service';
 import { RouterModule } from '@angular/router';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
-import {MatSliderModule} from '@angular/material/slider';
-import {MatButtonModule} from '@angular/material/button';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatCardModule} from '@angular/material/card';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatCardModule } from '@angular/material/card';
 
 
 @Component({

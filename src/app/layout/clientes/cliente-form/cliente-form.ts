@@ -21,19 +21,10 @@ import {
   doc,
   addDoc,
   updateDoc,
-  getDoc
+  getDoc,
 } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
-
-interface Cliente {
-  id?: string;
-  nome: string;
-  email: string;
-  telefone: string;
-  cpf?: string;
-  endereco?: string;
-  dataNascimento?: string;
-}
+import { Cliente } from '../../../models/cliente.model';
 
 @Component({
   selector: 'app-cliente-form',
@@ -50,7 +41,7 @@ interface Cliente {
     MatSnackBarModule,
     MatExpansionModule,
     MatSelectModule,
-    NgxMaskDirective
+    NgxMaskDirective,
   ],
   templateUrl: './cliente-form.html',
   styleUrl: './cliente-form.scss',
@@ -75,13 +66,15 @@ export class ClienteForm implements OnInit {
       cpf: ['', Validators.required],
       dataNascimento: ['', Validators.required],
       estadoCivil: ['', Validators.required],
-      cep: ['', Validators.required],
-      rua: ['', Validators.required],
-      numero: ['', Validators.required],
-      complemento: [''],
-      bairro: ['', Validators.required],
-      cidade: ['', Validators.required],
-      estado: ['', Validators.required]
+      endereco: this.fb.group({
+        cep: ['', Validators.required],
+        rua: ['', Validators.required],
+        numero: ['', Validators.required],
+        complemento: [''],
+        bairro: ['', Validators.required],
+        cidade: ['', Validators.required],
+        estado: ['', Validators.required],
+      }),
     });
   }
 

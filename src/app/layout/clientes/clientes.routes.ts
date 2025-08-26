@@ -1,5 +1,3 @@
-// src/app/dashboard/clientes/clientes.routes.ts
-
 import { Routes } from '@angular/router';
 import { Clientes } from './clientes';
 import { ClienteForm } from './cliente-form/cliente-form';
