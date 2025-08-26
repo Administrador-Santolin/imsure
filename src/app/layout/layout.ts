@@ -1,6 +1,6 @@
 import { RouterOutlet } from '@angular/router';
-import { Component, OnInit, OnDestroy, signal } from '@angular/core'; // Adicione OnInit, OnDestroy
-import { CommonModule, AsyncPipe } from '@angular/common'; // Adicione AsyncPipe
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
+import { CommonModule, AsyncPipe } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,14 +8,14 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router'; // Para routerLink na sidenav
 
-import { MatFormFieldModule } from '@angular/material/form-field'; // <<< ADICIONE
-import { MatInputModule } from '@angular/material/input';       // <<< ADICIONE
-import { MatAutocompleteModule } from '@angular/material/autocomplete'; // <<< ADICIONE
-import { FormControl, ReactiveFormsModule } from '@angular/forms'; // <<< ADICIONE
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
-import { Firestore, collection, collectionData, FirestoreDataConverter, query, orderBy, limit, where } from '@angular/fire/firestore'; // <<< ADICIONE
-import { Observable, Subscription, combineLatest } from 'rxjs'; // <<< ADICIONE combineLatest
-import { startWith, debounceTime, switchMap, map } from 'rxjs/operators'; // <<< ADICIONE
+import { Firestore, collection, collectionData, FirestoreDataConverter, query, orderBy, limit, where } from '@angular/fire/firestore';
+import { Observable, Subscription, combineLatest } from 'rxjs';
+import { startWith, debounceTime, switchMap, map } from 'rxjs/operators';
 
 import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';

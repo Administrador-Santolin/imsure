@@ -8,7 +8,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 // Imports do Firestore
-import { Firestore, doc, getDoc, FirestoreDataConverter } from '@angular/fire/firestore'; // <<< ADICIONE ESTAS LINHAS
+import { Firestore, doc, getDoc, FirestoreDataConverter } from '@angular/fire/firestore';
 
 interface Cliente {
   id?: string;
@@ -16,9 +16,8 @@ interface Cliente {
   email: string;
   telefone: string;
   cpf?: string;
-  endereco?: string; // Adicione para os dados pessoais
-  dataNascimento?: string; // Adicione para os dados pessoais
-  // Adicione outros campos que você espera nos dados do cliente
+  endereco?: string;
+  dataNascimento?: string;
 }
 
 // Reutilize o conversor de cliente para garantir a tipagem correta ao buscar
@@ -50,7 +49,7 @@ const clienteConverter: FirestoreDataConverter<Cliente> = {
     MatButtonModule,
     MatIconModule,
     MatTabsModule,
-    MatProgressSpinnerModule // <<< ADICIONE AQUI
+    MatProgressSpinnerModule
   ],
   templateUrl: './cliente-detalhes.html',
   styleUrl: './cliente-detalhes.scss'

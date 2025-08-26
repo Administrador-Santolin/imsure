@@ -36,12 +36,28 @@
       }
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="span-4">
+    <mat-form-field appearance="outline" class="span-3">
       <mat-label>Telefone</mat-label>
       <input matInput formControlName="telefone" placeholder="Ex: (99) 99999-9999" required>
       @if (clienteForm.get('telefone')?.hasError('required')) {
       <mat-error>
         Telefone é obrigatório.
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="span-3">
+      <mat-label>Estado Civil</mat-label>
+      <mat-select formControlName="estadoCivil" required>
+        <mat-option value="solteiro">Solteiro(a)</mat-option>
+        <mat-option value="uniaoEstavel">União Estável</mat-option>
+        <mat-option value="casado">Casado(a)</mat-option>
+        <mat-option value="divorciado">Divorciado(a)</mat-option>
+        <mat-option value="viuvo">Viúvo(a)</mat-option>
+      </mat-select>
+      @if (clienteForm.get('estadoCivil')?.hasError('required')) {
+      <mat-error>
+        Estado Civil é obrigatório.
       </mat-error>
       }
     </mat-form-field>
@@ -58,23 +74,44 @@
           <mat-icon>location_pin</mat-icon>
           Endereço
         </mat-panel-title>
-
       </mat-expansion-panel-header>
 
-      <mat-form-field>
-        <mat-label>First name</mat-label>
-        <input matInput />
-      </mat-form-field>
+      <div class="form-grid">
+        <mat-form-field appearance="outline" class="span-6">
+          <mat-label>Endereço</mat-label>
+          <input matInput formControlName="endereco" placeholder="Ex: Rua Exemplo, 123 - Cidade">
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Endereço</mat-label>
-        <input matInput formControlName="endereco" placeholder="Ex: Rua Exemplo, 123 - Cidade">
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="span-2">
+          <mat-label>Número</mat-label>
+          <input matInput type="number" />
+        </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Age</mat-label>
-        <input matInput type="number" min="1" />
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="span-4">
+          <mat-label>Complemento</mat-label>
+          <input matInput type="text" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="span-3">
+          <mat-label>CEP</mat-label>
+          <input matInput type="text" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="span-3">
+          <mat-label>Bairro</mat-label>
+          <input matInput type="text" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="span-3">
+          <mat-label>Cidade</mat-label>
+          <input matInput type="text" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="span-2">
+          <mat-label>Estado</mat-label>
+          <input matInput type="text" />
+        </mat-form-field>
+      </div>
     </mat-expansion-panel>
 
 

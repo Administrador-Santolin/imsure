@@ -1,6 +1,11 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core'; // Adicione AfterViewInit
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
+import { Observable, combineLatest, debounceTime, startWith, switchMap } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+// Angular Material
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -13,10 +18,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { RouterModule, Router, ActivatedRoute } from '@angular/router';
+
 import { Firestore, collection, query, orderBy, limit, where, collectionData, Timestamp, doc, deleteDoc } from '@angular/fire/firestore';
-import { Observable, combineLatest, debounceTime, startWith, switchMap } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 // Interface e Conversor (coloque aqui se não estiver em arquivo separado)
 interface Apolice {
@@ -74,7 +77,6 @@ const apoliceConverter = {
   }
 };
 
-
 @Component({
   selector: 'app-apolices',
   standalone: true,
@@ -98,7 +100,7 @@ const apoliceConverter = {
   templateUrl: './apolices.html',
   styleUrl: './apolices.scss'
 })
-export class Apolices implements OnInit, AfterViewInit { // Implemente AfterViewInit
+export class Apolices implements OnInit, AfterViewInit {
   filterForm: FormGroup;
   displayedColumns: string[] = ['apolice', 'clienteNome', 'seguradora', 'produto', 'dataEmissao', 'situacao', 'acoes'];
   dataSource = new MatTableDataSource<Apolice>();
@@ -136,7 +138,7 @@ export class Apolices implements OnInit, AfterViewInit { // Implemente AfterView
     // A lógica que depende de `this.paginator` e `this.sort` deve ir para ngAfterViewInit.
   }
 
-  ngAfterViewInit(): void { // Adicione o método ngAfterViewInit
+  ngAfterViewInit(): void {
     // Agora `this.paginator` e `this.sort` estão garantidos a serem inicializados
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

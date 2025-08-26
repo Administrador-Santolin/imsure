@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { MatInputModule } from '@angular/material/input'; // Adicione esta linha
-import { MatButtonModule } from '@angular/material/button'; // Adicione esta linha
-import { MatCardModule } from '@angular/material/card';     // Adicione esta linha
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@angular/fire/auth'; // Adicione estas importações
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
