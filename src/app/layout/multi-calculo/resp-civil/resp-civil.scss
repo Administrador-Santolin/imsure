@@ -1,0 +1,21 @@
+.slider-full-width {
+  width: 100%;
+}
+
+::ng-deep .mat-mdc-slide-toggle {
+  width: 100%;
+  padding: 6px;
+}
+
+::ng-deep .mat-mdc-slide-toggle .mdc-form-field {
+  display: flex;
+  justify-content: space-between;
+
+  & label {
+    margin: 0
+  }
+}
+
+.resultado {
+  font-size: large;
+}

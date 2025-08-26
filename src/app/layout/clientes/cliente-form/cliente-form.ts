@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { NgxMaskDirective } from 'ngx-mask';
 
 // Imports do Angular Material
 import { MatInputModule } from '@angular/material/input';
@@ -20,7 +21,7 @@ import {
   doc,
   addDoc,
   updateDoc,
-  getDoc,
+  getDoc
 } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -49,6 +50,7 @@ interface Cliente {
     MatSnackBarModule,
     MatExpansionModule,
     MatSelectModule,
+    NgxMaskDirective
   ],
   templateUrl: './cliente-form.html',
   styleUrl: './cliente-form.scss',
@@ -70,10 +72,16 @@ export class ClienteForm implements OnInit {
       nome: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', Validators.required],
-      cpf: [''], 
-      endereco: [''],
-      dataNascimento: [''],
-      estadoCivil: ['', Validators.required]
+      cpf: ['', Validators.required],
+      dataNascimento: ['', Validators.required],
+      estadoCivil: ['', Validators.required],
+      cep: ['', Validators.required],
+      rua: ['', Validators.required],
+      numero: ['', Validators.required],
+      complemento: [''],
+      bairro: ['', Validators.required],
+      cidade: ['', Validators.required],
+      estado: ['', Validators.required]
     });
   }
 

@@ -2,8 +2,7 @@
 
 import { Routes } from '@angular/router';
 import { Clientes } from './clientes';
-import { ClienteForm } from './cliente-form/cliente-form';// <<< ADICIONE ESTA LINHA
-import { ClienteDetalhes } from './cliente-detalhes/cliente-detalhes';
+import { ClienteForm } from './cliente-form/cliente-form';
 
 export const CLIENTES_ROUTES: Routes = [
   {

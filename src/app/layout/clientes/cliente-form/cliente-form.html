@@ -13,12 +13,12 @@
 
     <mat-form-field appearance="outline" class="span-3">
       <mat-label>CPF</mat-label>
-      <input matInput formControlName="cpf" placeholder="Ex: 123.456.789-00">
+      <input matInput formControlName="cpf" mask="CPF_CNPJ">
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="span-3">
       <mat-label>Data de Nascimento</mat-label>
-      <input matInput formControlName="dataNascimento" placeholder="Ex: DD/MM/AAAA">
+      <input matInput formControlName="dataNascimento" mask="d0/M0/0000">
       <!-- Para um seletor de data mais robusto, usaria <input matInput [matDatepicker]="picker"> e MatDatepickerModule -->
     </mat-form-field>
 
@@ -38,7 +38,7 @@
 
     <mat-form-field appearance="outline" class="span-3">
       <mat-label>Telefone</mat-label>
-      <input matInput formControlName="telefone" placeholder="Ex: (99) 99999-9999" required>
+      <input matInput formControlName="telefone" mask="(00) 0 0000-0000" placeholder="Ex: (99) 99999-9999" required>
       @if (clienteForm.get('telefone')?.hasError('required')) {
       <mat-error>
         Telefone é obrigatório.
@@ -67,7 +67,6 @@
       <mat-radio-button value="feminino">Feminino</mat-radio-button>
     </mat-radio-group>
 
-
     <mat-expansion-panel class="span-12">
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -78,38 +77,68 @@
 
       <div class="form-grid">
         <mat-form-field appearance="outline" class="span-6">
-          <mat-label>Endereço</mat-label>
-          <input matInput formControlName="endereco" placeholder="Ex: Rua Exemplo, 123 - Cidade">
+          <mat-label>Rua</mat-label>
+          <input matInput formControlName="rua" placeholder="Ex: Rua Exemplo, 123 - Cidade">
+          @if (clienteForm.get('rua')?.hasError('required')) {
+          <mat-error>
+            O nome da rua é obrigatório.
+          </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="span-2">
           <mat-label>Número</mat-label>
-          <input matInput type="number" />
+          <input matInput formControlName="numero" type="number" />
+          @if (clienteForm.get('numero')?.hasError('required')) {
+          <mat-error>
+            O número da rua é obrigatório.
+          </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="span-4">
           <mat-label>Complemento</mat-label>
-          <input matInput type="text" />
+          <input matInput formControlName="complemento" type="text" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="span-3">
           <mat-label>CEP</mat-label>
-          <input matInput type="text" />
+          <input matInput formControlName="cep" type="text" mask="00000-000" />
+          @if (clienteForm.get('cep')?.hasError('required')) {
+          <mat-error>
+            O CEP é obrigatório.
+          </mat-error>
+        }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="span-3">
           <mat-label>Bairro</mat-label>
-          <input matInput type="text" />
+          <input matInput formControlName="bairro" type="text" />
+          @if (clienteForm.get('bairro')?.hasError('required')) {
+            <mat-error>
+              O bairro é obrigatório.
+            </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="span-3">
           <mat-label>Cidade</mat-label>
-          <input matInput type="text" />
+          <input matInput formControlName="cidade" type="text" />
+          @if (clienteForm.get('cidade')?.hasError('required')) {
+            <mat-error>
+              A cidade é obrigatório.
+            </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="span-2">
           <mat-label>Estado</mat-label>
-          <input matInput type="text" />
+          <input matInput type="text" formControlName="estado" />
+          @if (clienteForm.get('estado')?.hasError('required')) {
+            <mat-error>
+              O Estado é obrigatório.
+            </mat-error>
+          }
         </mat-form-field>
       </div>
     </mat-expansion-panel>

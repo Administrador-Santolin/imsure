@@ -67,6 +67,72 @@ mat-expansion-panel {
     margin: 15px 0px !important;
 }
 
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Spans responsivos */
+.span-12 {
+  grid-column: span 12;
+}
+
+.span-6 {
+  grid-column: span 12;
+}
+
+.span-4 {
+  grid-column: span 12;
+}
+
+.span-3 {
+  grid-column: span 12;
+}
+
+.span-2 {
+    grid-column: span 12;
+  }
+
+@media (min-width: 768px) {
+  .span-6 {
+    grid-column: span 6;
+  }
+
+  .span-4 {
+    grid-column: span 6;
+  }
+
+  .span-3 {
+    grid-column: span 4;
+  }
+
+  .span-2 {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .span-4 {
+    grid-column: span 4;
+  }
+
+  .span-3 {
+    grid-column: span 3;
+  }
+
+  .span-2 {
+    grid-column: span 2;
+  }
+}
+
+
 .w25 { width: 25%; }
 .w33 { width: calc(100% / 3); }
 .w66 { width: calc(200% / 3); }
