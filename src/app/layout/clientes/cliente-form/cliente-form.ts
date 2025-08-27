@@ -64,6 +64,7 @@ export class ClienteForm implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', Validators.required],
       cpf: ['', Validators.required],
+      genero: [''],
       dataNascimento: ['', Validators.required],
       estadoCivil: ['', Validators.required],
       endereco: this.fb.group({

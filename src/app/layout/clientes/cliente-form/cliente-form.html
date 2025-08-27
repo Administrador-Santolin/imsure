@@ -13,7 +13,7 @@
 
     <mat-form-field appearance="outline" class="span-3">
       <mat-label>CPF</mat-label>
-      <input matInput formControlName="cpf" mask="CPF_CNPJ">
+      <input matInput type="text" formControlName="cpf" mask="CPF_CNPJ">
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="span-3">
@@ -38,7 +38,7 @@
 
     <mat-form-field appearance="outline" class="span-3">
       <mat-label>Telefone</mat-label>
-      <input matInput formControlName="telefone" mask="(00) 0 0000-0000" placeholder="Ex: (99) 99999-9999" required>
+      <input matInput formControlName="telefone" mask="(00) 0 0000-0000" type="text" placeholder="Ex: (99) 99999-9999" required>
       @if (clienteForm.get('telefone')?.hasError('required')) {
       <mat-error>
         Telefone é obrigatório.
@@ -62,7 +62,7 @@
       }
     </mat-form-field>
 
-    <mat-radio-group class="span-4">
+    <mat-radio-group class="span-4" formControlName="genero">
       <mat-radio-button value="masculino">Masculino</mat-radio-button>
       <mat-radio-button value="feminino">Feminino</mat-radio-button>
     </mat-radio-group>

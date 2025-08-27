@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Firestore, collection, collectionData, doc, deleteDoc, FirestoreDataConverter } from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
 import { RouterModule } from '@angular/router';
+import { MascaraPipe } from '../../mascara-pipe';
 
 interface Cliente {
   id?: string;
@@ -31,9 +32,11 @@ const clienteConverter: FirestoreDataConverter<Cliente> = {
       nome: data.nome,
       email: data.email,
       telefone: data.telefone,
-      cpf: data.cpf || '',
-      endereco: data.endereco || '',
-      dataNascimento: data.dataNascimento || ''
+      cpf: data.cpf,
+      endereco: data.endereco,
+      dataNascimento: data.dataNascimento,
+      genero: data.genero,
+      estadoCivil: data.estadoCivil
     } as Cliente;
   }
 };
@@ -48,7 +51,8 @@ const clienteConverter: FirestoreDataConverter<Cliente> = {
     MatProgressSpinnerModule, 
     MatCardModule,
     MatButtonModule, 
-    MatIconModule
+    MatIconModule,
+    MascaraPipe
   ],
   templateUrl: './clientes.html',
   styleUrl: './clientes.scss'
