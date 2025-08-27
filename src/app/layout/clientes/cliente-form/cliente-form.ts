@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, InjectDecorator, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,20 +15,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectModule } from '@angular/material/select';
 
 // Imports do Firestore e Roteamento
-import {
-  Firestore,
-  collection,
-  doc,
-  addDoc,
-  updateDoc,
-  getDoc,
-} from '@angular/fire/firestore';
+import { Firestore, collection, doc, addDoc, updateDoc, getDoc } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cliente } from '../../../models/cliente.model';
 
 @Component({
   selector: 'app-cliente-form',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -47,19 +39,13 @@ import { Cliente } from '../../../models/cliente.model';
   styleUrl: './cliente-form.scss',
 })
 export class ClienteForm implements OnInit {
-  clienteForm: FormGroup;
   isEditing: boolean = false;
   clienteId: string | null = null;
 
-  constructor(
-    private fb: FormBuilder,
-    private firestore: Firestore,
-    private route: ActivatedRoute,
-    private router: Router,
-    private snackBar: MatSnackBar
-  ) {
-    // Inicializa o formulário com os campos e validações
-    this.clienteForm = this.fb.group({
+  private fb = inject(FormBuilder);
+  private snackBar = inject(MatSnackBar);
+
+  clienteForm = this.fb.group({
       nome: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', Validators.required],
@@ -77,6 +63,8 @@ export class ClienteForm implements OnInit {
         estado: ['', Validators.required],
       }),
     });
+
+  constructor( private route: ActivatedRoute ) {
   }
 
   ngOnInit() {
@@ -87,6 +75,9 @@ export class ClienteForm implements OnInit {
       this.loadCliente(this.clienteId); // Carrega os dados do cliente para edição
     }
   }
+
+  firestore = inject(Firestore);
+  router = inject(Router);
 
   async loadCliente(id: string) {
     const clienteDocRef = doc(this.firestore, `clientes/${id}`);

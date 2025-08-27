@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
@@ -114,11 +114,11 @@ export class Apolices implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  private router = inject(Router);
+  private firestore = inject(Firestore);
+  private fb = inject(FormBuilder);
+
   constructor(
-    private fb: FormBuilder,
-    private firestore: Firestore,
-    private router: Router,
-    private route: ActivatedRoute
   ) {
     this.filterForm = this.fb.group({
       tipoSeguro: [''],
@@ -231,7 +231,7 @@ export class Apolices implements OnInit, AfterViewInit {
 
   editApolice(id: string | undefined): void {
     if (id) {
-      this.router.navigate(['/dashboard/apolices', id]);
+      this.router.navigate(['/apolices', id]);
     } else {
       console.warn('Não é possível editar a apólice: ID não definido.');
     }

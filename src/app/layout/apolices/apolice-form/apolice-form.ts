@@ -1,5 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { debounceTime, map, Observable, startWith, switchMap } from 'rxjs';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -7,11 +10,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { debounceTime, map, Observable, startWith, switchMap } from 'rxjs';
-import { Firestore, collection, doc, getDoc, addDoc, updateDoc, query, orderBy, limit, collectionData, where, FirestoreDataConverter, Timestamp } from '@angular/fire/firestore';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
+
+import { Firestore, collection, doc, getDoc, addDoc, updateDoc, query, orderBy, limit, collectionData, FirestoreDataConverter, Timestamp } from '@angular/fire/firestore';
 
 interface Cliente {
   id?: string;
@@ -96,11 +98,12 @@ export class ApoliceForm implements OnInit {
   clienteSearchControl = new FormControl<string | Cliente>('');
   filteredClientes$: Observable<Cliente[]> | undefined;
 
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private firestore = inject(Firestore);
+
   constructor(
-    private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private firestore: Firestore
+    private route: ActivatedRoute
   ) {
     this.apoliceForm = this.fb.group({
       clienteId: ['', Validators.required],
@@ -355,7 +358,7 @@ export class ApoliceForm implements OnInit {
 
   // onCancel: Lida com o clique no botão "Cancelar".
   onCancel(): void {
-    this.router.navigate(['/dashboard/apolices']); // Volta para a lista de apólices
+    this.router.navigate(['/apolices']); // Volta para a lista de apólices
   }
 
   // Método auxiliar para obter um FormControl de um subgrupo
