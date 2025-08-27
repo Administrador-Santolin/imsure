@@ -9,7 +9,7 @@ import { firebaseConfig } from './firebase-Credentials';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { provideHttpClient } from '@angular/common/http';
-import { provideEnvironmentNgxMask } from 'ngx-mask';
+import { provideNgxMask } from 'ngx-mask';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,6 +31,6 @@ export const appConfig: ApplicationConfig = {
     provideFirestore(() => getFirestore()),
     provideRouter(routes),
     provideHttpClient(),
-    provideEnvironmentNgxMask()
+    provideNgxMask()
   ]
 };

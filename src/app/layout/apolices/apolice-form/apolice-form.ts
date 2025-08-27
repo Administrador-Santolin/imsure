@@ -16,6 +16,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { Firestore, collection, doc, getDoc, addDoc, updateDoc, query, orderBy, limit, collectionData, FirestoreDataConverter, Timestamp } from '@angular/fire/firestore';
 import { Cliente } from '../../../models/cliente.model';
 import { MascaraPipe } from '../../../mascara-pipe';
+import { NgxMaskDirective } from 'ngx-mask';
+import { Automovel } from './Produtos/automovel/automovel';
 
 // Converte os dados do Firestore para o formato da Interface Cliente.
 // Isso é útil para garantir que os dados lidos do banco correspondam à nossa tipagem.
@@ -82,7 +84,9 @@ interface Apolice {
     MatRadioModule,
     MatAutocompleteModule,
     MatIconModule,
-    MascaraPipe
+    MascaraPipe,
+    NgxMaskDirective,
+    Automovel
   ],
   templateUrl: './apolice-form.html',
   styleUrl: './apolice-form.scss'
@@ -264,7 +268,7 @@ export class ApoliceForm implements OnInit {
         } : {},
         itemSegurado: apoliceData.itemSegurado || {}
       });
-      
+
       // Se estamos editando, o campo de busca de cliente precisa mostrar o nome atual.
       // (Isso é importante para quando o usuário abre o formulário de edição)
       this.clienteSearchControl.setValue(`${apoliceData.clienteNome}`);
