@@ -15,7 +15,7 @@
           </mat-option>
           <mat-option *ngFor="let cliente of filteredClientes$ | async" [value]="cliente"
             (onSelectionChange)="onClienteSelected($event)">
-            {{ cliente.nome }} - ({{ cliente.cpf }})
+            {{ cliente.nome }} - {{ cliente.cpf | mascara: '000.000.000-00' }}
           </mat-option>
         </ng-container>
         <ng-template #loadingClients>
@@ -58,9 +58,11 @@
         <mat-option value="Tokio Marine">Tokio Marine</mat-option>
         <mat-option value="Allianz">Allianz</mat-option>
       </mat-select>
-      <mat-error *ngIf="apoliceForm.get('seguradora')?.hasError('required') && apoliceForm.get('seguradora')?.touched">
+      @if ( apoliceForm.get('seguradora')?.hasError('required') && apoliceForm.get('seguradora')?.touched ) {
+      <mat-error>
         Seguradora é obrigatória.
       </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w20">
@@ -250,8 +252,8 @@
             <mat-label>Prêmio Total</mat-label>
             <input matInput type="number" formControlName="premioTotal" min="0" />
             <span matTextPrefix>R$</span>
-            @if ( getControl('informacoesFinanceiras', 'premioTotal')?.hasError('min') &&
-            getControl('informacoesFinanceiras', 'premioTotal')?.touched ) {
+            @if ( getControl('informacoesFinanceiras', 'premioTotal').hasError('min') &&
+            getControl('informacoesFinanceiras', 'premioTotal').touched ) {
             <mat-error>
               Prêmio total deve ser positivo.
             </mat-error>

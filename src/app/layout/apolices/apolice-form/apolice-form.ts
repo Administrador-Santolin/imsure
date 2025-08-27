@@ -14,12 +14,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
 
 import { Firestore, collection, doc, getDoc, addDoc, updateDoc, query, orderBy, limit, collectionData, FirestoreDataConverter, Timestamp } from '@angular/fire/firestore';
-
-interface Cliente {
-  id?: string;
-  nome: string;
-  cpf: string;
-}
+import { Cliente } from '../../../models/cliente.model';
+import { MascaraPipe } from '../../../mascara-pipe';
 
 // Converte os dados do Firestore para o formato da Interface Cliente.
 // Isso é útil para garantir que os dados lidos do banco correspondam à nossa tipagem.
@@ -85,13 +81,13 @@ interface Apolice {
     MatSelectModule,
     MatRadioModule,
     MatAutocompleteModule,
-    MatIconModule
+    MatIconModule,
+    MascaraPipe
   ],
   templateUrl: './apolice-form.html',
   styleUrl: './apolice-form.scss'
 })
 export class ApoliceForm implements OnInit {
-
   apoliceForm: FormGroup;
   apoliceId: string | null = null;
   isEditing: boolean = false;
@@ -268,16 +264,16 @@ export class ApoliceForm implements OnInit {
         } : {},
         itemSegurado: apoliceData.itemSegurado || {}
       });
-
+      
       // Se estamos editando, o campo de busca de cliente precisa mostrar o nome atual.
       // (Isso é importante para quando o usuário abre o formulário de edição)
-      this.clienteSearchControl.setValue({ id: apoliceData.clienteId, nome: apoliceData.clienteNome, cpf: '' });
+      this.clienteSearchControl.setValue(`${apoliceData.clienteNome}`);
 
       // Opcional: Se quiser que seja somente leitura até o usuário clicar em "Editar"
       // this.apoliceForm.disable();
     } else {
       console.error('Apólice não encontrada! Redirecionando para a lista de apólices.');
-      this.router.navigate(['/dashboard/apolices']); // Redireciona se não encontrar
+      this.router.navigate(['/apolices']); // Redireciona se não encontrar
     }
   }
 
@@ -344,7 +340,7 @@ export class ApoliceForm implements OnInit {
           await addDoc(apolicesCollection, apoliceData as any); // 'as any' para evitar erro de tipo com o ID
           console.log('Apólice adicionada com sucesso!');
         }
-        this.router.navigate(['/dashboard/apolices']); // Redireciona para a lista de apólices
+        this.router.navigate(['/apolices']); // Redireciona para a lista de apólices
       } catch (error) {
         console.error('Erro ao salvar apólice:', error);
         // Implementar MatSnackBar para feedback ao usuário
