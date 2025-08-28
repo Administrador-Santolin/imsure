@@ -1,10 +1,10 @@
 <form [formGroup]="apoliceForm" (ngSubmit)="onSubmit()">
-  <fieldset class="form-apolice">
+  <fieldset class="form-grid">
     <legend>
       <h2>Dados da Apólice</h2>
     </legend>
 
-    <mat-form-field appearance="outline" class="w30">
+    <mat-form-field appearance="outline" class="span-4">
       <mat-label>Cliente</mat-label>
       <input matInput placeholder="Digite o nome do cliente" [formControl]="clienteSearchControl"
         [matAutocomplete]="autoCliente" required />
@@ -29,7 +29,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="w30">
+    <mat-form-field appearance="outline" class="span-3">
       <mat-label>Apólice</mat-label>
       <input matInput placeholder="Número da apólice" formControlName="apolice" required />
       <mat-error *ngIf="apoliceForm.get('apolice')?.hasError('required') && apoliceForm.get('apolice')?.touched">
@@ -37,7 +37,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="w30">
+    <mat-form-field appearance="outline" class="span-3">
       <mat-label>Proposta</mat-label>
       <input matInput placeholder="Número da proposta" formControlName="proposta" required />
       <mat-error *ngIf="apoliceForm.get('proposta')?.hasError('required') && apoliceForm.get('proposta')?.touched">
@@ -45,7 +45,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="w25">
+    <mat-form-field appearance="outline" class="span-3">
       <mat-label>Seguradora</mat-label>
       <mat-select formControlName="seguradora" required>
         <mat-option value="Yelum">Yelum</mat-option>
@@ -65,7 +65,7 @@
       }
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="w20">
+    <mat-form-field appearance="outline" class="span-2">
       <mat-label>Produto</mat-label>
       <mat-select formControlName="produto"  required>
         <mat-option value="Automóvel">Automóvel</mat-option>
@@ -86,7 +86,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="w20">
+    <mat-form-field appearance="outline" class="span-2">
       <mat-label>Sub-tipo do documento</mat-label>
       <mat-select formControlName="subTipoDocumento" required>
         <mat-option value="Renovavel">Renovável</mat-option>
@@ -98,7 +98,8 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
+    <div class="form-grid-child span-12">
+    <mat-form-field appearance="outline" class="span-2">
       <mat-label>Início de Vigência</mat-label>
       <input matInput [matDatepicker]="inicioVigenciaPicker" placeholder="Início de vigência"
         formControlName="inicioVigencia"  required>
@@ -110,7 +111,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="span-2">
       <mat-label>Fim de Vigência</mat-label>
       <input matInput [matDatepicker]="fimVigenciaPicker" placeholder="Fim de vigência" formControlName="fimVigencia"
         required>
@@ -122,7 +123,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="span-2">
       <mat-label>Data de Emissão</mat-label>
       <input matInput [matDatepicker]="emissaoPicker" placeholder="Data de Emissão" formControlName="dataEmissao"
         required>
@@ -133,8 +134,9 @@
         Data de Emissão é obrigatória.
       </mat-error>
     </mat-form-field>
+  </div>
 
-    <fieldset>
+    <fieldset class="span-6 radioGroup">
       <legend>Tipo de Seguro</legend>
       <mat-radio-group aria-label="Tipo de Seguro" formControlName="tipoSeguro" required>
         <mat-radio-button value="novo">Novo</mat-radio-button>
@@ -146,7 +148,7 @@
       </mat-error>
     </fieldset>
 
-    <fieldset>
+    <fieldset class="span-6 radioGroup">
       <legend>Situação</legend>
       <mat-radio-group aria-label="Situação" formControlName="situacao" required>
         <mat-radio-button value="ativo">Ativo</mat-radio-button>
@@ -172,9 +174,9 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <section class="flex">
-        <fieldset class="w25 inline-grid">
-          <mat-form-field appearance="outline" class="w100">
+      <section class="form-grid">
+        <fieldset class="span-4">
+          <mat-form-field appearance="outline" class="span-4">
             <mat-label>Forma de Pagamento</mat-label>
             <mat-select formControlName="formaPagamento" required>
               <mat-option value="creditCard">Cartão de crédito</mat-option>
@@ -188,7 +190,7 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" class="span-2">
             <mat-label>Parcelas</mat-label>
             <input matInput type="number" placeholder="Número de Parcelas" formControlName="parcelas" min="1"
               required />
@@ -202,7 +204,7 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" class="span-2">
             <mat-label>Vencimento da 1ª parcela</mat-label>
             <input matInput [matDatepicker]="vencimentoPrimeiraParcelaPicker" placeholder="Vencimento da 1ª parcela"
               formControlName="vencimentoPrimeiraParcela" required>
@@ -276,6 +278,8 @@
 
       @if ( apoliceForm.get('produto')?.value === 'Automóvel' ) {
         <app-automovel></app-automovel>
+      } @else if ( isProdutoLocais() ){
+        <app-locais></app-locais>
       }
 
     </mat-expansion-panel>

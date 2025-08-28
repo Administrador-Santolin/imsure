@@ -1,4 +1,3 @@
-
 // Include theming for Angular Material with `mat.theme()`.
 // This Sass mixin will define CSS variables that are used for styling Angular Material
 // components according to the Material 3 design spec.
@@ -10,32 +9,25 @@ $surface: rgba(255, 255, 255, 1);
 $yellow: rgba(255, 213, 0, 1);
 
 html {
-  @include mat.theme((
-    color: (
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
+  @include mat.theme((color: (primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    ));
 
-  @include mat.fab-overrides((
-    container-color: $blue,
-    foreground-color: $surface
-  ));
+  @include mat.fab-overrides((container-color: $blue,
+      foreground-color: $surface ));
 
-  @include mat.form-field-overrides((
-    filled-container-color: transparent, // Custom state layer color
-  ));
+  @include mat.form-field-overrides((filled-container-color: transparent, // Custom state layer color
+    ));
 
-   @include mat.theme-overrides((
-      primary: $blue,
-   ));
+  @include mat.theme-overrides((primary: $blue,
+    ));
 
-  @include mat.toolbar-overrides((
-    container-background-color: $blue, // Custom toolbar background color
-    container-text-color: $surface,
-  ));
+  @include mat.toolbar-overrides((container-background-color: $blue, // Custom toolbar background color
+      container-text-color: $surface,
+    ));
 
   // Default the application to a light color theme. This can be changed to
   // `dark` to enable the dark color theme, or to `light dark` to defer to the
@@ -48,19 +40,33 @@ html {
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
-}/* You can add global styles to this file, and also import other style files */
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 @for $i from 1 through 10 {
-    .w#{$i * 10} {
-        width: #{$i * 10%};
-    }
+  .w#{$i * 10} {
+    width: #{$i * 10%};
+  }
 }
 
 fieldset {
-    border: none;
+  border: none;
+
+  .radioGroup {
+    border: 1px solid;
+    border-radius: 8px;
+  }
 }
 
 .form-grid {
@@ -69,6 +75,12 @@ fieldset {
   gap: 1rem;
   margin-bottom: 1.5rem;
   padding: 1.5rem;
+}
+
+.form-grid-child {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
 }
 
 .form-group {
@@ -94,8 +106,8 @@ fieldset {
 }
 
 .span-2 {
-    grid-column: span 12;
-  }
+  grid-column: span 12;
+}
 
 @media (min-width: 768px) {
   .span-6 {
@@ -130,7 +142,18 @@ fieldset {
 }
 
 
-.w25 { width: 25%; }
-.w33 { width: calc(100% / 3); }
-.w66 { width: calc(200% / 3); }
-.w75 { width: 75%; }
+.w25 {
+  width: 25%;
+}
+
+.w33 {
+  width: calc(100% / 3);
+}
+
+.w66 {
+  width: calc(200% / 3);
+}
+
+.w75 {
+  width: 75%;
+}

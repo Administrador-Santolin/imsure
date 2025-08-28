@@ -18,6 +18,7 @@ import { Cliente } from '../../../models/cliente.model';
 import { MascaraPipe } from '../../../mascara-pipe';
 import { NgxMaskDirective } from 'ngx-mask';
 import { Automovel } from './Produtos/automovel/automovel';
+import { Locais } from './Produtos/locais/locais';
 
 // Converte os dados do Firestore para o formato da Interface Cliente.
 // Isso é útil para garantir que os dados lidos do banco correspondam à nossa tipagem.
@@ -86,7 +87,8 @@ interface Apolice {
     MatIconModule,
     MascaraPipe,
     NgxMaskDirective,
-    Automovel
+    Automovel,
+    Locais,
   ],
   templateUrl: './apolice-form.html',
   styleUrl: './apolice-form.scss'
@@ -97,6 +99,21 @@ export class ApoliceForm implements OnInit {
   isEditing: boolean = false;
   clienteSearchControl = new FormControl<string | Cliente>('');
   filteredClientes$: Observable<Cliente[]> | undefined;
+
+  // Array com os produtos que são do tipo "locais"
+  produtosLocais: string[] = [
+    'Residencial',
+    'Comercial',
+    'Industrial',
+    'Rural',
+    'Condomínio',
+    'Empresarial',
+    'Escritório',
+    'Loja',
+    'Galpão',
+    'Fazenda',
+    'Sítio'
+  ];
 
   private fb = inject(FormBuilder);
   private router = inject(Router);
@@ -359,6 +376,12 @@ export class ApoliceForm implements OnInit {
   // onCancel: Lida com o clique no botão "Cancelar".
   onCancel(): void {
     this.router.navigate(['/apolices']); // Volta para a lista de apólices
+  }
+
+  // Método para verificar se o produto atual é do tipo "locais"
+  isProdutoLocais(): boolean {
+    const produtoAtual = this.apoliceForm.get('produto')?.value;
+    return this.produtosLocais.includes(produtoAtual);
   }
 
   // Método auxiliar para obter um FormControl de um subgrupo

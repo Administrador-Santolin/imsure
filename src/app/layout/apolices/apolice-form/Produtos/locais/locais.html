@@ -1,0 +1,75 @@
+<mat-tab-group>
+    <mat-tab label="Local Segurado">
+        <form class="form-grid" [formGroup]="localSegurado">
+            <mat-form-field appearance="outline" class="span-6">
+                <mat-label>Rua</mat-label>
+                <input matInput formControlName="rua" placeholder="Ex: Rua Exemplo, 123 - Cidade">
+                @if ( localSegurado.invalid ) {
+                <mat-error>
+                    O nome da rua é obrigatório.
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="span-2">
+                <mat-label>Número</mat-label>
+                <input matInput formControlName="numero" type="number" />
+                @if ( localSegurado.invalid ) {
+                <mat-error>
+                    O número da rua é obrigatório.
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="span-4">
+                <mat-label>Complemento</mat-label>
+                <input matInput formControlName="complemento" type="text" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="span-3">
+                <mat-label>CEP</mat-label>
+                <input matInput formControlName="cep" type="text" mask="00000-000" />
+                @if ( localSegurado.invalid ) {
+                <mat-error>
+                    O CEP é obrigatório.
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="span-3">
+                <mat-label>Bairro</mat-label>
+                <input matInput formControlName="bairro" type="text" />
+                @if ( localSegurado.invalid ) {
+                <mat-error>
+                    O bairro é obrigatório.
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="span-3">
+                <mat-label>Cidade</mat-label>
+                <input matInput formControlName="cidade" type="text" />
+                @if ( localSegurado.invalid ) {
+                <mat-error>
+                    A cidade é obrigatório.
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="span-2">
+                <mat-label>Estado</mat-label>
+                <input matInput type="text" formControlName="estado" />
+                @if ( localSegurado.invalid ) {
+                <mat-error>
+                    O Estado é obrigatório.
+                </mat-error>
+                }
+            </mat-form-field>
+        </form>
+    </mat-tab>
+
+    <mat-tab label="Coberturas">
+
+    </mat-tab>
+
+</mat-tab-group>
