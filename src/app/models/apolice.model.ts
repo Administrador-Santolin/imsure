@@ -11,10 +11,10 @@ export interface Apolice {
     dataEmissao: Date,
     tipoSeguro: string, // Radio group: 'novo', 'renovacao', 'renovacaoOutra'
     situacao: string, // Radio group: 'ativo', 'vencido', etc.
-    formaPagamento: formpaPagamento
+    formaPagamento: FormaPagamento
 }
 
-export interface formpaPagamento {// Informações Financeiras (subgrupo aninhado, para o Expansion Panel) ({
+export interface FormaPagamento {// Informações Financeiras (subgrupo aninhado, para o Expansion Panel) ({
     formaPagamento: string,
     parcelas: number,
     vencimentoPrimeiraParcela: number,
@@ -24,5 +24,13 @@ export interface formpaPagamento {// Informações Financeiras (subgrupo aninhad
     premioTotal: number
 }
 
-
-
+export interface Automovel {
+    fabricante: string;
+    modelo: string;
+    anoFabricacao: number;
+    anoModelo: number;
+    placa: string;
+    chassi: string;
+    fipe: string;
+    cepRisco: string;
+}

@@ -1,45 +1,47 @@
-<form class="form-grid">
+<form [formGroup]="automovelForm">
   <mat-tab-group>
     <mat-tab label="Dados do veículo">
-      <mat-form-field class="span-3">
-        <mat-label>Fabricante</mat-label>
-        <input matInput />
-      </mat-form-field>
+      <div class="form-grid">
+        <mat-form-field class="span-3" formControlName="fabricante" appearance="outline">
+          <mat-label>Fabricante</mat-label>
+          <input matInput />
+        </mat-form-field>
 
-      <mat-form-field class="span-6">
-        <mat-label>Modelo</mat-label>
-        <input matInput />
-      </mat-form-field>
+        <mat-form-field class="span-4" formControlName="modelo" appearance="outline">
+          <mat-label>Modelo</mat-label>
+          <input matInput />
+        </mat-form-field>
 
-      <mat-form-field class="span-2">
-        <mat-label>Ano fabricação</mat-label>
-        <input matInput />
-      </mat-form-field>
+        <mat-form-field class="span-2" formControlName="anoFabricacao" appearance="outline">
+          <mat-label>Ano fabricação</mat-label>
+          <input matInput maxlength="4" />
+        </mat-form-field>
 
-      <mat-form-field class="span-2">
-        <mat-label>Ano modelo</mat-label>
-        <input matInput />
-      </mat-form-field>
+        <mat-form-field class="span-2" formControlName="anoModelo" appearance="outline">
+          <mat-label>Ano modelo</mat-label>
+          <input matInput maxlength="4" />
+        </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Placa</mat-label>
-        <input matInput />
-      </mat-form-field>
+        <mat-form-field appearance="outline" formControlName="placa" class="span-2">
+          <mat-label>Placa</mat-label>
+          <input matInput />
+        </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Chassi</mat-label>
-        <input matInput />
-      </mat-form-field>
+        <mat-form-field appearance="outline" formControlName="chassi" class="span-3">
+          <mat-label>Chassi</mat-label>
+          <input matInput />
+        </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>FIPE</mat-label>
-        <input matInput />
-      </mat-form-field>
+        <mat-form-field appearance="outline" formControlName="fipe" class="span-2">
+          <mat-label>FIPE</mat-label>
+          <input matInput />
+        </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>CEP risco</mat-label>
-        <input matInput />
-      </mat-form-field>
+        <mat-form-field appearance="outline" formControlName="cepRisco" class="span-2">
+          <mat-label>CEP risco</mat-label>
+          <input matInput mask="00000-000" />
+        </mat-form-field>
+      </div>
     </mat-tab>
 
     <mat-tab label="Coberturas">
