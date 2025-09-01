@@ -280,6 +280,8 @@
         <app-automovel></app-automovel>
       } @else if ( isProdutoLocais() ){
         <app-locais></app-locais>
+      } @else if ( apoliceForm.get('produto')?.value === 'Responsabilidade Civil' ) {
+        <app-resp-civil></app-resp-civil>
       }
 
     </mat-expansion-panel>

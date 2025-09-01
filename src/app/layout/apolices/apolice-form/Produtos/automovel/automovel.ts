@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -13,6 +14,7 @@ import { NgxMaskDirective } from 'ngx-mask';
     ReactiveFormsModule,
     MatInputModule,
     MatSelectModule,
+    MatFormFieldModule,
     MatTabsModule,
     NgxMaskDirective
   ],
@@ -32,4 +34,6 @@ export class Automovel {
     cepRisco: ['']
   });
 
+  constructor() {
+  }
 }

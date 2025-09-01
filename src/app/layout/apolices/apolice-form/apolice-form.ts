@@ -19,6 +19,7 @@ import { MascaraPipe } from '../../../mascara-pipe';
 import { NgxMaskDirective } from 'ngx-mask';
 import { Automovel } from './Produtos/automovel/automovel';
 import { Locais } from './Produtos/locais/locais';
+import { RespCivil } from './Produtos/resp-civil/resp-civil';
 
 // Converte os dados do Firestore para o formato da Interface Cliente.
 // Isso é útil para garantir que os dados lidos do banco correspondam à nossa tipagem.
@@ -89,6 +90,7 @@ interface Apolice {
     NgxMaskDirective,
     Automovel,
     Locais,
+    RespCivil
   ],
   templateUrl: './apolice-form.html',
   styleUrl: './apolice-form.scss'
