@@ -9,40 +9,50 @@
       <input matInput placeholder="Digite o nome do cliente" [formControl]="clienteSearchControl"
         [matAutocomplete]="autoCliente" required />
       <mat-autocomplete #autoCliente="matAutocomplete" [displayWith]="displayCliente">
-        <ng-container *ngIf="filteredClientes$ | async as Clientes; else loadingClients">
-          <mat-option *ngIf="Clientes.length === 0 && clienteSearchControl.value" value="">
-            Nenhum cliente encontrado
-          </mat-option>
-          <mat-option *ngFor="let cliente of filteredClientes$ | async" [value]="cliente"
-            (onSelectionChange)="onClienteSelected($event)">
-            {{ cliente.nome }} - {{ cliente.cpf | mascara: '000.000.000-00' }}
-          </mat-option>
-        </ng-container>
-        <ng-template #loadingClients>
-          <mat-option value="" disabled>Carregando clientes...</mat-option>
-        </ng-template>
+        @if ( filteredClientes$ | async; as clientes ) {
+        @if ( clientes.length === 0 && clienteSearchControl.value ) {
+        <mat-option value="">
+          Nenhum cliente encontrado
+        </mat-option>
+        }
+
+        @for (cliente of clientes; track cliente.id) {
+        <mat-option [value]="cliente" (onSelectionChange)="onClienteSelected($event)">
+          {{ cliente.nome }} - {{ cliente.cpf | mascara: '000.000.000-00' }}
+        </mat-option>
+        }
+        } @else {
+        <mat-option value="" disabled>Carregando clientes...</mat-option>
+        }
+
       </mat-autocomplete>
       <input type="hidden" formControlName="clienteId">
       <input type="hidden" formControlName="clienteNome">
-      <mat-error *ngIf="apoliceForm.get('clienteId')?.hasError('required') && apoliceForm.get('clienteId')?.touched">
+      @if ( apoliceForm.get('clienteId')?.hasError('required') && apoliceForm.get('clienteId')?.touched ) {
+      <mat-error>
         Cliente é obrigatório.
       </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="span-3">
       <mat-label>Apólice</mat-label>
       <input matInput placeholder="Número da apólice" formControlName="apolice" required />
-      <mat-error *ngIf="apoliceForm.get('apolice')?.hasError('required') && apoliceForm.get('apolice')?.touched">
+      @if ( apoliceForm.get('apolice')?.hasError('required') && apoliceForm.get('apolice')?.touched ) {
+      <mat-error>
         Número da apólice é obrigatório.
       </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="span-3">
       <mat-label>Proposta</mat-label>
       <input matInput placeholder="Número da proposta" formControlName="proposta" required />
-      <mat-error *ngIf="apoliceForm.get('proposta')?.hasError('required') && apoliceForm.get('proposta')?.touched">
+      @if ( apoliceForm.get('proposta')?.hasError('required') && apoliceForm.get('proposta')?.touched ) {
+      <mat-error>
         Número da proposta é obrigatório.
       </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="span-3">
@@ -67,7 +77,7 @@
 
     <mat-form-field appearance="outline" class="span-2">
       <mat-label>Produto</mat-label>
-      <mat-select formControlName="produto"  required>
+      <mat-select formControlName="produto" required>
         <mat-option value="Automóvel">Automóvel</mat-option>
         <mat-option value="Residencial">Residencial</mat-option>
         <mat-option value="Vida">Vida</mat-option>
@@ -81,9 +91,12 @@
         <mat-option value="Transportes">Transportes</mat-option>
         <mat-option value="Outros">Outros</mat-option>
       </mat-select>
-      <mat-error *ngIf="apoliceForm.get('produto')?.hasError('required') && apoliceForm.get('produto')?.touched">
+      @if ( apoliceForm.get('produto')?.hasError('required') && apoliceForm.get('produto')?.touched ) {
+      <mat-error>
         Produto é obrigatório.
       </mat-error>
+      }
+
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="span-2">
@@ -92,49 +105,53 @@
         <mat-option value="Renovavel">Renovável</mat-option>
         <mat-option value="Avulso">Avulso</mat-option>
       </mat-select>
-      <mat-error
-        *ngIf="apoliceForm.get('subTipoDocumento')?.hasError('required') && apoliceForm.get('subTipoDocumento')?.touched">
+      @if ( apoliceForm.get('subTipoDocumento')?.hasError('required') && apoliceForm.get('subTipoDocumento')?.touched) {
+      <mat-error>
         Sub-tipo é obrigatório.
       </mat-error>
+      }
     </mat-form-field>
 
     <div class="form-grid-child span-12">
-    <mat-form-field appearance="outline" class="span-2">
-      <mat-label>Início de Vigência</mat-label>
-      <input matInput [matDatepicker]="inicioVigenciaPicker" placeholder="Início de vigência"
-        formControlName="inicioVigencia"  required>
-      <mat-datepicker-toggle matIconSuffix [for]="inicioVigenciaPicker"></mat-datepicker-toggle>
-      <mat-datepicker #inicioVigenciaPicker></mat-datepicker>
-      <mat-error
-        *ngIf="apoliceForm.get('inicioVigencia')?.hasError('required') && apoliceForm.get('inicioVigencia')?.touched">
-        Início de Vigência é obrigatório.
-      </mat-error>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="span-2">
+        <mat-label>Início de Vigência</mat-label>
+        <input matInput [matDatepicker]="inicioVigenciaPicker" placeholder="Início de vigência"
+          formControlName="inicioVigencia" required>
+        <mat-datepicker-toggle matIconSuffix [for]="inicioVigenciaPicker"></mat-datepicker-toggle>
+        <mat-datepicker #inicioVigenciaPicker></mat-datepicker>
+        @if ( apoliceForm.get('inicioVigencia')?.hasError('required') && apoliceForm.get('inicioVigencia')?.touched ) {
+        <mat-error>
+          Início de Vigência é obrigatório.
+        </mat-error>
+        }
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="span-2">
-      <mat-label>Fim de Vigência</mat-label>
-      <input matInput [matDatepicker]="fimVigenciaPicker" placeholder="Fim de vigência" formControlName="fimVigencia"
-        required>
-      <mat-datepicker-toggle matIconSuffix [for]="fimVigenciaPicker"></mat-datepicker-toggle>
-      <mat-datepicker #fimVigenciaPicker></mat-datepicker>
-      <mat-error
-        *ngIf="apoliceForm.get('fimVigencia')?.hasError('required') && apoliceForm.get('fimVigencia')?.touched">
-        Fim de Vigência é obrigatório.
-      </mat-error>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="span-2">
+        <mat-label>Fim de Vigência</mat-label>
+        <input matInput [matDatepicker]="fimVigenciaPicker" placeholder="Fim de vigência" formControlName="fimVigencia"
+          required>
+        <mat-datepicker-toggle matIconSuffix [for]="fimVigenciaPicker"></mat-datepicker-toggle>
+        <mat-datepicker #fimVigenciaPicker></mat-datepicker>
+        @if ( apoliceForm.get('fimVigencia')?.hasError('required') && apoliceForm.get('fimVigencia')?.touched ) {
+        <mat-error>
+          Fim de Vigência é obrigatório.
+        </mat-error>
+        }
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="span-2">
-      <mat-label>Data de Emissão</mat-label>
-      <input matInput [matDatepicker]="emissaoPicker" placeholder="Data de Emissão" formControlName="dataEmissao"
-        required>
-      <mat-datepicker-toggle matIconSuffix [for]="emissaoPicker"></mat-datepicker-toggle>
-      <mat-datepicker #emissaoPicker></mat-datepicker>
-      <mat-error
-        *ngIf="apoliceForm.get('dataEmissao')?.hasError('required') && apoliceForm.get('dataEmissao')?.touched">
-        Data de Emissão é obrigatória.
-      </mat-error>
-    </mat-form-field>
-  </div>
+      <mat-form-field appearance="outline" class="span-2">
+        <mat-label>Data de Emissão</mat-label>
+        <input matInput [matDatepicker]="emissaoPicker" placeholder="Data de Emissão" formControlName="dataEmissao"
+          required>
+        <mat-datepicker-toggle matIconSuffix [for]="emissaoPicker"></mat-datepicker-toggle>
+        <mat-datepicker #emissaoPicker></mat-datepicker>
+        @if ( apoliceForm.get('dataEmissao')?.hasError('required') && apoliceForm.get('dataEmissao')?.touched ) {
+        <mat-error>
+          Data de Emissão é obrigatória.
+        </mat-error>
+        }
+      </mat-form-field>
+    </div>
 
     <fieldset class="span-6 radioGroup">
       <legend>Tipo de Seguro</legend>
@@ -143,9 +160,11 @@
         <mat-radio-button value="renovacao">Renovação</mat-radio-button>
         <mat-radio-button value="renovacaoOutra">Renovação de outra corretora</mat-radio-button>
       </mat-radio-group>
-      <mat-error *ngIf="apoliceForm.get('tipoSeguro')?.hasError('required') && apoliceForm.get('tipoSeguro')?.touched">
+      @if ( apoliceForm.get('tipoSeguro')?.hasError('required') && apoliceForm.get('tipoSeguro')?.touched ) {
+      <mat-error>
         Tipo de Seguro é obrigatório.
       </mat-error>
+      }
     </fieldset>
 
     <fieldset class="span-6 radioGroup">
@@ -158,9 +177,11 @@
         <mat-radio-button value="suspenso">Suspenso</mat-radio-button>
         <mat-radio-button value="naoRenovado">Não Renovado</mat-radio-button>
       </mat-radio-group>
-      <mat-error *ngIf="apoliceForm.get('situacao')?.hasError('required') && apoliceForm.get('situacao')?.touched">
+      @if ( apoliceForm.get('situacao')?.hasError('required') && apoliceForm.get('situacao')?.touched ) {
+      <mat-error>
         Situação é obrigatória.
       </mat-error>
+      }
     </fieldset>
 
   </fieldset>
@@ -184,24 +205,29 @@
               <mat-option value="ticket">Boleto</mat-option>
               <mat-option value="pix">Pix</mat-option>
             </mat-select>
-            <mat-error
-              *ngIf="getControl('informacoesFinanceiras', 'formaPagamento')?.hasError('required') && getControl('informacoesFinanceiras', 'formaPagamento')?.touched">
+            @if ( getControl('informacoesFinanceiras', 'formaPagamento').hasError('required') &&
+            getControl('informacoesFinanceiras', 'formaPagamento').touched ) {
+            <mat-error>
               Forma de Pagamento é obrigatória.
             </mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="span-2">
             <mat-label>Parcelas</mat-label>
             <input matInput type="number" placeholder="Número de Parcelas" formControlName="parcelas" min="1"
               required />
-            <mat-error
-              *ngIf="getControl('informacoesFinanceiras', 'parcelas')?.hasError('required') && getControl('informacoesFinanceiras', 'parcelas')?.touched">
+            @if ( getControl('informacoesFinanceiras', 'parcelas').hasError('required') &&
+            getControl('informacoesFinanceiras', 'parcelas').touched ) {
+            <mat-error>
               Parcelas é obrigatório.
             </mat-error>
-            <mat-error
-              *ngIf="getControl('informacoesFinanceiras', 'parcelas')?.hasError('min') && getControl('informacoesFinanceiras', 'parcelas')?.touched">
+            } @else if ( getControl('informacoesFinanceiras', 'parcelas').hasError('min') &&
+            getControl('informacoesFinanceiras', 'parcelas').touched ) {
+            <mat-error>
               Mínimo 1 parcela.
             </mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="span-2">
@@ -210,10 +236,12 @@
               formControlName="vencimentoPrimeiraParcela" required>
             <mat-datepicker-toggle matIconSuffix [for]="vencimentoPrimeiraParcelaPicker"></mat-datepicker-toggle>
             <mat-datepicker #vencimentoPrimeiraParcelaPicker></mat-datepicker>
-            <mat-error
-              *ngIf="getControl('informacoesFinanceiras', 'vencimentoPrimeiraParcela')?.hasError('required') && getControl('informacoesFinanceiras', 'vencimentoPrimeiraParcela')?.touched">
+            @if ( getControl('informacoesFinanceiras', 'vencimentoPrimeiraParcela').hasError('required') &&
+            getControl('informacoesFinanceiras', 'vencimentoPrimeiraParcela').touched ) {
+            <mat-error>
               Vencimento é obrigatório.
             </mat-error>
+            }
           </mat-form-field>
         </fieldset>
 
@@ -223,21 +251,26 @@
             <input matInput type="number" style="text-align: right;" formControlName="comissaoPercentual" min="0"
               max="100" />
             <span matTextSuffix>%</span>
-            <mat-error
-              *ngIf="getControl('informacoesFinanceiras', 'comissaoPercentual')?.hasError('min') || getControl('informacoesFinanceiras', 'comissaoPercentual')?.hasError('max') && getControl('informacoesFinanceiras', 'comissaoPercentual')?.touched">
+            @if ( getControl('informacoesFinanceiras', 'comissaoPercentual').hasError('min') ||
+            getControl('informacoesFinanceiras', 'comissaoPercentual').hasError('max') &&
+            getControl('informacoesFinanceiras', 'comissaoPercentual').touched) {
+            <mat-error>
               Deve ser entre 0 e 100.
             </mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field floatLabel="always" appearance="outline">
             <mat-label>Prêmio Líquido</mat-label>
-            <input matInput type="text" formControlName="premioLiquido" min="0" mask="separator.2"
-              thousandSeparator="." [decimalMarker]="','" />
+            <input matInput type="text" formControlName="premioLiquido" min="0" mask="separator.2" thousandSeparator="."
+              [decimalMarker]="','" />
             <span matTextPrefix>R$</span>
-            <mat-error
-              *ngIf="getControl('informacoesFinanceiras', 'premioLiquido')?.hasError('min') && getControl('informacoesFinanceiras', 'premioLiquido')?.touched">
+            @if ( getControl('informacoesFinanceiras', 'premioLiquido').hasError('min') &&
+            getControl('informacoesFinanceiras', 'premioLiquido').touched) {
+            <mat-error>
               Prêmio líquido deve ser positivo.
             </mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field floatLabel="always" appearance="outline">
@@ -245,16 +278,19 @@
             <input matInput type="text" style="text-align: right;" formControlName="iofPercentual" min="0" max="100"
               [decimalMarker]="','" mask="percent.2" />
             <span matTextSuffix>%</span>
-            <mat-error
-              *ngIf="getControl('informacoesFinanceiras', 'iofPercentual')?.hasError('min') || getControl('informacoesFinanceiras', 'iofPercentual')?.hasError('max') && getControl('informacoesFinanceiras', 'iofPercentual')?.touched">
+            @if ( getControl('informacoesFinanceiras', 'iofPercentual').hasError('min') ||
+            getControl('informacoesFinanceiras', 'iofPercentual').hasError('max') &&
+            getControl('informacoesFinanceiras', 'iofPercentual').touched ) {
+            <mat-error>
               Deve ser entre 0 e 100.
             </mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field floatLabel="always" appearance="outline">
             <mat-label>Prêmio Total</mat-label>
-            <input matInput type="text" formControlName="premioTotal" min="0" mask="separator.2"
-              thousandSeparator="." [decimalMarker]="','" />
+            <input matInput type="text" formControlName="premioTotal" min="0" mask="separator.2" thousandSeparator="."
+              [decimalMarker]="','" />
             <span matTextPrefix>R$</span>
             @if ( getControl('informacoesFinanceiras', 'premioTotal').hasError('min') &&
             getControl('informacoesFinanceiras', 'premioTotal').touched ) {
@@ -277,9 +313,9 @@
       </mat-expansion-panel-header>
 
       @if ( apoliceForm.get('produto')?.value === 'Automóvel' ) {
-        <app-automovel></app-automovel>
+      <app-automovel></app-automovel>
       } @else if ( isProdutoLocais() ){
-        <app-locais></app-locais>
+      <app-locais></app-locais>
       }
 
     </mat-expansion-panel>
