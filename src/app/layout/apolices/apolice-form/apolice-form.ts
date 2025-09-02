@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { debounceTime, map, Observable, startWith, switchMap } from 'rxjs';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -20,6 +20,7 @@ import { NgxMaskDirective } from 'ngx-mask';
 import { Automovel } from './Produtos/automovel/automovel';
 import { Locais } from './Produtos/locais/locais';
 import { RespCivil } from './Produtos/resp-civil/resp-civil';
+import { Apolice } from '../../../models/apolice.model';
 
 // Converte os dados do Firestore para o formato da Interface Cliente.
 // Isso é útil para garantir que os dados lidos do banco correspondam à nossa tipagem.
@@ -40,37 +41,6 @@ const clienteConverter: FirestoreDataConverter<Cliente> = {
     } as Cliente;
   }
 };
-
-// Interface para a Apólice, refletindo a estrutura do seu FormGroup e como será salva no Firestore.
-interface Apolice {
-  id?: string; // Opcional, pois é gerado pelo Firestore
-  clienteId: string;
-  clienteNome: string; // Duplicado para facilitar a exibição rápida
-  apolice: string;
-  proposta: string;
-  seguradora: string;
-  produto: string;
-  subTipoDocumento: string;
-  inicioVigencia: Date | Timestamp | null; // Pode ser Date ou Timestamp
-  fimVigencia: Date | Timestamp | null;
-  dataEmissao: Date | Timestamp | null;
-  createdAt?: Date | Timestamp; // Para armazenar a data de criação
-  tipoSeguro: string; // Ex: 'novo', 'renovacao'
-  situacao: string; // Ex: 'ativo', 'vencido'
-  informacoesFinanceiras: {
-    formaPagamento: string;
-    parcelas: number | null;
-    vencimentoPrimeiraParcela: Date | Timestamp | null;
-    comissaoPercentual: number | null;
-    premioLiquido: number | null;
-    iofPercentual: number | null;
-    premioTotal: number | null;
-  };
-  itemSegurado: {
-    descricao: string;
-    // ... outros campos futuros do item segurado
-  };
-}
 
 @Component({
   selector: 'app-apolice-form',
@@ -151,10 +121,7 @@ export class ApoliceForm implements OnInit {
       }),
 
       // Item Segurado (subgrupo aninhado, para o Expansion Panel)
-      itemSegurado: this.fb.group({
-        descricao: [''] // Campo de texto simples por enquanto
-        // ... (outros campos do item segurado viriam aqui no futuro)
-      })
+      itensSegurados: this.fb.array([])
     })
   }
 
@@ -214,6 +181,39 @@ export class ApoliceForm implements OnInit {
   }
 
 
+  get itensSegurados(): FormArray {
+    return this.apoliceForm.get('itensSegurados') as FormArray<FormGroup>;
+  }
+
+  private newId(): string {
+    return (globalThis as any).crypto?.randomUUID?.()
+      ?? Math.random().toString(36).slice(2);
+  }
+
+  private createItem(produto: string, details: any = {}): FormGroup {
+    return this.fb.group({
+      id: [this.newId()],
+      produto: [produto, Validators.required],
+      details: [details, Validators.required]
+    }, {updateOn: 'blur'});
+  }
+
+  addItem(produto?: string) {
+    const base = produto || this.apoliceForm.get('produto')?.value || '';
+    this.itensSegurados.push(this.createItem(base));
+  }
+
+  removeItem(i: number) {
+    this.itensSegurados.removeAt(i);
+  }
+
+  cloneItem(i: number) {
+    const {produto, details } = this.itensSegurados.at(i).getRawValue();
+    this.itensSegurados.push(this.createItem(produto, details)); 
+  }
+
+  trackById = (_: number, ctrl: AbstractControl) => ctrl.value?.id ?? _;
+
   // loadApoliceData: Carrega os dados de uma apólice específica do Firestore.
   // É chamada quando o formulário está no modo de edição/visualização.
   async loadApoliceData(id: string): Promise<void> {
@@ -267,23 +267,23 @@ export class ApoliceForm implements OnInit {
         situacao: apoliceData.situacao,
 
         // Preenche os subgrupos
-        informacoesFinanceiras: apoliceData.informacoesFinanceiras ? {
-          formaPagamento: apoliceData.informacoesFinanceiras.formaPagamento,
-          parcelas: apoliceData.informacoesFinanceiras.parcelas,
+        informacoesFinanceiras: apoliceData.formaPagamento ? {
+          formaPagamento: apoliceData.formaPagamento.formaPagamento,
+          parcelas: apoliceData.formaPagamento.parcelas,
           // Converta a string de data para objeto Date
           vencimentoPrimeiraParcela:
-            apoliceData.informacoesFinanceiras.vencimentoPrimeiraParcela instanceof Date
-              ? apoliceData.informacoesFinanceiras.vencimentoPrimeiraParcela
-              : (apoliceData.informacoesFinanceiras.vencimentoPrimeiraParcela &&
-                typeof (apoliceData.informacoesFinanceiras.vencimentoPrimeiraParcela as any).toDate === 'function'
-                ? (apoliceData.informacoesFinanceiras.vencimentoPrimeiraParcela as any).toDate()
-                : (typeof apoliceData.informacoesFinanceiras.vencimentoPrimeiraParcela === 'string' || typeof apoliceData.informacoesFinanceiras.vencimentoPrimeiraParcela === 'number'
-                  ? new Date(apoliceData.informacoesFinanceiras.vencimentoPrimeiraParcela)
+            apoliceData.formaPagamento.vencimentoPrimeiraParcela instanceof Date
+              ? apoliceData.formaPagamento.vencimentoPrimeiraParcela
+              : (apoliceData.formaPagamento.vencimentoPrimeiraParcela &&
+                typeof (apoliceData.formaPagamento.vencimentoPrimeiraParcela as any).toDate === 'function'
+                ? (apoliceData.formaPagamento.vencimentoPrimeiraParcela as any).toDate()
+                : (typeof apoliceData.formaPagamento.vencimentoPrimeiraParcela === 'string' || typeof apoliceData.formaPagamento.vencimentoPrimeiraParcela === 'number'
+                  ? new Date(apoliceData.formaPagamento.vencimentoPrimeiraParcela)
                   : null)),
-          comissaoPercentual: apoliceData.informacoesFinanceiras.comissaoPercentual,
-          premioLiquido: apoliceData.informacoesFinanceiras.premioLiquido,
-          iofPercentual: apoliceData.informacoesFinanceiras.iofPercentual,
-          premioTotal: apoliceData.informacoesFinanceiras.premioTotal
+          comissaoPercentual: apoliceData.formaPagamento.comissaoPercentual,
+          premioLiquido: apoliceData.formaPagamento.premioLiquido,
+          iofPercentual: apoliceData.formaPagamento.iofPercentual,
+          premioTotal: apoliceData.formaPagamento.premioTotal
         } : {},
         itemSegurado: apoliceData.itemSegurado || {}
       });
@@ -337,13 +337,13 @@ export class ApoliceForm implements OnInit {
         apoliceData.dataEmissao = null;
       }
 
-      if (apoliceData.informacoesFinanceiras.vencimentoPrimeiraParcela) {
-        if (apoliceData.informacoesFinanceiras.vencimentoPrimeiraParcela instanceof Date) {
-          apoliceData.informacoesFinanceiras.vencimentoPrimeiraParcela = Timestamp.fromDate(apoliceData.informacoesFinanceiras.vencimentoPrimeiraParcela);
-        } else if ((apoliceData.informacoesFinanceiras.vencimentoPrimeiraParcela as any).toDate) {
-          apoliceData.informacoesFinanceiras.vencimentoPrimeiraParcela = (apoliceData.informacoesFinanceiras.vencimentoPrimeiraParcela as any).toDate();
+      if (apoliceData.formaPagamento.vencimentoPrimeiraParcela) {
+        if (apoliceData.formaPagamento.vencimentoPrimeiraParcela instanceof Date) {
+          apoliceData.formaPagamento.vencimentoPrimeiraParcela = Timestamp.fromDate(apoliceData.formaPagamento.vencimentoPrimeiraParcela);
+        } else if ((apoliceData.formaPagamento.vencimentoPrimeiraParcela as any).toDate) {
+          apoliceData.formaPagamento.vencimentoPrimeiraParcela = (apoliceData.formaPagamento.vencimentoPrimeiraParcela as any).toDate();
         } else {
-          apoliceData.informacoesFinanceiras.vencimentoPrimeiraParcela = null;
+          apoliceData.formaPagamento.vencimentoPrimeiraParcela = null;
         }
       }
 

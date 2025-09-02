@@ -304,7 +304,71 @@
       </section>
     </mat-expansion-panel>
 
-    <mat-expansion-panel formGroupName="itemSegurado">
+    <div class="form-actions" style="margin: 1rem 0;">
+      <button mat-raised-button color="primary" type="button" (click)="addItem()">
+        Adicionar item segurado
+      </button>
+    </div>
+
+    <!-- Lista de itens segurados -->
+      <mat-expansion-panel *ngFor="let item of itensSegurados.controls; let i = index; trackBy: trackById"
+        formGroupName="item">
+
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>assignment</mat-icon>
+            Item Segurado #{{ i + 1 }}
+          </mat-panel-title>
+          <mat-panel-description>
+            Produto: {{ item.value?.produto || 'defina' }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <!-- Produto por item -->
+        <mat-form-field appearance="outline" class="span-3">
+          <mat-label>Produto do item</mat-label>
+          <mat-select formControlName="produto">
+            <mat-option value="Automóvel">Automóvel</mat-option>
+            <mat-option value="Residencial">Residencial</mat-option>
+            <mat-option value="Responsabilidade Civil">Responsabilidade Civil</mat-option>
+            <!-- adicione outros aqui quando precisar -->
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Área para o form específico do item (próximo passo será ligar via CVA) -->
+        @switch (item.get('produto')?.value) {
+        @case ('Automóvel') {
+        <!-- depois: <app-automovel formControlName="details"></app-automovel> -->
+        <pre class="p-2 bg-light">Automóvel (placeholder). Details: {{ item.value?.details | json }}</pre>
+        }
+        @case ('Residencial') {
+        <!-- depois: <app-locais formControlName="details"></app-locais> -->
+        <pre class="p-2 bg-light">Residencial (placeholder). Details: {{ item.value?.details | json }}</pre>
+        }
+        @case ('Responsabilidade Civil') {
+        <!-- depois: <app-resp-civil formControlName="details"></app-resp-civil> -->
+        <pre class="p-2 bg-light">Resp. Civil (placeholder). Details: {{ item.value?.details | json }}</pre>
+        }
+        @default {
+        <div class="p-2">Escolha um produto para este item.</div>
+        }
+        }
+
+        <div class="form-actions" style="display:flex; gap:.5rem; margin-top:.5rem;">
+          <button mat-stroked-button color="primary" type="button" (click)="cloneItem(i)">Duplicar item</button>
+          <button mat-stroked-button color="warn" type="button" (click)="removeItem(i)">Remover item</button>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="form-actions">
+      <button matFab color="primary" type="submit" [disabled]="apoliceForm.invalid">Salvar Apólice</button>
+      <button mat-button type="button" (click)="onCancel()">Cancelar</button>
+    </div>
+</form>
+
+
+<!-- <mat-expansion-panel formGroupName="itemSegurado">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <mat-icon>assignment</mat-icon>
@@ -315,16 +379,10 @@
       @if ( apoliceForm.get('produto')?.value === 'Automóvel' ) {
       <app-automovel></app-automovel>
       } @else if ( isProdutoLocais() ){
-        <app-locais></app-locais>
+      <app-locais></app-locais>
       } @else if ( apoliceForm.get('produto')?.value === 'Responsabilidade Civil' ) {
-        <app-resp-civil></app-resp-civil>
+      <app-resp-civil></app-resp-civil>
       }
 
     </mat-expansion-panel>
-  </mat-accordion>
-
-  <div class="form-actions">
-    <button matFab color="primary" type="submit" [disabled]="apoliceForm.invalid">Salvar Apólice</button>
-    <button mat-button type="button" (click)="onCancel()">Cancelar</button>
-  </div>
-</form>
+  </mat-accordion> -->
