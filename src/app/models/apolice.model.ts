@@ -33,15 +33,27 @@ export interface FormaPagamento {// Informações Financeiras (subgrupo aninhado
     premioTotal: number
 }
 
-export interface Automovel {
+export interface AutomovelDetails {
     fabricante: string;
     modelo: string;
-    anoFabricacao: number;
-    anoModelo: number;
+    anoFabricacao: string;
+    anoModelo: string;
     placa: string;
     chassi: string;
     fipe: string;
     cepRisco: string;
 }
+
+// locais-details.model.ts
+export interface LocaisDetails {
+    rua: string;
+    numero: number | null;
+    complemento?: string | null;
+    cep: string;
+    bairro: string;
+    cidade: string;
+    estado: string;
+  }
+  
 
 

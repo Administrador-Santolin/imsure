@@ -1,10 +1,10 @@
 <mat-tab-group>
     <mat-tab label="Local Segurado">
-        <form class="form-grid" [formGroup]="localSegurado">
+        <form class="form-grid" [formGroup]="fg">
             <mat-form-field appearance="outline" class="span-6">
                 <mat-label>Rua</mat-label>
-                <input matInput formControlName="rua" placeholder="Ex: Rua Exemplo, 123 - Cidade">
-                @if ( localSegurado.invalid ) {
+                <input matInput formControlName="rua" placeholder="Ex: Rua Exemplo, 123 - Cidade" (blur)="markTouched()" />
+                @if ( fg.get('rua')?.invalid && fg.get('rua')?.touched ) {
                 <mat-error>
                     O nome da rua é obrigatório.
                 </mat-error>
@@ -13,23 +13,23 @@
 
             <mat-form-field appearance="outline" class="span-2">
                 <mat-label>Número</mat-label>
-                <input matInput formControlName="numero" type="number" />
-                @if ( localSegurado.invalid ) {
+                <input matInput formControlName="numero" type="number" (blur)="markTouched()"/>
+                @if ( fg.get('numero')?.invalid && fg.get('numero')?.touched ) {
                 <mat-error>
                     O número da rua é obrigatório.
                 </mat-error>
                 }
-            </mat-form-field>
+            </mat-form-field>   
 
             <mat-form-field appearance="outline" class="span-4">
                 <mat-label>Complemento</mat-label>
-                <input matInput formControlName="complemento" type="text" />
+                <input matInput formControlName="complemento" type="text" (blur)="markTouched()"/>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="span-3">
                 <mat-label>CEP</mat-label>
-                <input matInput formControlName="cep" type="text" mask="00000-000" />
-                @if ( localSegurado.invalid ) {
+                <input matInput formControlName="cep" type="text" mask="00000-000" (blur)="markTouched()"/>
+                @if ( fg.get('cep')?.invalid && fg.get('numero')?.touched ) {
                 <mat-error>
                     O CEP é obrigatório.
                 </mat-error>
@@ -38,8 +38,8 @@
 
             <mat-form-field appearance="outline" class="span-3">
                 <mat-label>Bairro</mat-label>
-                <input matInput formControlName="bairro" type="text" />
-                @if ( localSegurado.invalid ) {
+                <input matInput formControlName="bairro" type="text" (blur)="markTouched()"/>
+                @if ( fg.get('bairro')?.invalid && fg.get('bairro')?.touched ) {
                 <mat-error>
                     O bairro é obrigatório.
                 </mat-error>
@@ -48,8 +48,8 @@
 
             <mat-form-field appearance="outline" class="span-3">
                 <mat-label>Cidade</mat-label>
-                <input matInput formControlName="cidade" type="text" />
-                @if ( localSegurado.invalid ) {
+                <input matInput formControlName="cidade" type="text" (blur)="markTouched()"/>
+                @if ( fg.invalid ) {
                 <mat-error>
                     A cidade é obrigatório.
                 </mat-error>
@@ -58,8 +58,8 @@
 
             <mat-form-field appearance="outline" class="span-2">
                 <mat-label>Estado</mat-label>
-                <input matInput type="text" formControlName="estado" />
-                @if ( localSegurado.invalid ) {
+                <input matInput type="text" formControlName="estado" (blur)="markTouched()"/>
+                @if ( fg.invalid ) {
                 <mat-error>
                     O Estado é obrigatório.
                 </mat-error>

@@ -42,6 +42,12 @@ const clienteConverter: FirestoreDataConverter<Cliente> = {
   }
 };
 
+type ItemGroup = FormGroup<{
+  id: FormControl<string>;
+  produto: FormControl<string>;
+  details: FormControl<any>;
+}>;
+
 @Component({
   selector: 'app-apolice-form',
   imports: [
@@ -121,7 +127,7 @@ export class ApoliceForm implements OnInit {
       }),
 
       // Item Segurado (subgrupo aninhado, para o Expansion Panel)
-      itensSegurados: this.fb.array([])
+      itensSegurados: this.fb.array<ItemGroup>([])
     })
   }
 
@@ -181,21 +187,26 @@ export class ApoliceForm implements OnInit {
   }
 
 
-  get itensSegurados(): FormArray {
-    return this.apoliceForm.get('itensSegurados') as FormArray<FormGroup>;
+  get itensSegurados(): FormArray<ItemGroup> {
+    return this.apoliceForm.get('itensSegurados') as FormArray<ItemGroup>;
+  }
+
+  get itemGroups(): ItemGroup[] {
+    return this.itensSegurados.controls as ItemGroup[];
+  }
+  
+  // 4) garanta que sua fábrica retorna ItemGroup
+  private createItem(produto: string, details: any = {}): ItemGroup {
+    return this.fb.group({
+      id: this.fb.control<string>(this.newId()),
+      produto: this.fb.control<string>(produto, { validators: Validators.required }),
+      details: this.fb.control<any>(details, { validators: Validators.required })
+    }, { updateOn: 'blur' }) as ItemGroup;
   }
 
   private newId(): string {
     return (globalThis as any).crypto?.randomUUID?.()
       ?? Math.random().toString(36).slice(2);
-  }
-
-  private createItem(produto: string, details: any = {}): FormGroup {
-    return this.fb.group({
-      id: [this.newId()],
-      produto: [produto, Validators.required],
-      details: [details, Validators.required]
-    }, {updateOn: 'blur'});
   }
 
   addItem(produto?: string) {
