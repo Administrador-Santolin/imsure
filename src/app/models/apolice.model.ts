@@ -44,6 +44,12 @@ export interface AutomovelDetails {
     cepRisco: string;
 }
 
+export interface RespCivilDetails {
+    nome: string;
+    registroProfissional: string;
+    especialidade: string[];
+}
+
 // locais-details.model.ts
 export interface LocaisDetails {
     rua: string;

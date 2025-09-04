@@ -312,7 +312,7 @@
 
     <!-- Lista de itens segurados -->
     @for ( item of itensSegurados.controls; let i = $index; track item.value?.id) {
-    <mat-expansion-panel [formGroup]="item">  
+    <mat-expansion-panel [formGroup]="item">
 
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -339,17 +339,18 @@
       @switch (item.get('produto')?.value) {
       @case ('Automóvel') {
       <!-- depois: <app-automovel formControlName="details"></app-automovel> -->
-      <pre class="p-2 bg-light">Automóvel (placeholder). Details: {{ item.value.details | json }}</pre>
+      <pre class="p-2 bg-light">Automóvel (placeholder). Details: {{ item.value | json }}</pre>
+      <app-automovel formControlName="details" />
       }
       @case ('Residencial') {
       <!-- depois: <app-locais formControlName="details"></app-locais> -->
       <pre class="p-2 bg-light">Residencial (placeholder). Details: {{ item.value | json }}</pre>
-      <app-locais formControlName="details"></app-locais>
+      <app-locais formControlName="details" />
       }
       @case ('Responsabilidade Civil') {
       <!-- depois: <app-resp-civil formControlName="details"></app-resp-civil> -->
-      <pre class="p-2 bg-light">Resp. Civil (placeholder). Details: {{ item.value.details | json }}</pre>
-      <app-resp-civil></app-resp-civil>
+      <pre class="p-2 bg-light">Resp. Civil (placeholder). Details: {{ item.value | json }}</pre>
+      <app-resp-civil formControlName="details" />
       }
       @default {
       <div class="p-2">Escolha um produto para este item.</div>

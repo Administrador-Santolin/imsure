@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, forwardRef, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NgxMaskDirective } from 'ngx-mask';
-import { AutomovelDetails, LocaisDetails } from '../../../../../models/apolice.model';
+import { AutomovelDetails } from '../../../../../models/apolice.model';
 
 @Component({
   selector: 'app-automovel',
@@ -28,17 +28,17 @@ import { AutomovelDetails, LocaisDetails } from '../../../../../models/apolice.m
     { provide: NG_VALIDATORS, useExisting: forwardRef(() => Automovel), multi: true }
   ]
 })
-export class Automovel {
+export class Automovel implements ControlValueAccessor {
   private fb = inject(FormBuilder);
-  automovelForm = this.fb.group({
-    fabricante: [''],
-    modelo: [''],
-    anoFabricacao: [''],
-    anoModelo: [''],
+  automovelForm: FormGroup = this.fb.group({
+    fabricante: ['', Validators.required],
+    modelo: ['', Validators.required],
+    anoFabricacao: ['', Validators.required],
+    anoModelo: ['', Validators.required],
     placa: [''],
-    chassi: [''],
-    fipe: [''],
-    cepRisco: ['']
+    chassi: ['', Validators.required],
+    fipe: ['', Validators.required],
+    cepRisco: ['', Validators.required]
   },
     {
       updateOn: 'blur'
@@ -51,12 +51,12 @@ export class Automovel {
     this.automovelForm.valueChanges.subscribe(v => this.onChange(v as AutomovelDetails))
   }
 
-  writeValue(value: LocaisDetails | null): void {
+  writeValue(value: AutomovelDetails | null): void {
     if (value) {
       this.automovelForm.patchValue(value, { emitEvent: false });
     } else {
       this.automovelForm.reset(
-        { rua: '', numero: null, complemento: '', cep: '', bairro: '', cidade: '', estado: '' },
+        { fabricante: '', modelo: '', anoFabricacao: '', anoModelo: '', placa: '', chassi: '', fipe: '', cepRisco: '' },
         { emitEvent: false }
       );
     }

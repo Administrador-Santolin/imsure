@@ -1,52 +1,86 @@
-<form [formGroup]="automovelForm">
-  <mat-tab-group>
-    <mat-tab label="Dados do veículo">
-
+<mat-tab-group>
+  <mat-tab label="Dados do veículo">
+    <form [formGroup]="automovelForm">
       <div class="form-grid">
-        <mat-form-field class="span-3" formControlName="fabricante" appearance="outline">
+        <mat-form-field class="span-3" appearance="outline">
           <mat-label>Fabricante</mat-label>
-          <input matInput />
+          <input matInput formControlName="fabricante" (blur)="markTouched()" />
+          @if ( automovelForm.get('fabricante')?.invalid && automovelForm.get('fabricante')?.touched) {
+          <mat-error>
+            O Fabricante do veículo é obrigatório.
+          </mat-error>
+          }
         </mat-form-field>
 
-        <mat-form-field class="span-4" formControlName="modelo" appearance="outline">
+        <mat-form-field class="span-4" appearance="outline">
           <mat-label>Modelo</mat-label>
-          <input matInput />
+          <input matInput formControlName="modelo" (blur)="markTouched()" />
+          @if ( automovelForm.get('modelo')?.invalid && automovelForm.get('modelo')?.touched) {
+          <mat-error>
+            O Modelo do veículo é obrigatório.
+          </mat-error>
+          }
         </mat-form-field>
 
-        <mat-form-field class="span-2" formControlName="anoFabricacao" appearance="outline">
+        <mat-form-field class="span-2" appearance="outline">
           <mat-label>Ano fabricação</mat-label>
-          <input matInput maxlength="4" />
+          <input matInput maxlength="4" formControlName="anoFabricacao" (blur)="markTouched()" />
+          @if ( automovelForm.get('anoFabricacao')?.invalid && automovelForm.get('anoFabricacao')?.touched) {
+          <mat-error>
+            O Ano de fabricação do veículo é obrigatório.
+          </mat-error>
+          }
         </mat-form-field>
 
-        <mat-form-field class="span-2" formControlName="anoModelo" appearance="outline">
+        <mat-form-field class="span-2" appearance="outline">
           <mat-label>Ano modelo</mat-label>
-          <input matInput maxlength="4" />
+          <input matInput maxlength="4" formControlName="anoModelo" (blur)="markTouched()" />
+          @if ( automovelForm.get('anoModelo')?.invalid && automovelForm.get('anoModelo')?.touched) {
+          <mat-error>
+            O Ano do modelo do veículo é obrigatório.
+          </mat-error>
+          }
         </mat-form-field>
 
-        <mat-form-field appearance="outline" formControlName="placa" class="span-2">
+        <mat-form-field appearance="outline" class="span-2">
           <mat-label>Placa</mat-label>
-          <input matInput />
+          <input matInput formControlName="placa" (blur)="markTouched()" />
         </mat-form-field>
 
-        <mat-form-field appearance="outline" formControlName="chassi" class="span-3">
+        <mat-form-field appearance="outline" class="span-3">
           <mat-label>Chassi</mat-label>
-          <input matInput />
+          <input matInput formControlName="chassi" (blur)="markTouched()" />
+          @if ( automovelForm.get('chassi')?.invalid && automovelForm.get('chassi')?.touched) {
+          <mat-error>
+            O Chassi do veículo é obrigatório.
+          </mat-error>
+          }
         </mat-form-field>
 
-        <mat-form-field appearance="outline" formControlName="fipe" class="span-2">
+        <mat-form-field appearance="outline" class="span-2">
           <mat-label>FIPE</mat-label>
-          <input matInput />
+          <input matInput formControlName="fipe" (blur)="markTouched()" maxlength="7" mask="000000-0"/>
+          @if ( automovelForm.get('fipe')?.invalid && automovelForm.get('fipe')?.touched) {
+          <mat-error>
+            O FIPE do veículo é obrigatório.
+          </mat-error>
+          }
         </mat-form-field>
 
-        <mat-form-field appearance="outline" formControlName="cepRisco" class="span-2">
+        <mat-form-field appearance="outline" class="span-2">
           <mat-label>CEP risco</mat-label>
-          <input matInput mask="00000-000" />
+          <input matInput mask="00000-000" formControlName="cepRisco" (blur)="markTouched()" />
+          @if ( automovelForm.get('cepRisco')?.invalid && automovelForm.get('cepRisco')?.touched) {
+          <mat-error>
+            O CEP do risco do veículo é obrigatório.
+          </mat-error>
+          }
         </mat-form-field>
       </div>
-    </mat-tab>
+    </form>
+  </mat-tab>
 
-    <mat-tab label="Coberturas">
-      Coberturas
-    </mat-tab>
-  </mat-tab-group>
-</form>
+  <mat-tab label="Coberturas">
+    Coberturas
+  </mat-tab>
+</mat-tab-group>

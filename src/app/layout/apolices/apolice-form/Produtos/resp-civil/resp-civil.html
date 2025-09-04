@@ -1,16 +1,31 @@
-<form class="form-grid">
+<form class="form-grid" [formGroup]="respCivilForm">
     <mat-form-field class="span-4" appearance="outline">
         <mat-label>Nome</mat-label>
-        <input matInput type="text" placeholder="Responsável Civil">
+        <input matInput type="text" formControlName="nome" placeholder="Responsável Civil">
+        @if ( respCivilForm.get('nome')?.invalid && respCivilForm.get('nome')?.touched) {
+            <mat-error>
+                O nome do segurado é obrigatório.
+            </mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field class="span-2" appearance="outline">
         <mat-label>Registro Profissional</mat-label>
-        <input matInput type="text">
+        <input matInput type="text" formControlName="registroProfissional">
+        @if ( respCivilForm.get('registroProfissional')?.invalid && respCivilForm.get('registroProfissional')?.touched) {
+            <mat-error>
+                O registro profissional é obrigatório.
+            </mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field class="span-3" appearance="outline">
         <mat-label>Especialidade</mat-label>
-        <input matInput type="text">
+        <input matInput type="text" formControlName="especialidade">
+        @if ( respCivilForm.get('especialidade')?.invalid && respCivilForm.get('especialidade')?.touched){
+            <mat-error>
+                A especialidade deve ser selecionada.
+            </mat-error>
+        }
     </mat-form-field>
 </form>
