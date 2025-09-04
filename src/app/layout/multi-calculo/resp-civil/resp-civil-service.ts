@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { SimulacaoData } from './models'; // Ajuste o caminho conforme necessário
+import { SimulacaoData } from '../../../models/respCivil.model'; // Ajuste o caminho conforme necessário
 
 @Injectable({
   providedIn: 'root'
