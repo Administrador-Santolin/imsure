@@ -159,7 +159,7 @@ export class AkadClient {
                 let h = new HttpHeaders({
                     'Content-Type': 'application/json;charset=UTF-8',
                     'Authorization': `Bearer ${token}`,
-                    'Ocp-Apim-Subscription-Key': this.cfg.subscriptionKey
+                    'Ocp-Apim-Subscription-Key': 'b91d51eb223546e1b390afd6ade06814'
                 });
                 return h;
             })
@@ -196,9 +196,9 @@ export class AkadClient {
             client_secret: this.cfg.clientSecret
         });
 
-        let headers = new HttpHeaders({
+        const headers = new HttpHeaders({
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Ocp-Apim-Subscription-Key': this.cfg.subscriptionKey,
+            'Ocp-Apim-Subscription-Key': 'b91d51eb223546e1b390afd6ade06814',
             'Client': this.cfg.clientHeader
         });
 
