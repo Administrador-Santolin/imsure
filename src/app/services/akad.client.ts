@@ -316,34 +316,101 @@ export class AkadClient {
 
     // ====== normalizador de resposta ======
     private toQuoteResult(resp: any): RcQuoteResult {
-        // Ajuste aqui conforme o JSON real da Akad.
-        // Mapeio locais comuns para “total / 6x / 10x”.
-        const total =
-            resp?.pricing?.total ??
-            resp?.preco?.avista ??
-            resp?.price?.total ??
-            0;
+        // À vista (vem como totalAmount no topo)
+        const avista =
+            Number(resp?.totalAmount) ||
+            Number(resp?.paymentOptions?.[0]?.totalAmount) ||
+            Number(resp?.netValue) || 0;
 
-        const parcelas6x =
-            resp?.pricing?.installments?.['6x'] ??
-            resp?.preco?.parcelas6x ??
-            undefined;
+        // Parcelas 6x e 10x (pega a menor parcela encontrada em qualquer forma)
+        const p6 = this.pickInstallmentAmount(resp, 6);
+        const p10 = this.pickInstallmentAmount(resp, 10);
 
-        const parcelas10x =
-            resp?.pricing?.installments?.['10x'] ??
-            resp?.preco?.parcelas10x ??
-            undefined;
+        // Máximo sem juros (n) + valor da parcela nessa máxima + quais tipos têm essa condição
+        const maxNoInterest = this.findMaxNoInterest(resp);
+
+        // Tipos de pagamento disponíveis
+        const tiposPagamento = this.listPaymentTypes(resp);
 
         return {
             carrier: this.id,
             carrierLabel: this.label,
             moeda: 'BRL',
-            premioTotal: Number(total) || 0,
-            parcelas6x: parcelas6x ? Number(parcelas6x) : undefined,
-            parcelas10x: parcelas10x ? Number(parcelas10x) : undefined,
-            quoteId: resp?.quoteId ?? resp?.id ?? undefined,
+            premioTotal: avista,
+            parcelas6x: p6,
+            parcelas10x: p10,
+            quoteId: resp?.identifier ?? String(resp?.id ?? ''),
+
+            // 🔽 campos extras (opcionais, só para exibir no card)
+            maxSemJurosParcelas: maxNoInterest?.n,
+            maxSemJurosValor: maxNoInterest?.amount,
+            pagamentosDisponiveis: tiposPagamento,
+
             raw: resp
-        };
+        } as any; // (ok adicionar extras além do RcQuoteResult)
+    }
+
+    /** Menor valor de parcela para o número 'n' (varre todas as formas de pagamento) */
+    private pickInstallmentAmount(resp: any, n: number): number | undefined {
+        const opts = Array.isArray(resp?.paymentOptions) ? resp.paymentOptions : [];
+        let best: number | undefined;
+
+        for (const opt of opts) {
+            const insts = Array.isArray(opt?.installments) ? opt.installments : [];
+            const hit = insts.find((i: any) => Number(i?.installmentNumber) === n);
+            if (!hit) continue;
+            const val = Number(hit?.totalInstallment ?? hit?.totalValue);
+            if (!Number.isFinite(val)) continue;
+            best = best === undefined ? val : Math.min(best, val);
+        }
+        return best;
+    }
+
+    /** Procura a MAIOR quantidade de parcelas com juros = 0; retorna n, valor (menor entre os tipos) e os tipos que permitem */
+    private findMaxNoInterest(resp: any): { n: number; amount: number; types: string[] } | null {
+        const opts = Array.isArray(resp?.paymentOptions) ? resp.paymentOptions : [];
+        let maxN = 0;
+        let bestAmount: number | undefined;
+        const typesSet = new Set<string>();
+
+        for (const opt of opts) {
+            const t = String(opt?.type ?? '');
+            const insts = Array.isArray(opt?.installments) ? opt.installments : [];
+            for (const it of insts) {
+                const n = Number(it?.installmentNumber);
+                const interest = Number(it?.insterestValue ?? it?.interestValue ?? 0); // aceita ambas as grafias
+                if (!Number.isFinite(n)) continue;
+                if (interest === 0) {
+                    const val = Number(it?.totalInstallment ?? it?.totalValue);
+                    if (!Number.isFinite(val)) continue;
+
+                    if (n > maxN) {
+                        maxN = n;
+                        bestAmount = val;
+                        typesSet.clear();
+                        if (t) typesSet.add(t);
+                    } else if (n === maxN) {
+                        // mesmo N: pega a MENOR parcela e adiciona o tipo
+                        bestAmount = bestAmount === undefined ? val : Math.min(bestAmount, val);
+                        if (t) typesSet.add(t);
+                    }
+                }
+            }
+        }
+
+        if (maxN === 0 || bestAmount === undefined) return null;
+        return { n: maxN, amount: bestAmount, types: Array.from(typesSet) };
+    }
+
+    /** Lista simples dos tipos de pagamento disponíveis (sem duplicar) */
+    private listPaymentTypes(resp: any): string[] {
+        const opts = Array.isArray(resp?.paymentOptions) ? resp.paymentOptions : [];
+        const set = new Set<string>();
+        for (const o of opts) {
+            const t = String(o?.type ?? '').trim();
+            if (t) set.add(t);
+        }
+        return Array.from(set);
     }
 
     private friendlyError(err: any): string {

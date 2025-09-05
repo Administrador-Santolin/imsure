@@ -169,5 +169,9 @@ export interface Precos {
     quoteId?: string;       // id da cotação quando a API retornar
     raw?: any;              // resposta crua (debug)
     error?: string;         // mensagem de erro amigável (se falhou)
+    maxSemJurosParcelas?: string,
+    maxSemJurosValor?:    string,
+    pagamentosDisponiveis?: string[],
+
   }
   

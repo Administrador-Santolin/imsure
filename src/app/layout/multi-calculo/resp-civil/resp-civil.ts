@@ -110,6 +110,9 @@ export class RespCivil implements OnInit {
           carrierLabel: 'Akad',
           moeda: 'BRL',
           premioTotal: 0,
+          maxSemJurosParcelas: '',
+          maxSemJurosValor: '',
+          pagamentosDisponiveis: [],
           error: e?.message ?? 'Erro inesperado'
         };
         this.carregandoAkad = false;

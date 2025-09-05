@@ -47,13 +47,21 @@
     {{ carregandoAkad ? 'Cotando Akad...' : 'Cotar na Akad' }}
   </button>
   
-  <mat-card *ngIf="resultadoAkad" style="margin-top: 12px;">
+  <mat-card *ngIf="resultadoAkad" class="cardsCotacao">
     <mat-card-title>{{ resultadoAkad.carrierLabel }}</mat-card-title>
     <mat-card-content>
       <ng-container *ngIf="!resultadoAkad.error; else erroAkad">
         <p><strong>À vista:</strong> {{ resultadoAkad.premioTotal | currency:'BRL' }}</p>
-        <p *ngIf="resultadoAkad.parcelas6x"><strong>6x:</strong> {{ resultadoAkad.parcelas6x | currency:'BRL' }}</p>
-        <p *ngIf="resultadoAkad.parcelas10x"><strong>10x:</strong> {{ resultadoAkad.parcelas10x | currency:'BRL' }}</p>
+        <p *ngIf="resultadoAkad?.pagamentosDisponiveis?.length">
+          <strong>Pagamentos:</strong>
+          {{ resultadoAkad.pagamentosDisponiveis?.join(' • ') }}
+        </p>
+        
+        <p *ngIf="resultadoAkad?.maxSemJurosParcelas">
+          <strong>Sem juros até:</strong>
+          {{ resultadoAkad.maxSemJurosParcelas }}x
+          — parcela de {{ resultadoAkad.maxSemJurosValor | currency:'BRL' }}
+        </p>
       </ng-container>
       <ng-template #erroAkad>
         <p style="color:#b00020">Indisponível: {{ resultadoAkad.error }}</p>
