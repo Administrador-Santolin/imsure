@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EspecialidadeInfo, Precos, RcQuoteInput, RcQuoteResult } from '../../../models/respCivil.model';
-import { RespCivilService } from './resp-civil-service';
+import { RespCivilService } from './unimed.client';
 import { RouterModule } from '@angular/router';
 import { AkadClient } from '../../../services/akad.client';
 
@@ -14,6 +14,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { RCMultiService } from '../../../services/RCMulti.service';
 import { startWith } from 'rxjs/operators';
+import { FairfaxClient } from '../../../services/fairfax.client';
 
 @Component({
   selector: 'app-resp-civil',
@@ -42,8 +43,9 @@ export class RespCivil implements OnInit {
 
   constructor(private respCivilService: RespCivilService,
     private akad: AkadClient,
-    private rcEnq: RCMultiService
-  ) { 
+    private rcEnq: RCMultiService,
+    private fairfax: FairfaxClient
+  ) {
   }
 
   carregandoAkad = false;
@@ -57,15 +59,14 @@ export class RespCivil implements OnInit {
 
   private async buildRcQuoteInputMinimo(): Promise<RcQuoteInput> {
     const especialidadeKey = this.especialidadeSelecionadaId || this.filtroEspecialidade.value || '';
-    const classe = await this.rcEnq.resolveClasse(especialidadeKey);
-    
+
     return {
       // 1) da sua tela atual
       especialidadeId: especialidadeKey, // qualquer id que mapeie p/ classe interna
       cobertura: Number(this.coberturaSelecionada || 100000),
       // se você já tiver o CRM em algum input, troque aqui:
       crm: '123456', // <-- TEMPORÁRIO para testar
-  
+
       // 2) defaults seguros (só p/ cotar agora)
       sinistralidade5Anos: 'NENHUM',
       totalSinistros5Anos: null,
@@ -76,13 +77,62 @@ export class RespCivil implements OnInit {
       congenere: 'NOVO',            // “novo segurado”
       custoDefesa: 'STANDARD',
       dataInicioVigencia: new Date(), // hoje
-  
+
       // 3) alvos (por enquanto só Akad)
       targets: { akad: true, fairfax: false, local: false },
-  
+
+      // 4) extras específicos da Akad (franquia 3 como sugerido na doc)
+      extras: {
+        fairfax: {
+          residente: false,          // RESIDENT
+          peritoMedico: false,       // MEDICAL-EXPERT
+          territorialidade: 'BR',
+          escopo: 'NATIONAL',
+          // Se precisar, você pode permitir override das categorias:
+          // Dedutível: a Fairfax manda um array de pares [ {LIMIT}, {DEDUCTIBLE} ].
+          // Vamos guardar o que a tela escolher e o service monta a estrutura.
+          limite: 100000,              // LIMIT
+          dedutivel: 'DEFAULT', // DEDUCTIBLE code
+          procedures: []
+        }
+      },
+
+      // 5) dados pessoais fixos (se quiser já mandar por aqui)
+      dadosPessoaisFixos: {
+        nome: 'Dr. Medico',
+        email: 'apolices@santolinseguros.com.br',
+        cpf: '00000000191'
+      }
+    };
+  }
+
+  private async buildRcQuoteInputMinimoFF(): Promise<RcQuoteInput> {
+    const especialidadeKey = this.especialidadeSelecionadaId || this.filtroEspecialidade.value || '';
+
+    return {
+      // 1) da sua tela atual
+      especialidadeId: especialidadeKey, // qualquer id que mapeie p/ classe interna
+      cobertura: Number(this.coberturaSelecionada || 100000),
+      // se você já tiver o CRM em algum input, troque aqui:
+      crm: '18999', // <-- TEMPORÁRIO para testar
+
+      // 2) defaults seguros (só p/ cotar agora)
+      sinistralidade5Anos: 'NENHUM',
+      totalSinistros5Anos: null,
+      reclamacoes12m: 'NENHUM',
+      conhecimentoPrevio: false,
+      reclamantes: null,
+      retroatividadeAnos: 0,        // 0 = sem retroatividade
+      congenere: 'NOVO',            // “novo segurado”
+      custoDefesa: 'STANDARD',
+      dataInicioVigencia: new Date(), // hoje
+
+      // 3) alvos (por enquanto só Akad)
+      targets: { akad: true, fairfax: false, local: false },
+
       // 4) extras específicos da Akad (franquia 3 como sugerido na doc)
       extras: { akad: { franquiaCodigo: 3 } },
-  
+
       // 5) dados pessoais fixos (se quiser já mandar por aqui)
       dadosPessoaisFixos: {
         nome: 'MEDICO PF API',
@@ -91,13 +141,14 @@ export class RespCivil implements OnInit {
       }
     };
   }
-  
+
+
   async cotarAkad(): Promise<void> {
     this.carregandoAkad = true;
     this.resultadoAkad = null;
-  
+
     const input = await this.buildRcQuoteInputMinimo();
-  
+
     this.akad.cotar(input).subscribe({
       next: (r) => {
         this.resultadoAkad = r;
@@ -120,11 +171,19 @@ export class RespCivil implements OnInit {
     });
   }
 
+  async cotarFairfax(): Promise<void> {
+    const input = await this.buildRcQuoteInputMinimoFF(); // o mesmo que você usa
+    this.fairfax.cotar(input).subscribe(r => {
+      // adicione o card da Fairfax ao array de resultados
+      console.log('FAIRFAX RESULT:', r);
+    });
+  }
+
   especialidadesOpcoes: { id: string; nome: string }[] = [];
-  
+
   ngOnInit(): void {
     // Inscreve-se no Observable para garantir que os dados do serviço foram carregados
-    
+
     // Carrega as especialidades do enquadramento
     this.rcEnq.getEspecialidades().subscribe(list => {
       this.especialidadesOpcoes = list.map(x => ({ id: x.id, nome: x.nome }));
@@ -137,13 +196,13 @@ export class RespCivil implements OnInit {
     });
 
     this.filtroEspecialidade.valueChanges
-    .pipe(startWith(''))
-    .subscribe(value => {
-      const t = this.norm(typeof value === 'string' ? value : '');
-      this.especialidadesFiltradas = this.especialidades.filter(e =>
-        this.norm(e.nome).includes(t)
-      );
-    });
+      .pipe(startWith(''))
+      .subscribe(value => {
+        const t = this.norm(typeof value === 'string' ? value : '');
+        this.especialidadesFiltradas = this.especialidades.filter(e =>
+          this.norm(e.nome).includes(t)
+        );
+      });
   }
 
   private norm(s: string): string {

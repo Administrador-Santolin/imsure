@@ -119,6 +119,13 @@ export class RCMultiService {
         }
     };
 
+    mapClasseToCarrierCode(
+      carrier: CarrierId,
+      classe: RCInternalClass
+    ): string | null {
+      return this.carrierMap?.[carrier]?.[classe] ?? null;
+    }
+
 
     // 4) Pega a "classe da seguradora" a partir da classe interna
     mapToCarrierClass(carrier: CarrierId, classe: RCInternalClass): string | null {

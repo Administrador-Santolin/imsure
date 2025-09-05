@@ -4,7 +4,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 
 import {
-    RcCarrierId,
+    CarrierId,
     RcCongenere,
     RcCustoDefesa,
     RCInternalClass,
@@ -26,7 +26,7 @@ import { environment } from '../environments/environment';
  */
 @Injectable({ providedIn: 'root' })
 export class AkadClient {
-    readonly id: RcCarrierId = 'Akad';
+    readonly id: CarrierId = 'Akad';
     readonly label = 'Akad';
 
     private http = inject(HttpClient);

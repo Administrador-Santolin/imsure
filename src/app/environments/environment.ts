@@ -17,7 +17,7 @@ export const environment = {
     },
 
     fairfax: {
-        baseUrl: 'https://azuh1-br-fairfax-gateway.azure-api.net/partner/api',
+        baseUrl: 'https://azuh1-br-fairfax-gateway.azure-api.net/partner/api/v1/quotation/contracting',
         subscriptionKey: '474ebccd1512407ea009928603d73cbd',
         registerNumber: '232148243',
         operationCode: 'MEDICAL-CIVIL-LIABILITY-PARTNER'

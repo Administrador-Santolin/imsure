@@ -45,10 +45,6 @@ export interface Precos {
     legendasEspecialidades: { [key: string]: string | null };
   }
   
-  // === Quem vamos cotar ===
-  // Use nomes curtinhos para identificar cada fonte de cotação.
-  export type RcCarrierId = 'Akad' | 'FF' | 'Unimed';
-  
   // === Classe interna (a "caixinha" padrão da corretora) ===
   // Você já usa isso no enquadramento por especialidade.
   
@@ -103,6 +99,8 @@ export interface Precos {
     // Vamos guardar o que a tela escolher e o service monta a estrutura.
     limite?: number;              // LIMIT
     dedutivel?: 'DEFAULT' | 'PLUS' | string; // DEDUCTIBLE code
+    procedures?: string[]; // PROCEDURES
+    categories?: string[]; // CATEGORIES
   }
   
   // === Entrada única para cotar (o "form" unificado) ===
@@ -160,13 +158,14 @@ export interface Precos {
   
   // === Saída padronizada para a UI (um card por fonte) ===
   export interface RcQuoteResult {
-    carrier: RcCarrierId;
+    carrier: CarrierId;
     carrierLabel: string;   // nome para mostrar no card
     moeda: 'BRL';
     premioTotal: number;    // principal (à vista ou total)
     parcelas6x?: number;
     parcelas10x?: number;
     quoteId?: string;       // id da cotação quando a API retornar
+    franquia?: string;
     raw?: any;              // resposta crua (debug)
     error?: string;         // mensagem de erro amigável (se falhou)
     maxSemJurosParcelas?: string,

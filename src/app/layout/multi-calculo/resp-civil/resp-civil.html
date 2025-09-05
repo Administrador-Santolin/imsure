@@ -46,6 +46,10 @@
   <button mat-raised-button color="primary" type="button" (click)="cotarAkad()" [disabled]="carregandoAkad">
     {{ carregandoAkad ? 'Cotando Akad...' : 'Cotar na Akad' }}
   </button>
+
+  <button mat-raised-button color="primary" type="button" (click)="cotarFairfax()">
+    {{ carregandoAkad ? 'Cotando Fairfax...' : 'Cotar na Fairfax' }}
+  </button>
   
   <mat-card *ngIf="resultadoAkad" class="cardsCotacao">
     <mat-card-title>{{ resultadoAkad.carrierLabel }}</mat-card-title>
