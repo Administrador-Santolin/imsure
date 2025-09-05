@@ -14,5 +14,12 @@ export const environment = {
         clientSecret: 'portal_argo_secret',
         brokerIdentityCPF: '81510015000',
         brokerageFirmCNPJ: null
+    },
+
+    fairfax: {
+        baseUrl: 'https://azuh1-br-fairfax-gateway.azure-api.net/partner/api',
+        subscriptionKey: '474ebccd1512407ea009928603d73cbd',
+        registerNumber: '232148243',
+        operationCode: 'MEDICAL-CIVIL-LIABILITY-PARTNER'
     }
 }
