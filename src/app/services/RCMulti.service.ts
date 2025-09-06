@@ -109,7 +109,7 @@ export class RCMultiService {
             MEDICO_SEM_CIRURGIA: 'NO-SURGERY',
             MEDICO_COM_CIRURGIA: 'SURGERY-EXCEPT-PLASTIC',
             OBSTETRA: 'OBSTETRICIAN',
-            CIRURGIAO_PLASTICO: 'PLASTIC-SURGEON' // coloque 'PLASTIC-SURGEON' se a Fairfax tiver código oficial
+            CIRURGIAO_PLASTICO: 'PLASTIC-SURGERY' // coloque 'PLASTIC-SURGEON' se a Fairfax tiver código oficial
         },
         Akad: {
             MEDICO_SEM_CIRURGIA: '1',

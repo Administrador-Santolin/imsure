@@ -26,42 +26,65 @@ export class FairfaxClient {
       });
     }
 
-    const payload = this.buildPayload(input);
-    const headers = this.buildHeaders();
-
-    return this.http.post<any>(this.cfg.baseUrl, payload, { headers }).pipe(
-      map(resp => this.toQuoteResult(resp)),
-      catchError(err => of({
-        carrier: this.id,
-        carrierLabel: this.label,
-        moeda: 'BRL' as const, // Corrigido para garantir que seja do tipo literal "BRL"
-        premioTotal: 0,
-        error: this.explainHttpError(err),
-        raw: err
-      }))
-    );
+    return new Observable(observer => {
+      this.buildPayload(input).then(payload => {
+        const headers = this.buildHeaders();
+        
+        this.http.post<any>(this.cfg.baseUrl, payload, { headers }).pipe(
+          map(resp => this.toQuoteResult(resp)),
+          catchError(err => of({
+            carrier: this.id,
+            carrierLabel: this.label,
+            moeda: 'BRL' as const,
+            premioTotal: 0,
+            error: this.explainHttpError(err),
+            raw: err
+          }))
+        ).subscribe(observer);
+      }).catch(err => {
+        observer.next({
+          carrier: this.id,
+          carrierLabel: this.label,
+          moeda: 'BRL' as const,
+          premioTotal: 0,
+          error: this.explainHttpError(err),
+          raw: err
+        });
+        observer.complete();
+      });
+    });
   }
 
-  private getFairfaxCategories(input: RcQuoteInput): string[] {
-    const classe = input.classeInterna as RCInternalClass;
-
-    // pega o código traduzido pelo Enquadramento (ex.: 'NO-SURGERY')
+  private async getFairfaxCategories(input: RcQuoteInput): Promise<string[]> {
+    // 1) tente usar a classe que veio pronta
+    let classe = input.classeInterna as RCInternalClass | undefined;
+  
+    // 3) fallback: tente pelo id/slug (se o seu input tiver)
+    if (!classe && input.especialidadeId) {
+      classe = await this.enq.getClasseByEspecialidadeId(input.especialidadeId) ?? undefined;
+    }
+  
+    if (!classe) {
+      throw new Error('Selecione uma especialidade válida para cotar na Fairfax.');
+    }
+  
+    // pega o código da Fairfax a partir do carrierMap central
     const base = this.enq.mapClasseToCarrierCode('FF', classe);
     if (!base) {
-      throw new Error(`Sem mapeamento Fairfax para classe: ${classe}`);
+      throw new Error(`Classe não suportada pela Fairfax: ${classe}`);
     }
-
-    // permite extras opcionais vindos do form (se existirem)
+  
+    // aceita extras do form, mas garante o código base
     const extras = Array.isArray(input.extras?.fairfax?.categories)
       ? input.extras!.fairfax!.categories
       : [];
-
-    // devolve sempre ARRAY de strings, sem duplicatas
-    return Array.from(new Set([base, ...extras]));
+  
+    return Array.from(new Set([base, ...extras])); // sempre array<string>, sem duplicados
   }
+  
 
   // ---------- Montagem do payload (answers[]) ----------
-  private buildPayload(input: RcQuoteInput) {
+  private async buildPayload(input: RcQuoteInput) {
     const classe = input.classeInterna; // já vem do seu enquadramento (Akad/Fairfax usam a mesma lógica)
 
     // Mapas simples p/ Fairfax
@@ -74,11 +97,11 @@ export class FairfaxClient {
     const procedures = Array.isArray(input.extras?.fairfax?.procedures)
       ? input.extras!.fairfax!.procedures : []; // ex.: ['AESTHETIC-PROCEDURES', 'ENDOSCOPY-COLONOSCOPY', ...]
 
-    // Deductible (franquia) — Fairfax usa ‘DEFAULT’ por padrão, mas permita override
+    // Deductible (franquia) — Fairfax usa 'DEFAULT' por padrão, mas permita override
     const deductibleCode = 'MINIMUM'; //input.extras?.fairfax?.dedutivel ??
 
     const answers: any[] = [
-      { code: 'CATEGORIES', answer: this.getFairfaxCategories(input) },
+      { code: 'CATEGORIES', answer: await this.getFairfaxCategories(input) },
       { code: 'INSURED-CELLPHONE', answer: '(11) 91111-2222' },
       { code: 'INSURED-ADDRESS-ZIPCODE', answer: '12345-123' },
       { code: 'INSURED-ADDRESS-STREET', answer: 'Nome da rua' },

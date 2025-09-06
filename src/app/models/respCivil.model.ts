@@ -90,7 +90,7 @@ export interface Precos {
   export interface RcExtrasFairfax {
     residente?: boolean;          // RESIDENT
     peritoMedico?: boolean;       // MEDICAL-EXPERT
-    procedimentosAtividades?: string[]; // PROCEDURES-ACTIVITIES (códigos da API)
+    procedures?: string[]; // PROCEDURES-ACTIVITIES (códigos da API)
     territorialidade?: 'BR' | 'WORLD';
     escopo?: 'NATIONAL' | 'INTERNATIONAL';
     // Se precisar, você pode permitir override das categorias:
@@ -99,7 +99,6 @@ export interface Precos {
     // Vamos guardar o que a tela escolher e o service monta a estrutura.
     limite?: number;              // LIMIT
     dedutivel?: 'DEFAULT' | 'PLUS' | string; // DEDUCTIBLE code
-    procedures?: string[]; // PROCEDURES
     categories?: string[]; // CATEGORIES
   }
   

@@ -92,8 +92,8 @@ export class RespCivil implements OnInit {
           // Dedutível: a Fairfax manda um array de pares [ {LIMIT}, {DEDUCTIBLE} ].
           // Vamos guardar o que a tela escolher e o service monta a estrutura.
           limite: 100000,              // LIMIT
-          dedutivel: 'DEFAULT', // DEDUCTIBLE code
-          procedures: []
+          dedutivel: 'MINIMUM', // DEDUCTIBLE code
+          categories: []
         }
       },
 
@@ -172,7 +172,9 @@ export class RespCivil implements OnInit {
   }
 
   async cotarFairfax(): Promise<void> {
-    const input = await this.buildRcQuoteInputMinimoFF(); // o mesmo que você usa
+    const input = await this.buildRcQuoteInputMinimo(); // o mesmo que você usa
+    console.log('[FF] classeInterna:', input.classeInterna);
+    
     this.fairfax.cotar(input).subscribe(r => {
       // adicione o card da Fairfax ao array de resultados
       console.log('FAIRFAX RESULT:', r);
