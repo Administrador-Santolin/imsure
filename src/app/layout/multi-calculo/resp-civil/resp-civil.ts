@@ -50,6 +50,7 @@ export class RespCivil implements OnInit {
 
   carregandoAkad = false;
   resultadoAkad: RcQuoteResult | null = null;
+  resultadoFF: RcQuoteResult | null = null;
 
   private _filter(value: string): EspecialidadeInfo[] {
     const filterValue = value.toLowerCase();
@@ -65,7 +66,7 @@ export class RespCivil implements OnInit {
       especialidadeId: especialidadeKey, // qualquer id que mapeie p/ classe interna
       cobertura: Number(this.coberturaSelecionada || 100000),
       // se você já tiver o CRM em algum input, troque aqui:
-      crm: '123456', // <-- TEMPORÁRIO para testar
+      crm: '18999', // <-- TEMPORÁRIO para testar
 
       // 2) defaults seguros (só p/ cotar agora)
       sinistralidade5Anos: 'NENHUM',
@@ -79,7 +80,7 @@ export class RespCivil implements OnInit {
       dataInicioVigencia: new Date(), // hoje
 
       // 3) alvos (por enquanto só Akad)
-      targets: { akad: true, fairfax: false, local: false },
+      targets: { akad: true, fairfax: true, local: true },
 
       // 4) extras específicos da Akad (franquia 3 como sugerido na doc)
       extras: {
@@ -105,43 +106,6 @@ export class RespCivil implements OnInit {
       }
     };
   }
-
-  private async buildRcQuoteInputMinimoFF(): Promise<RcQuoteInput> {
-    const especialidadeKey = this.especialidadeSelecionadaId || this.filtroEspecialidade.value || '';
-
-    return {
-      // 1) da sua tela atual
-      especialidadeId: especialidadeKey, // qualquer id que mapeie p/ classe interna
-      cobertura: Number(this.coberturaSelecionada || 100000),
-      // se você já tiver o CRM em algum input, troque aqui:
-      crm: '18999', // <-- TEMPORÁRIO para testar
-
-      // 2) defaults seguros (só p/ cotar agora)
-      sinistralidade5Anos: 'NENHUM',
-      totalSinistros5Anos: null,
-      reclamacoes12m: 'NENHUM',
-      conhecimentoPrevio: false,
-      reclamantes: null,
-      retroatividadeAnos: 0,        // 0 = sem retroatividade
-      congenere: 'NOVO',            // “novo segurado”
-      custoDefesa: 'STANDARD',
-      dataInicioVigencia: new Date(), // hoje
-
-      // 3) alvos (por enquanto só Akad)
-      targets: { akad: true, fairfax: false, local: false },
-
-      // 4) extras específicos da Akad (franquia 3 como sugerido na doc)
-      extras: { akad: { franquiaCodigo: 3 } },
-
-      // 5) dados pessoais fixos (se quiser já mandar por aqui)
-      dadosPessoaisFixos: {
-        nome: 'MEDICO PF API',
-        email: 'parcerias-api@akadseguros.com.br',
-        cpf: '00000000191'
-      }
-    };
-  }
-
 
   async cotarAkad(): Promise<void> {
     this.carregandoAkad = true;
@@ -172,11 +136,13 @@ export class RespCivil implements OnInit {
   }
 
   async cotarFairfax(): Promise<void> {
+    this.resultadoFF = null;
     const input = await this.buildRcQuoteInputMinimo(); // o mesmo que você usa
     console.log('[FF] classeInterna:', input.classeInterna);
     
     this.fairfax.cotar(input).subscribe(r => {
       // adicione o card da Fairfax ao array de resultados
+      this.resultadoFF = r;
       console.log('FAIRFAX RESULT:', r);
     });
   }

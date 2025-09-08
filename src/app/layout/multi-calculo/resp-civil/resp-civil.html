@@ -33,10 +33,17 @@
     </div>
 
 
-  <div class="span-3">
+  <div class="span-4">
     <mat-slide-toggle class="mat-mdc-slide-toggle" [(ngModel)]="temChefe" labelPosition="before">Possui chefe de equipe: </mat-slide-toggle> <br>
     <mat-slide-toggle [(ngModel)]="temDiretor" labelPosition="before">É diretor técnico: </mat-slide-toggle>
   </div>
+  <div class="span-4">
+    <mat-slide-toggle labelPosition="before">Atua como perito médico?</mat-slide-toggle><br>
+    <mat-slide-toggle labelPosition="before">Médico(a) residente</mat-slide-toggle>
+  </div>
+  
+
+
 
 </div>
   <mat-card-actions>
@@ -73,6 +80,27 @@
     </mat-card-content>
   </mat-card>
 
+  <mat-card *ngIf="resultadoFF" class="cardsCotacao">
+    <mat-card-title>{{ resultadoFF.carrierLabel }}</mat-card-title>
+    <mat-card-content>
+      <ng-container *ngIf="!resultadoFF.error; else erroAkad">
+        <p><strong>À vista:</strong> {{ resultadoFF.premioTotal | currency:'BRL' }}</p>
+        <p *ngIf="resultadoFF?.pagamentosDisponiveis?.length">
+          <strong>Pagamentos:</strong>
+          {{ resultadoFF.pagamentosDisponiveis?.join(' • ') }}
+        </p>
+        
+        <p *ngIf="resultadoFF?.maxSemJurosParcelas">
+          <strong>Sem juros até:</strong>
+          {{ resultadoFF.maxSemJurosParcelas }}x
+          — parcela de {{ resultadoFF.maxSemJurosValor | currency:'BRL' }}
+        </p>
+      </ng-container>
+      <ng-template #erroAkad>
+        <p style="color:#b00020">Indisponível: {{ resultadoFF.error }}</p>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
 
   <div *ngIf="precosCalculados" class="resultado">
     <h2>Valores da Simulação</h2>

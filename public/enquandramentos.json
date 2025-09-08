@@ -1,7 +1,7 @@
 {
   "acupuntura": "MEDICO_SEM_CIRURGIA",
   "alergologia e imunologia": "MEDICO_SEM_CIRURGIA",
-  "anestesiologia": "MEDICO_SEM_CIRURGIA",
+  "anestesiologia": "MEDICO_COM_CIRURGIA",
   "biólogo": "MEDICO_SEM_CIRURGIA",
   "biomedicina com estética": "MEDICO_SEM_CIRURGIA",
   "biomedicina sem estética": "MEDICO_SEM_CIRURGIA",
