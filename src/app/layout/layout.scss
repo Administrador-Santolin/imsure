@@ -1,5 +1,17 @@
 @use '@angular/material' as mat;
 
+.toolbar-search-input {
+  width: 300px;
+  
+  @media (max-width: 768px) {
+    width: 200px;
+  }
+  
+  @media (max-width: 480px) {
+    width: 150px;
+  }
+}
+
 .toolbar-spacer {
   flex: 1 1 auto; // Empurra os itens para os lados
 }

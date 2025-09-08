@@ -1,7 +1,7 @@
 export const environment = {
-    //   ...,
+    production: false,
     akad: {
-        subscriptionKey: '',   // Ocp-Apim-Subscription-Key ✅
+        subscriptionKey: 'b91d51eb223546e1b390afd6ade06814',   // Ocp-Apim-Subscription-Key ✅
         clientHeader: 'argo_api_moderation', // Client ✅
         securityBaseUrl: 'https://azuh3-br-api-platform.azure-api.net/security',
         tokenPath: '/connect/token',

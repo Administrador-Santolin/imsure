@@ -1,5 +1,5 @@
 import { RouterOutlet } from '@angular/router';
-import { Component, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, inject, ErrorHandler } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,41 +13,16 @@ import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
-import { Firestore, collection, collectionData, FirestoreDataConverter, query, orderBy, limit, where } from '@angular/fire/firestore';
-import { Observable, Subscription, combineLatest } from 'rxjs';
-import { startWith, debounceTime, switchMap, map } from 'rxjs/operators';
+import { Firestore } from '@angular/fire/firestore';
+import { Observable, Subscription, of } from 'rxjs';
+import { startWith, debounceTime, switchMap, distinctUntilChanged } from 'rxjs/operators';
 
 import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-
-interface Cliente {
-  id?: string;
-  nome: string;
-  email: string;
-  telefone: string;
-  cpf?: string;
-  endereco?: string;
-  dataNascimento?: string;
-}
-
-const clienteConverter: FirestoreDataConverter<Cliente> = {
-  toFirestore: (cliente: Cliente) => {
-    const { id, ...data } = cliente;
-    return data; // Não adiciona mais nomeLowerCase aqui
-  },
-  fromFirestore: (snapshot: any, options: any) => {
-    const data = snapshot.data(options);
-    return {
-      id: snapshot.id,
-      nome: data.nome,
-      email: data.email,
-      telefone: data.telefone,
-      cpf: data.cpf || '',
-      endereco: data.endereco || '',
-      dataNascimento: data.dataNascimento || ''
-    } as Cliente;
-  }
-};
+import { Cliente } from '../models/cliente.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ClienteService } from '../services/cliente.service';
+import { ErrorHandlerService } from '../services/error-handler';
 
 @Component({
   selector: 'app-layout',
@@ -67,78 +42,27 @@ const clienteConverter: FirestoreDataConverter<Cliente> = {
   templateUrl: './layout.html',
   styleUrl: './layout.scss'
 })
-export class Layout implements OnInit, OnDestroy {
-   searchControl = new FormControl(''); // <<< NOVO: Controle para o campo de pesquisa
+export class Layout implements OnInit {
+  isLoading = signal(false);
+  searchControl = new FormControl(''); // <<< NOVO: Controle para o campo de pesquisa
   filteredClientes$: Observable<Cliente[]> | undefined; // <<< NOVO: Observable para os resultados da pesquisa
+  private _snackBar = inject(MatSnackBar);
+  private clienteService = inject(ClienteService);
+  private errorHandler = inject(ErrorHandlerService);
 
-  private searchSubscription: Subscription | undefined; // Para gerenciar a subscrição da pesquisa
 
   constructor(private auth: Auth, private router: Router, private firestore: Firestore) {}
 
   ngOnInit() {
     this.filteredClientes$ = this.searchControl.valueChanges.pipe(
       startWith(''),
-      debounceTime(300),
-      // Use switchMap para buscar todos os clientes relevantes do Firestore
-      switchMap(value => {
-        const clientesCollectionRef = collection(this.firestore, 'clientes').withConverter(clienteConverter);
-        // Buscamos um número limitado de clientes (ex: 50) ordenados por nome
-        // Não usamos cláusulas 'where' de intervalo aqui para simplificar a busca inicial no Firestore
-        // e evitar problemas de índice complexos.
-        return collectionData(query(clientesCollectionRef, orderBy('nome'), limit(50))) as Observable<Cliente[]>;
-      }),
-      // Agora, aplicamos o filtro localmente no cliente
-      map(clientes => {
-        const searchText = this.searchControl.value?.toLowerCase() || ''; // Pega o texto atual do input
-        if (!searchText) {
-          return clientes; // Se o input estiver vazio, retorna todos os clientes buscados inicialmente
+      debounceTime(300), // Espera 300ms antes de buscar
+      distinctUntilChanged(), // Só busca se o texto mudou
+      switchMap(searchText => {
+        if (!searchText || searchText.length < 2) {
+          return of([]); // Não busca se menos de 2 caracteres
         }
-        return clientes.filter(cliente =>
-          cliente.nome.toLowerCase().includes(searchText) || // Busca por nome (case-insensitive, "contém")
-          (cliente.cpf && cliente.cpf.toLowerCase().includes(searchText)) // Busca por CPF (case-insensitive, "contém")
-        );
-      })
-    );
-  }
-
-  ngOnDestroy() {
-    if (this.searchSubscription) {
-      this.searchSubscription.unsubscribe();
-    }
-  }
-
-  private searchClientes(searchText: string): Observable<Cliente[]> {
-    const clientesCollectionRef = collection(this.firestore, 'clientes').withConverter(clienteConverter);
-
-    const lowerCaseSearchText = searchText.trim().toLowerCase();
-
-    if (!lowerCaseSearchText) {
-      return collectionData(query(clientesCollectionRef, orderBy('nome'), limit(10))) as Observable<Cliente[]>;
-    }
-
-    const nameQuery = query(
-      clientesCollectionRef,
-      orderBy('nome'),
-      where('nome', '>=', lowerCaseSearchText),
-      where('nome', '<=', lowerCaseSearchText + '\uf8ff'),
-      limit(10)
-    );
-    const nameResults$ = collectionData(nameQuery) as Observable<Cliente[]>;
-
-    const cpfQuery = query(
-      clientesCollectionRef,
-      orderBy('cpf'),
-      where('cpf', '>=', lowerCaseSearchText),
-      where('cpf', '<=', lowerCaseSearchText + '\uf8ff'),
-      limit(10)
-    );
-    const cpfResults$ = collectionData(cpfQuery) as Observable<Cliente[]>;
-
-    return combineLatest([nameResults$, cpfResults$]).pipe(
-      map(([nameClients, cpfClients]) => {
-        const combined = [...nameClients, ...cpfClients];
-        const uniqueClients = Array.from(new Map(combined.map(item => [item.id, item])).values());
-        return uniqueClients.sort((a, b) => a.nome.localeCompare(b.nome));
+        return this.clienteService.searchClientes(searchText);
       })
     );
   }
@@ -156,13 +80,15 @@ export class Layout implements OnInit, OnDestroy {
   }
 
   async onLogout() {
+    this.isLoading.set(true);
     try {
       await this.auth.signOut();
       this.router.navigate(['/login']);
-      alert('Você foi desconectado com sucesso!');
+      this._snackBar.open('Logout realizado com sucesso!', 'Fechar', { duration: 3000 });
     } catch (error) {
-      console.error('Erro ao fazer logout:', error);
-      alert('Erro ao fazer logout. Tente novamente.');
+      this.errorHandler.handleError(error);
+    } finally {
+      this.isLoading.set(false);
     }
   }
 }

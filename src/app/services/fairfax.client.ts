@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of, throwError } from 'rxjs';
-import { environment } from '../environments/environment';
+import { environment } from '../environments/environments';
 import { RcQuoteInput, RcQuoteResult, CarrierId, RCInternalClass } from '../models/respCivil.model';
 import { RCMultiService } from './RCMulti.service';
 

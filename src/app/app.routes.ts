@@ -13,7 +13,6 @@ export const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        canActivate: [authGuard],
         loadChildren: () =>
           import('./layout/dashboard/dashboard.routes').then(
             (m) => m.DASHBOARD_ROUTES
@@ -21,20 +20,17 @@ export const routes: Routes = [
       },
       {
         path: 'clientes',
-        canActivate: [authGuard],
         loadChildren: () =>
           import('./layout/clientes/clientes.routes').then((m) => m.CLIENTES_ROUTES),
       },
       {
         path: 'apolices',
-        canActivate: [authGuard],
         loadChildren: () =>
           import('./layout/apolices/apolices.routes').then((m) => m.APOLICES_ROUTES),
       },
       { path: 'relatorios', canActivate: [authGuard], component: Relatorios },
       {
         path: 'multi-calculo',
-        canActivate: [authGuard],
         loadChildren: () =>
           import('./layout/multi-calculo/multi-calculo.routes').then(
             (m) => m.MULTI_CALCULO_ROUTES

@@ -1,50 +1,89 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { FormsModule } from '@angular/forms';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  imports: [MatInputModule, MatButtonModule, MatCardModule, FormsModule, CommonModule],
+  imports: [MatInputModule, MatButtonModule, MatCardModule, MatSnackBarModule, FormsModule, CommonModule, ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
-export class Login {
-  username = '';
-  password = '';
-  errorMessage: string | null = null;
 
-  constructor(private auth: Auth, private router: Router) {}
+export class Login {
+  private _snackBar = inject(MatSnackBar);
+  loginForm = new FormGroup({
+    username: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required, Validators.minLength(6)])
+  });
+  errorMessage: string | null = null;
+  isLoading = false;
+
+  get username() { return this.loginForm.get('username'); }
+  get password() { return this.loginForm.get('password'); }
+
+  constructor(private auth: Auth,
+    private router: Router
+  ) { }
 
   async onRegister() {
     this.errorMessage = null; // Limpa qualquer erro anterior
+    // Aqui, vamos garantir que email e password nunca sejam undefined ou null
+    const username = this.username?.value ?? '';
+    const password = this.password?.value ?? '';
+    if (!username || !password) {
+      this.errorMessage = 'Por favor, preencha o e-mail e a senha corretamente.';
+      this._snackBar.open(this.errorMessage, 'Fechar', { duration: 5000 });
+      return;
+    }
     try {
-      const userCredential = await createUserWithEmailAndPassword(this.auth, this.username, this.password);
-      console.log('Usuário registrado com sucesso:', userCredential.user);
-      alert('Registro bem-sucedido! Agora você pode fazer login.');
-      // Opcional: Redirecionar para alguma página após o registro
-      // this.router.navigate(['/dashboard']);
+      const userCredential = await createUserWithEmailAndPassword(this.auth, username, password);
+      // Se o displayName for nulo, mostramos só o email
+      const nomeUsuario = userCredential.user.displayName || userCredential.user.email || '';
+      this._snackBar.open('Registro bem-sucedido! Bem vindo, ' + nomeUsuario + '!', 'Fechar', {
+        duration: 3000,
+      });
+      this.router.navigate(['/dashboard']);
     } catch (error: any) {
-      console.error('Erro no registro:', error.message);
       this.errorMessage = this.getFirebaseErrorMessage(error.code);
+      this._snackBar.open(this.errorMessage, 'Fechar', {
+        duration: 5000,
+      });
+    } finally {
+      this.isLoading = false;
     }
   }
 
   async onLogin() {
+    this.isLoading = true;
     this.errorMessage = null; // Limpa qualquer erro anterior
+    // Vamos garantir que email e password nunca sejam undefined ou null
+    const username = this.username?.value ?? '';
+    const password = this.password?.value ?? '';
+    if (!username || !password) {
+      this.errorMessage = 'Por favor, preencha o e-mail e a senha corretamente.';
+      this._snackBar.open(this.errorMessage, 'Fechar', { duration: 5000 });
+      return;
+    }
     try {
-      const userCredential = await signInWithEmailAndPassword(this.auth, this.username, this.password);
-      console.log('Login bem-sucedido:', userCredential.user);
-      alert('Login bem-sucedido!');
+      const userCredential = await signInWithEmailAndPassword(this.auth, username, password);
+      // Se o displayName for nulo, mostramos só o email
+      const nomeUsuario = userCredential.user.displayName || userCredential.user.email || '';
+      this._snackBar.open('Bem vindo, ' + nomeUsuario + '!', 'Fechar', {
+        duration: 3000,
+      });
       // Redirecionar para a página principal do sistema após o login
-      this.router.navigate(['/dashboard']); // Vamos criar esta rota em breve
+      this.router.navigate(['/dashboard']);
     } catch (error: any) {
-      console.error('Erro no login:', error.message);
       this.errorMessage = this.getFirebaseErrorMessage(error.code);
+      this._snackBar.open(this.errorMessage, 'Fechar', { duration: 5000 });
+    } finally {
+      this.isLoading = false;
     }
   }
 

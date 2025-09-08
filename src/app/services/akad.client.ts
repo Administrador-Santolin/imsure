@@ -15,7 +15,7 @@ import {
     RcSinistralidade5Anos,
 } from '../models/respCivil.model';
 import { RCMultiService } from './RCMulti.service';
-import { environment } from '../environments/environment';
+import { environment } from '../environments/environments';
 
 /**
  * AkadClient
