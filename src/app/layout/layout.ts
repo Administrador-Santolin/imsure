@@ -56,7 +56,7 @@ export class Layout implements OnInit {
   ngOnInit() {
     this.filteredClientes$ = this.searchControl.valueChanges.pipe(
       startWith(''),
-      debounceTime(300), // Espera 300ms antes de buscar
+      debounceTime(500), // Espera 300ms antes de buscar
       distinctUntilChanged(), // Só busca se o texto mudou
       switchMap(searchText => {
         if (!searchText || searchText.length < 2) {
@@ -68,10 +68,15 @@ export class Layout implements OnInit {
   }
 
   onClienteSelected(event: any) {
-    const selectedCliente: Cliente = event.option.value;
-    if (selectedCliente && selectedCliente.id) {
-      this.router.navigate(['/clientes', selectedCliente.id]); // Navega para a tela de detalhes
-      this.searchControl.setValue(''); // Limpa o campo de pesquisa após a seleção
+    try {
+      const selectedCliente: Cliente = event.option.value;
+      if (selectedCliente?.id) {
+        this.router.navigate(['/clientes', selectedCliente.id]);
+        this.searchControl.setValue('');
+      }
+    } catch (error) {
+      this.errorHandler.handleError(error);
+      this._snackBar.open('Erro ao selecionar cliente', 'Fechar');
     }
   }
 

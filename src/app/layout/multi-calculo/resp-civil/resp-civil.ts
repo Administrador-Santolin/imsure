@@ -41,7 +41,8 @@ export class RespCivil implements OnInit {
   // Variável para armazenar o resultado do cálculo
   precosCalculados: Precos | null = null;
 
-  constructor(private respCivilService: RespCivilService,
+  constructor(
+    private respCivilService: RespCivilService,
     private akad: AkadClient,
     private rcEnq: RCMultiService,
     private fairfax: FairfaxClient
@@ -196,7 +197,7 @@ export class RespCivil implements OnInit {
   // Método chamado pelo botão de cálculo
   calcularPreco(): void {
     this.precosCalculados = this.respCivilService.obterPrecos(
-      this.especialidadeSelecionada,
+      this.filtroEspecialidade.value || '',
       this.coberturaSelecionada,
       this.temChefe,
       this.temDiretor

@@ -1,112 +1,109 @@
-  <h1>Responsabilidade Civil Profissional</h1>
+<h1>Responsabilidade Civil Profissional</h1>
 
-  <div class="form-grid">
-    <mat-form-field appearance="outline" class="span-4">
-      <mat-label>Especialidade:</mat-label>
-      <input
-        type="text"
-        aria-label="Especialidade"
-        matInput
-        [matAutocomplete]="auto"
-        [formControl]="filtroEspecialidade"
-      >
-    
-      <mat-autocomplete
-        #auto="matAutocomplete"
-        [displayWith]="displayEspecialidade"
-        (optionSelected)="onEspecialidadeSelected($event.option.value)"
-      >
-        <mat-option
-          *ngFor="let e of especialidadesFiltradas"
-          [value]="e"          
-        >
-          {{ e.nome }}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
+<div class="form-grid">
+  <mat-form-field appearance="outline" class="span-4">
+    <mat-label>Especialidade:</mat-label>
+    <input type="text" aria-label="Especialidade" matInput [matAutocomplete]="auto" [formControl]="filtroEspecialidade">
 
-    <div class="span-6">
-      <label><strong>Cobertura: </strong> R$ {{ coberturaSelecionada | number:'1.2-2':'pt-BR' }}</label> <br>
-      <mat-slider class="slider-full-width" min="50000" max="500000" step="50000" showTickMarks>
-        <input matSliderThumb [(ngModel)]="coberturaSelecionada">
-      </mat-slider>
-    </div>
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayEspecialidade"
+      (optionSelected)="onEspecialidadeSelected($event.option.value)">
+      @for (e of especialidadesFiltradas; track e.id) {
+      <mat-option [value]="e">
+        {{ e.nome }}
+      </mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
 
+  <div class="span-6">
+    <label><strong>Cobertura: </strong> R$ {{ coberturaSelecionada | number:'1.2-2':'pt-BR' }}</label> <br>
+    <mat-slider class="slider-full-width" min="50000" max="500000" step="50000" showTickMarks>
+      <input matSliderThumb [(ngModel)]="coberturaSelecionada">
+    </mat-slider>
+  </div>
 
   <div class="span-4">
-    <mat-slide-toggle class="mat-mdc-slide-toggle" [(ngModel)]="temChefe" labelPosition="before">Possui chefe de equipe: </mat-slide-toggle> <br>
+    <mat-slide-toggle class="mat-mdc-slide-toggle" [(ngModel)]="temChefe" labelPosition="before">Possui chefe de equipe:
+    </mat-slide-toggle> <br>
     <mat-slide-toggle [(ngModel)]="temDiretor" labelPosition="before">É diretor técnico: </mat-slide-toggle>
   </div>
+
   <div class="span-4">
     <mat-slide-toggle labelPosition="before">Atua como perito médico?</mat-slide-toggle><br>
     <mat-slide-toggle labelPosition="before">Médico(a) residente</mat-slide-toggle>
   </div>
-  
-
-
-
 </div>
-  <mat-card-actions>
-    <button matButton (click)="calcularPreco()" [disabled]="!especialidadeSelecionada || !coberturaSelecionada">Calcular</button>
-  </mat-card-actions>
 
-  <button mat-raised-button color="primary" type="button" (click)="cotarAkad()" [disabled]="carregandoAkad">
-    {{ carregandoAkad ? 'Cotando Akad...' : 'Cotar na Akad' }}
-  </button>
+<mat-card-actions>
+  <button matButton (click)="calcularPreco()"
+    [disabled]="!filtroEspecialidade || !coberturaSelecionada">Calcular</button>
+</mat-card-actions>
 
-  <button mat-raised-button color="primary" type="button" (click)="cotarFairfax()">
-    {{ carregandoAkad ? 'Cotando Fairfax...' : 'Cotar na Fairfax' }}
-  </button>
-  
-  <mat-card *ngIf="resultadoAkad" class="cardsCotacao">
+<button mat-raised-button color="primary" type="button" (click)="cotarAkad()" [disabled]="carregandoAkad">
+  {{ carregandoAkad ? 'Cotando Akad...' : 'Cotar na Akad' }}
+</button>
+
+<button mat-raised-button color="primary" type="button" (click)="cotarFairfax()">
+  {{ carregandoAkad ? 'Cotando Fairfax...' : 'Cotar na Fairfax' }}
+</button>
+
+<div class="resultado form-grid">
+  @if (resultadoAkad) {
+  <mat-card class="cardsCotacao span-3">
     <mat-card-title>{{ resultadoAkad.carrierLabel }}</mat-card-title>
     <mat-card-content>
-      <ng-container *ngIf="!resultadoAkad.error; else erroAkad">
-        <p><strong>À vista:</strong> {{ resultadoAkad.premioTotal | currency:'BRL' }}</p>
-        <p *ngIf="resultadoAkad?.pagamentosDisponiveis?.length">
-          <strong>Pagamentos:</strong>
-          {{ resultadoAkad.pagamentosDisponiveis?.join(' • ') }}
-        </p>
-        
-        <p *ngIf="resultadoAkad?.maxSemJurosParcelas">
-          <strong>Sem juros até:</strong>
-          {{ resultadoAkad.maxSemJurosParcelas }}x
-          — parcela de {{ resultadoAkad.maxSemJurosValor | currency:'BRL' }}
-        </p>
-      </ng-container>
-      <ng-template #erroAkad>
-        <p style="color:#b00020">Indisponível: {{ resultadoAkad.error }}</p>
-      </ng-template>
+      @if (!resultadoAkad.error) {
+      <p><strong>À vista:</strong> {{ resultadoAkad.premioTotal | currency:'BRL' }}</p>
+      <p *ngIf="resultadoAkad?.pagamentosDisponiveis?.length">
+        <strong>Pagamentos:</strong>
+        {{ resultadoAkad.pagamentosDisponiveis?.join(' • ') }}
+      </p>
+      @if (resultadoAkad?.maxSemJurosParcelas) {
+      <p>
+        <strong>Sem juros até:</strong>
+        {{ resultadoAkad.maxSemJurosParcelas }}x
+        — parcela de {{ resultadoAkad.maxSemJurosValor | currency:'BRL' }}
+      </p>
+      }
+      } @else {
+      <p style="color:#b00020">Indisponível: {{ resultadoAkad.error }}</p>
+      }
     </mat-card-content>
   </mat-card>
+  }
 
-  <mat-card *ngIf="resultadoFF" class="cardsCotacao">
-    <mat-card-title>{{ resultadoFF.carrierLabel }}</mat-card-title>
+  @if (resultadoFF) {
+  <mat-card class="cardsCotacao span-3">
+    <mat-card-title><strong>{{ resultadoFF.carrierLabel }}</strong></mat-card-title>
     <mat-card-content>
-      <ng-container *ngIf="!resultadoFF.error; else erroAkad">
-        <p><strong>À vista:</strong> {{ resultadoFF.premioTotal | currency:'BRL' }}</p>
-        <p *ngIf="resultadoFF?.pagamentosDisponiveis?.length">
-          <strong>Pagamentos:</strong>
-          {{ resultadoFF.pagamentosDisponiveis?.join(' • ') }}
-        </p>
-        
-        <p *ngIf="resultadoFF?.maxSemJurosParcelas">
-          <strong>Sem juros até:</strong>
-          {{ resultadoFF.maxSemJurosParcelas }}x
-          — parcela de {{ resultadoFF.maxSemJurosValor | currency:'BRL' }}
-        </p>
-      </ng-container>
-      <ng-template #erroAkad>
-        <p style="color:#b00020">Indisponível: {{ resultadoFF.error }}</p>
-      </ng-template>
+      @if (!resultadoFF.error) {
+      <p><strong>À vista:</strong> {{ resultadoFF.premioTotal | currency:'BRL' }}</p>
+      <p *ngIf="resultadoFF?.pagamentosDisponiveis?.length">
+        <strong>Pagamentos:</strong>
+        {{ resultadoFF.pagamentosDisponiveis?.join(' • ') }}
+      </p>
+      @if (resultadoFF?.maxSemJurosParcelas) {
+      <p>
+        <strong>Sem juros até:</strong>
+        {{ resultadoFF.maxSemJurosParcelas }}x
+        — parcela de {{ resultadoFF.maxSemJurosValor | currency:'BRL' }}
+      </p>
+      }
+      } @else {
+      <p style="color:#b00020">Indisponível: {{ resultadoFF.error }}</p>
+      }
     </mat-card-content>
   </mat-card>
+  }
 
-  <div *ngIf="precosCalculados" class="resultado">
-    <h2>Valores da Simulação</h2>
-    <p>Total à vista: <strong>R$ {{ precosCalculados.totalAVista | number:'1.2-2':'pt-BR' }}</strong></p>
-    <p>6x de: <strong>R$ {{ precosCalculados.parcelas6x | number:'1.2-2':'pt-BR' }}</strong></p>
-    <p>10x de: <strong>R$ {{ precosCalculados.parcelas10x | number:'1.2-2':'pt-BR' }}</strong></p>
-  </div>
-
-
+  @if (precosCalculados) {
+  <mat-card class="cardsCotacao span-3">
+    <mat-card-title><strong>Unimed</strong></mat-card-title>
+    <mat-card-content>
+      <p>Total à vista: <strong>R$ {{ precosCalculados.totalAVista | number:'1.2-2':'pt-BR' }}</strong></p>
+      <p>6x de: <strong>R$ {{ precosCalculados.parcelas6x | number:'1.2-2':'pt-BR' }}</strong></p>
+      <p>10x de: <strong>R$ {{ precosCalculados.parcelas10x | number:'1.2-2':'pt-BR' }}</strong></p>
+    </mat-card-content>
+  </mat-card>
+  }
+</div>
