@@ -23,6 +23,7 @@ import { Cliente } from '../models/cliente.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ClienteService } from '../services/cliente.service';
 import { ErrorHandlerService } from '../services/error-handler';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-layout',
@@ -36,6 +37,7 @@ import { ErrorHandlerService } from '../services/error-handler';
     RouterModule,
     MatFormFieldModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
     AsyncPipe],

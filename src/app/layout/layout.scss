@@ -2,11 +2,11 @@
 
 .toolbar-search-input {
   width: 300px;
-  
+
   @media (max-width: 768px) {
     width: 200px;
   }
-  
+
   @media (max-width: 480px) {
     width: 150px;
   }
@@ -36,6 +36,7 @@
   // Estilos padrão para os itens da lista
   color: #333; // Cor do texto
   font-weight: 500;
+
   & .mat-icon {
     color: var(--mat-sys-on-surface); // Cor padrão do ícone
   }
@@ -63,6 +64,7 @@
   top: 0;
   z-index: 1000; // Garante que a toolbar fique acima de outros elementos
   --mat-form-field-outlined-label-text-color: rgba(255, 255, 255, 1); // Custom state layer color
+
   .mat-mdc-icon-button {
     color: var(--mat-icon-button-icon-color, rgba(255, 255, 255, 1)); // Cor do ícone
   }
@@ -90,8 +92,29 @@ mat-nav-list a mat-icon {
   .mat-mdc-form-field-infix {
     padding: 8px 0; // Ajuste o padding interno
   }
+
   .mat-mdc-form-field-subscript-wrapper {
     display: none; // Esconde a linha de erro/ajuda padrão
+  }
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+
+  p {
+    color: white;
+    margin-top: 16px;
+    font-size: 16px;
   }
 }
 
@@ -101,6 +124,7 @@ mat-nav-list a mat-icon {
     width: 180px; // Reduz a largura em telas pequenas
     margin: 0 10px;
   }
+
   .mat-toolbar span {
     font-size: 16px; // Reduz o tamanho da fonte do título
   }

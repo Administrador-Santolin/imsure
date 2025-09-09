@@ -9,8 +9,13 @@
     <mat-form-field appearance="outline" class="toolbar-search-input">
         <mat-label>Buscar Cliente</mat-label>
         <input type="text" placeholder="Nome ou CPF" aria-label="Buscar Cliente" matInput [formControl]="searchControl"
-            [matAutocomplete]="auto">
+            [matAutocomplete]="auto" [disabled]="isLoading()">
+        @if (!isLoading()) {
         <mat-icon matSuffix>search</mat-icon>
+        } @else {
+        <mat-icon matSuffix>hourglass_empty</mat-icon>
+        }
+
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onClienteSelected($event)"
             [displayWith]="displayCliente">
             <mat-option *ngFor="let cliente of filteredClientes$ | async" [value]="cliente">
@@ -22,9 +27,14 @@
         </mat-autocomplete>
     </mat-form-field>
 
-    <button mat-button (click)="onLogout()">
+    <button mat-button (click)="onLogout()" [disabled]="isLoading()">
+        @if (!isLoading()) {
         <mat-icon>logout</mat-icon>
-        Logout
+        <span>Logout</span>
+        } @else {
+        <mat-icon>hourglass_empty</mat-icon>
+        <span>Saindo...</span>
+        }
     </button>
 </mat-toolbar>
 
@@ -49,6 +59,13 @@
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content class="sidenav-content">
+        @if (isLoading()) {
+        <div class="loading-overlay">
+            <mat-spinner diameter="50"></mat-spinner>
+            <p>Carregando...</p>
+        </div>
+        }
+
         <div class="main-content">
             <router-outlet></router-outlet>
         </div>
