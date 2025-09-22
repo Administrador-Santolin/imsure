@@ -141,6 +141,24 @@ fieldset {
   }
 }
 
+.error-snackbar {
+  background-color: #f44336 !important;
+  /* Vermelho */
+  color: white !important;
+}
+
+.success-snackbar {
+  background-color: #4caf50 !important;
+  /* Verde */
+  color: white !important;
+}
+
+.info-snackbar {
+  background-color: #2196f3 !important;
+  /* Azul */
+  color: white !important;
+}
+
 
 .w25 {
   width: 25%;

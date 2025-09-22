@@ -18,12 +18,16 @@
 
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onClienteSelected($event)"
             [displayWith]="displayCliente">
-            <mat-option *ngFor="let cliente of filteredClientes$ | async" [value]="cliente">
+            @for (cliente of filteredClientes$ | async; track cliente.id) {
+            <mat-option [value]="cliente">
                 {{ cliente.nome }} - {{ cliente.cpf || 'CPF não informado' }}
             </mat-option>
-            <mat-option *ngIf="!(filteredClientes$ | async)?.length && searchControl.value" disabled>
+            }
+            @if ( !(filteredClientes$ | async)?.length && searchControl.value ) {
+            <mat-option disabled>
                 Nenhum cliente encontrado.
             </mat-option>
+            }
         </mat-autocomplete>
     </mat-form-field>
 
