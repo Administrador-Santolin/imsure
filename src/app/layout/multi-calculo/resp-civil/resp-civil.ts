@@ -150,9 +150,44 @@ export class RespCivil implements OnInit {
 
   especialidadesOpcoes: { id: string; nome: string }[] = [];
 
+  private procedimentosPorEspecialidade = {
+    'MEDICO_SEM_CIRURGIA': [
+      { id: 'AESTHETIC-PROCEDURES', nome: 'Procedimentos Estéticos Minimamente Invasivos.', ativo: false },
+      { id: 'ENDOSCOPY-COLONOSCOPY', nome: 'Endoscopia e/ou Colonoscopia.', ativo: false },
+      { id: 'RADIOTHERAPY-CHEMOTHERAPY-IMMUNOTHERAPY', nome: 'Radioterapia e/ou Quimioterapia e/ou Imunoterapia.', ativo: false },
+      { id: 'HAIR-IMPLANT-TRANSPLANT', nome: 'Procedimentos Estéticos relacionados à Implante e Transplante Capilar.', ativo: false }
+    ],
+    
+    'MEDICO_COM_CIRURGIA': [
+      { id: 'AESTHETIC-PROCEDURES', nome: 'Procedimentos Estéticos Minimamente Invasivos.', ativo: false },
+      { id: 'ENDOSCOPY-COLONOSCOPY', nome: 'Endoscopia e/ou Colonoscopia.', ativo: false },
+      { id: 'RADIOTHERAPY-CHEMOTHERAPY-IMMUNOTHERAPY', nome: 'Radioterapia e/ou Quimioterapia e/ou Imunoterapia.', ativo: false },
+      { id: 'AESTHETIC-PROCEDURES-MEDICAL-SPECIALTY', nome: 'Procedimentos Estéticos relacionados à Especialidade Médica.', ativo: false },
+      { id: 'HAIR-IMPLANT-TRANSPLANT', nome: 'Procedimentos Estéticos relacionados à Implante e Transplante Capilar.', ativo: false }
+    ],
+    
+    'OBSTETRA': [
+      { id: 'AESTHETIC-PROCEDURES', nome: 'Procedimentos Estéticos Minimamente Invasivos.', ativo: false },
+      { id: 'ENDOSCOPY-COLONOSCOPY', nome: 'Endoscopia e/ou Colonoscopia.', ativo: false },
+      { id: 'RADIOTHERAPY-CHEMOTHERAPY-IMMUNOTHERAPY', nome: 'Radioterapia e/ou Quimioterapia e/ou Imunoterapia.', ativo: false },
+      { id: 'AESTHETIC-PROCEDURES-MEDICAL-SPECIALTY', nome: 'Procedimentos Estéticos relacionados à Especialidade Médica.', ativo: false },
+      { id: 'HAIR-IMPLANT-TRANSPLANT', nome: 'Procedimentos Estéticos relacionados à Implante e Transplante Capilar.', ativo: false }
+    ],
+
+    'CIRURGIAO_PLASTICO': [
+      { id: 'ENDOSCOPY-COLONOSCOPY', nome: 'Endoscopia e/ou Colonoscopia.', ativo: false },
+      { id: 'RADIOTHERAPY-CHEMOTHERAPY-IMMUNOTHERAPY', nome: 'Radioterapia e/ou Quimioterapia e/ou Imunoterapia.', ativo: false }
+    ]
+  };
+  
+  // �� EXPLICAÇÃO: Variável que guarda os procedimentos da especialidade atual
+  procedimentosAtuais: any[] = [];
+  
+  // 🎓 EXPLICAÇÃO: Variável que controla se os procedimentos estão visíveis
+  procedimentosVisiveis: boolean = false;
+
   ngOnInit(): void {
     // Inscreve-se no Observable para garantir que os dados do serviço foram carregados
-
     // Carrega as especialidades do enquadramento
     this.rcEnq.getEspecialidades().subscribe(list => {
       this.especialidadesOpcoes = list.map(x => ({ id: x.id, nome: x.nome }));
@@ -185,13 +220,63 @@ export class RespCivil implements OnInit {
     return typeof val === 'string' ? val : val.nome;
   };
 
+  private atualizarProcedimentos(especialidadeId: string): void {
+    // 🎓 EXPLICAÇÃO: Primeiro, vamos descobrir qual é a classe da especialidade
+    // (MEDICO_SEM_CIRURGIA, MEDICO_COM_CIRURGIA, ou OBSTETRA)
+    
+    // 🎓 EXPLICAÇÃO: Procura a especialidade na lista carregada
+    const especialidade = this.especialidades.find(e => e.id === especialidadeId);
+    
+    if (!especialidade) {
+      console.warn('⚠️ Especialidade não encontrada:', especialidadeId);
+      this.procedimentosVisiveis = false;
+      return;
+    }
+    
+    // 🎓 EXPLICAÇÃO: Pega a classe da especialidade (ex: 'MEDICO_SEM_CIRURGIA')
+    const classeEspecialidade = especialidade.classe;
+    
+    // 🎓 EXPLICAÇÃO: Busca os procedimentos correspondentes na nossa tabela
+    const procedimentos = this.procedimentosPorEspecialidade[classeEspecialidade];
+    
+    if (!procedimentos) {
+      console.warn('⚠️ Procedimentos não encontrados para classe:', classeEspecialidade);
+      this.procedimentosVisiveis = false;
+      return;
+    }
+    
+    // 🎓 EXPLICAÇÃO: Atualiza a lista de procedimentos atuais
+    this.procedimentosAtuais = [...procedimentos]; // Cria uma cópia
+    
+    // 🎓 EXPLICAÇÃO: Mostra os procedimentos na tela
+    this.procedimentosVisiveis = true;
+    
+    console.log(`✅ Procedimentos atualizados para ${classeEspecialidade}:`, this.procedimentosAtuais);
+  }
+
   onEspecialidadeSelected(espec: EspecialidadeInfo) {
     this.especialidadeSelecionadaId = espec.id;                 // guardamos o id
     this.filtroEspecialidade.setValue(espec.nome, { emitEvent: false }); // mantém o nome no input
+    this.atualizarProcedimentos(espec.id);
   }
 
   onEscolherEspecialidade(opcao: { id: string; nome: string }) {
     this.especialidadeSelecionada = opcao.nome;
+  }
+
+  onProcedimentoChange(procedimentoId: string, event: any): void {
+    // 🎓 EXPLICAÇÃO: Pega o valor do checkbox (true = marcado, false = desmarcado)
+    const ativo = event.target.checked;
+    
+    // 🎓 EXPLICAÇÃO: Procura o procedimento na lista atual
+    const procedimento = this.procedimentosAtuais.find(p => p.id === procedimentoId);
+    
+    if (procedimento) {
+      // 🎓 EXPLICAÇÃO: Atualiza o estado do procedimento
+      procedimento.ativo = ativo;
+      
+      console.log(`✅ Procedimento ${procedimento.nome}: ${ativo ? 'ATIVADO' : 'DESATIVADO'}`);
+    }
   }
 
   // Método chamado pelo botão de cálculo

@@ -437,31 +437,16 @@ export class AkadClient {
     }
 
     // Valor da cobertura -> Q4 (código Akad)
-    private mapCobertura(valor: number): string {
-        const tabela = new Map<number, string>([
-            [30000, '1'],
-            [50000, '2'],
-            [75000, '3'],
-            [100000, '4'],
-            [150000, '5'],
-            [200000, '6'],
-            [250000, '7'],
-            [300000, '8'],
-            [400000, '9'],
-            [500000, '10'],
-            [600000, '11'],
-            [700000, '12'],
-            [800000, '13'],
-            [900000, '14'],
-            [1000000, '15'],
-            [1500000, '16'],
-            [2000000, '17'],
-            [2500000, '18'],
-            [3000000, '19'],
-            [3500000, '20'],
-            [4000000, '21'],
-            [4500000, '22'],
-            [5000000, '23'],
+    private mapCobertura(valor: number): number {
+        const tabela = new Map<number, number>([
+            [50000, 2],  
+            [100000, 4],   
+            [150000, 5], 
+            [200000, 6],   
+            [250000, 7], 
+            [300000, 8],   
+            [400000, 9],   
+            [500000, 10],
         ]);
         const code = tabela.get(Number(valor));
         if (!code) throw new Error(`Cobertura ${valor} não mapeada para a Akad (Q4).`);
