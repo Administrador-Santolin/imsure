@@ -29,23 +29,32 @@
   </div>
 
   <div class="span-4">
-    <mat-slide-toggle labelPosition="before">Atua como perito médico?</mat-slide-toggle><br>
-    <mat-slide-toggle labelPosition="before">Médico(a) residente</mat-slide-toggle>
+    <mat-slide-toggle labelPosition="before" [(ngModel)]="peritoMedico">Atua como perito médico?</mat-slide-toggle><br>
+    <mat-slide-toggle labelPosition="before" [(ngModel)]="residente">Médico(a) residente</mat-slide-toggle>
   </div>
+  
+  <!-- 🎓 NOVA SEÇÃO: Procedimentos específicos da Fairfax -->
+  @if (procedimentosVisiveis) {
+    <div class="span-4">
+      <h3>Procedimentos Específicos (Fairfax)</h3>
+      <div class="procedimentos-container">
+        @for (procedimento of procedimentosAtuais; track procedimento.id) {
+        <mat-checkbox
+          [(ngModel)]="procedimento.ativo"
+          class="procedimento-checkbox">
+          {{ procedimento.nome }}
+        </mat-checkbox>
+        }
+      </div>
+    </div>
+    }
 </div>
 
 <mat-card-actions>
-  <button matButton (click)="calcularPreco()"
-    [disabled]="!filtroEspecialidade || !coberturaSelecionada">Calcular</button>
+  <button matButton (click)="cotarTodas()" [disabled]="!filtroEspecialidade || !coberturaSelecionada || carregando">
+    {{ carregando ? 'Cotando todas as seguradoras...' : 'Cotar' }}
+  </button>
 </mat-card-actions>
-
-<button mat-raised-button color="primary" type="button" (click)="cotarAkad()" [disabled]="carregandoAkad">
-  {{ carregandoAkad ? 'Cotando Akad...' : 'Cotar na Akad' }}
-</button>
-
-<button mat-raised-button color="primary" type="button" (click)="cotarFairfax()">
-  {{ carregandoAkad ? 'Cotando Fairfax...' : 'Cotar na Fairfax' }}
-</button>
 
 <div class="resultado form-grid">
   @if (resultadoAkad) {

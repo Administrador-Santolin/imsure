@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { RCMultiService } from '../../../services/RCMulti.service';
 import { startWith } from 'rxjs/operators';
@@ -19,7 +20,7 @@ import { FairfaxClient } from '../../../services/fairfax.client';
 @Component({
   selector: 'app-resp-civil',
   imports: [CommonModule, FormsModule, RouterModule, ReactiveFormsModule,
-    MatAutocompleteModule, MatInputModule, MatSliderModule, MatButtonModule, MatSlideToggleModule, MatCardModule],
+    MatAutocompleteModule, MatInputModule, MatSliderModule, MatButtonModule, MatSlideToggleModule, MatCardModule, MatCheckboxModule],
   templateUrl: './resp-civil.html',
   styleUrl: './resp-civil.scss'
 })
@@ -29,6 +30,8 @@ export class RespCivil implements OnInit {
   coberturaSelecionada: number = 50000;
   temChefe: boolean = false;
   temDiretor: boolean = false;
+  residente: boolean = false;
+  peritoMedico: boolean = false;
 
   // Listas para os menus drop-down
   especialidades: EspecialidadeInfo[] = [];
@@ -49,9 +52,36 @@ export class RespCivil implements OnInit {
   ) {
   }
 
-  carregandoAkad = false;
+  private getProcedimentosAtivos(): string[] {
+    // 🎓 EXPLICAÇÃO: Filtra só os procedimentos que estão marcados (ativo = true)
+    const procedimentosAtivos = this.procedimentosAtuais
+      .filter(procedimento => procedimento.ativo) // ← Só os marcados
+      .map(procedimento => procedimento.id); // ← Pega só o ID
+    
+    return procedimentosAtivos;
+  }
+
+  carregando = false;
   resultadoAkad: RcQuoteResult | null = null;
   resultadoFF: RcQuoteResult | null = null;
+
+  async cotarTodas(): Promise<void> {
+    // 🎓 EXPLICAÇÃO: Primeiro, vamos mostrar que está carregando
+    this.carregando = true;
+
+    // 🎓 EXPLICAÇÃO: Limpamos os resultados anteriores
+    this.resultadoAkad = null;
+    this.resultadoFF = null;
+    this.precosCalculados = null;
+
+    this.calcularPreco();
+
+    await this.cotarAkad();
+
+    await this.cotarFairfax();
+
+    this.carregando = false;
+  }
 
   private _filter(value: string): EspecialidadeInfo[] {
     const filterValue = value.toLowerCase();
@@ -61,6 +91,7 @@ export class RespCivil implements OnInit {
 
   private async buildRcQuoteInputMinimo(): Promise<RcQuoteInput> {
     const especialidadeKey = this.especialidadeSelecionadaId || this.filtroEspecialidade.value || '';
+    const procedimentosAtivos = this.getProcedimentosAtivos();
 
     return {
       // 1) da sua tela atual
@@ -86,16 +117,16 @@ export class RespCivil implements OnInit {
       // 4) extras específicos da Akad (franquia 3 como sugerido na doc)
       extras: {
         fairfax: {
-          residente: false,          // RESIDENT
-          peritoMedico: false,       // MEDICAL-EXPERT
+          residente: this.residente,          // RESIDENT
+          peritoMedico: this.peritoMedico,       // MEDICAL-EXPERT
           territorialidade: 'BR',
           escopo: 'NATIONAL',
           // Se precisar, você pode permitir override das categorias:
           // Dedutível: a Fairfax manda um array de pares [ {LIMIT}, {DEDUCTIBLE} ].
           // Vamos guardar o que a tela escolher e o service monta a estrutura.
-          limite: 100000,              // LIMIT
           dedutivel: 'MINIMUM', // DEDUCTIBLE code
-          categories: []
+          categories: [],
+          procedures: procedimentosAtivos
         }
       },
 
@@ -109,7 +140,6 @@ export class RespCivil implements OnInit {
   }
 
   async cotarAkad(): Promise<void> {
-    this.carregandoAkad = true;
     this.resultadoAkad = null;
 
     const input = await this.buildRcQuoteInputMinimo();
@@ -117,7 +147,6 @@ export class RespCivil implements OnInit {
     this.akad.cotar(input).subscribe({
       next: (r) => {
         this.resultadoAkad = r;
-        this.carregandoAkad = false;
         console.log('AKAD RESULT:', r);
       },
       error: (e) => {
@@ -131,7 +160,6 @@ export class RespCivil implements OnInit {
           pagamentosDisponiveis: [],
           error: e?.message ?? 'Erro inesperado'
         };
-        this.carregandoAkad = false;
       }
     });
   }
@@ -139,8 +167,7 @@ export class RespCivil implements OnInit {
   async cotarFairfax(): Promise<void> {
     this.resultadoFF = null;
     const input = await this.buildRcQuoteInputMinimo(); // o mesmo que você usa
-    console.log('[FF] classeInterna:', input.classeInterna);
-    
+
     this.fairfax.cotar(input).subscribe(r => {
       // adicione o card da Fairfax ao array de resultados
       this.resultadoFF = r;
@@ -157,20 +184,20 @@ export class RespCivil implements OnInit {
       { id: 'RADIOTHERAPY-CHEMOTHERAPY-IMMUNOTHERAPY', nome: 'Radioterapia e/ou Quimioterapia e/ou Imunoterapia.', ativo: false },
       { id: 'HAIR-IMPLANT-TRANSPLANT', nome: 'Procedimentos Estéticos relacionados à Implante e Transplante Capilar.', ativo: false }
     ],
-    
+
     'MEDICO_COM_CIRURGIA': [
       { id: 'AESTHETIC-PROCEDURES', nome: 'Procedimentos Estéticos Minimamente Invasivos.', ativo: false },
+      { id: 'AESTHETIC-PROCEDURES-MEDICAL-SPECIALTY', nome: 'Procedimentos Estéticos relacionados à Especialidade Médica.', ativo: false },
       { id: 'ENDOSCOPY-COLONOSCOPY', nome: 'Endoscopia e/ou Colonoscopia.', ativo: false },
       { id: 'RADIOTHERAPY-CHEMOTHERAPY-IMMUNOTHERAPY', nome: 'Radioterapia e/ou Quimioterapia e/ou Imunoterapia.', ativo: false },
-      { id: 'AESTHETIC-PROCEDURES-MEDICAL-SPECIALTY', nome: 'Procedimentos Estéticos relacionados à Especialidade Médica.', ativo: false },
       { id: 'HAIR-IMPLANT-TRANSPLANT', nome: 'Procedimentos Estéticos relacionados à Implante e Transplante Capilar.', ativo: false }
     ],
-    
+
     'OBSTETRA': [
       { id: 'AESTHETIC-PROCEDURES', nome: 'Procedimentos Estéticos Minimamente Invasivos.', ativo: false },
+      { id: 'AESTHETIC-PROCEDURES-MEDICAL-SPECIALTY', nome: 'Procedimentos Estéticos relacionados à Especialidade Médica.', ativo: false },
       { id: 'ENDOSCOPY-COLONOSCOPY', nome: 'Endoscopia e/ou Colonoscopia.', ativo: false },
       { id: 'RADIOTHERAPY-CHEMOTHERAPY-IMMUNOTHERAPY', nome: 'Radioterapia e/ou Quimioterapia e/ou Imunoterapia.', ativo: false },
-      { id: 'AESTHETIC-PROCEDURES-MEDICAL-SPECIALTY', nome: 'Procedimentos Estéticos relacionados à Especialidade Médica.', ativo: false },
       { id: 'HAIR-IMPLANT-TRANSPLANT', nome: 'Procedimentos Estéticos relacionados à Implante e Transplante Capilar.', ativo: false }
     ],
 
@@ -179,10 +206,10 @@ export class RespCivil implements OnInit {
       { id: 'RADIOTHERAPY-CHEMOTHERAPY-IMMUNOTHERAPY', nome: 'Radioterapia e/ou Quimioterapia e/ou Imunoterapia.', ativo: false }
     ]
   };
-  
+
   // �� EXPLICAÇÃO: Variável que guarda os procedimentos da especialidade atual
   procedimentosAtuais: any[] = [];
-  
+
   // 🎓 EXPLICAÇÃO: Variável que controla se os procedimentos estão visíveis
   procedimentosVisiveis: boolean = false;
 
@@ -193,10 +220,6 @@ export class RespCivil implements OnInit {
       this.especialidadesOpcoes = list.map(x => ({ id: x.id, nome: x.nome }));
       this.especialidades = list;
       this.especialidadesFiltradas = list;
-      console.table(list.map(x => ({ id: x.id, nome: x.nome, classe: x.classe })));
-      console.log('ENQ carregado (nomes):', list.map(x => x.nome));
-      // opcional: veja também os ids (slugs)
-      console.log('ENQ ids:', list.map(x => x.id));
     });
 
     this.filtroEspecialidade.valueChanges
@@ -223,35 +246,31 @@ export class RespCivil implements OnInit {
   private atualizarProcedimentos(especialidadeId: string): void {
     // 🎓 EXPLICAÇÃO: Primeiro, vamos descobrir qual é a classe da especialidade
     // (MEDICO_SEM_CIRURGIA, MEDICO_COM_CIRURGIA, ou OBSTETRA)
-    
+
     // 🎓 EXPLICAÇÃO: Procura a especialidade na lista carregada
     const especialidade = this.especialidades.find(e => e.id === especialidadeId);
-    
+
     if (!especialidade) {
       console.warn('⚠️ Especialidade não encontrada:', especialidadeId);
       this.procedimentosVisiveis = false;
       return;
     }
-    
+
     // 🎓 EXPLICAÇÃO: Pega a classe da especialidade (ex: 'MEDICO_SEM_CIRURGIA')
     const classeEspecialidade = especialidade.classe;
-    
+
     // 🎓 EXPLICAÇÃO: Busca os procedimentos correspondentes na nossa tabela
     const procedimentos = this.procedimentosPorEspecialidade[classeEspecialidade];
-    
+
     if (!procedimentos) {
       console.warn('⚠️ Procedimentos não encontrados para classe:', classeEspecialidade);
       this.procedimentosVisiveis = false;
       return;
     }
-    
     // 🎓 EXPLICAÇÃO: Atualiza a lista de procedimentos atuais
     this.procedimentosAtuais = [...procedimentos]; // Cria uma cópia
-    
     // 🎓 EXPLICAÇÃO: Mostra os procedimentos na tela
     this.procedimentosVisiveis = true;
-    
-    console.log(`✅ Procedimentos atualizados para ${classeEspecialidade}:`, this.procedimentosAtuais);
   }
 
   onEspecialidadeSelected(espec: EspecialidadeInfo) {
@@ -264,21 +283,6 @@ export class RespCivil implements OnInit {
     this.especialidadeSelecionada = opcao.nome;
   }
 
-  onProcedimentoChange(procedimentoId: string, event: any): void {
-    // 🎓 EXPLICAÇÃO: Pega o valor do checkbox (true = marcado, false = desmarcado)
-    const ativo = event.target.checked;
-    
-    // 🎓 EXPLICAÇÃO: Procura o procedimento na lista atual
-    const procedimento = this.procedimentosAtuais.find(p => p.id === procedimentoId);
-    
-    if (procedimento) {
-      // 🎓 EXPLICAÇÃO: Atualiza o estado do procedimento
-      procedimento.ativo = ativo;
-      
-      console.log(`✅ Procedimento ${procedimento.nome}: ${ativo ? 'ATIVADO' : 'DESATIVADO'}`);
-    }
-  }
-
   // Método chamado pelo botão de cálculo
   calcularPreco(): void {
     this.precosCalculados = this.respCivilService.obterPrecos(
@@ -287,6 +291,5 @@ export class RespCivil implements OnInit {
       this.temChefe,
       this.temDiretor
     );
-    console.log('Preços calculados:', this.precosCalculados);
   }
 }

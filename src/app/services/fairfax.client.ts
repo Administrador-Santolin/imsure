@@ -94,6 +94,7 @@ export class FairfaxClient {
 
     // Procedimentos/flags específicos (opcionais)
     const resident = !!input.extras?.fairfax?.residente;
+    const peritoMedico = !!input.extras?.fairfax?.peritoMedico;
     const procedures = Array.isArray(input.extras?.fairfax?.procedures)
       ? input.extras!.fairfax!.procedures : []; // ex.: ['AESTHETIC-PROCEDURES', 'ENDOSCOPY-COLONOSCOPY', ...]
 
@@ -113,7 +114,7 @@ export class FairfaxClient {
       { code: 'GRIEVANCE-DISCOUNT', answer: 0 },
       { code: 'INSURED-SOCIAL-NAME-AGREEMENT', answer: false },
       { code: 'MODALITY', answer: 'MEDICAL-CIVIL-LIABILITY' },
-      { code: 'MEDICAL-EXPERT', answer: true },
+      { code: 'MEDICAL-EXPERT', answer: peritoMedico },
       { code: 'PERSON-TYPE', answer: 'NATURAL' },
       { code: 'CONGENER', answer: congenere },
       { code: 'START-VIGENCY-DATE', answer: this.toIsoDate(input.dataInicioVigencia || new Date()) },
