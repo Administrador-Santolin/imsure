@@ -89,7 +89,8 @@ export class FairfaxClient {
 
     // Mapas simples p/ Fairfax
     const congenere = input.congenere === 'NOVO' ? 'NEW' : 'EXISTING';
-    const retro = Number(input.retroatividadeAnos || 0);
+    const retroInput = input.extras?.fairfax?.retroatividadeFF ?? input.retroatividadeAnos ?? 0;
+    const retro = Math.min(Number(retroInput), 5); // Limita a 5 anos
     const limit = Number(input.cobertura || 0);
 
     // Procedimentos/flags específicos (opcionais)
@@ -132,11 +133,16 @@ export class FairfaxClient {
 
       { code: 'RETROACTIVITY', answer: retro },
 
+      ...(retro > 0 ? [{ code: 'RETROACTIVITY-AGREEMENT', answer: true }] : []),
+
       // Sinistros: Fairfax usa “CLAIMS” como string
-      { code: 'CLAIMS', answer: this.mapClaims(input.sinistralidade5Anos) },
+      { code: 'CLAIMS', answer: input.extras?.fairfax?.sinistralidadeFF },
 
       // Conhecimento prévio → expectation
-      { code: 'CLAIM-EXPECTATION', answer: !!input.conhecimentoPrevio },
+      { code: 'CLAIM-EXPECTATION', answer: input.conhecimentoPrevio },
+
+      ...(input.conhecimentoPrevio ? [{ code: 'CLAIM-EXPECTATION-AGREEMENT', answer: true }] : []),
+      ...(input.conhecimentoPrevio ? [{ code: 'CLAIM-EXPECTATION-THIRD-PARTY', answer: input.reclamantes }] : []),
 
       // Território/escopo padrão Brasil
       { code: 'TERRITORIALITY', answer: 'BR' },
@@ -231,8 +237,6 @@ export class FairfaxClient {
     }
     return Array.from(set);
   }
-
-
   // ---------- Helpers ----------
   private buildHeaders(): HttpHeaders {
     let h = new HttpHeaders({ 'Content-Type': 'application/json;charset=UTF-8', 'Ocp-Apim-Subscription-Key': this.cfg.subscriptionKey });
@@ -245,70 +249,6 @@ export class FairfaxClient {
 
   private toIsoDate(d: Date): string {
     try { return new Date(d).toISOString(); } catch { return new Date().toISOString(); }
-  }
-
-  private mapClaims(sin: RcQuoteInput['sinistralidade5Anos']): string {
-    // mapeia para texto esperado pela Fairfax (ex.: "0", "1", "2", "3+")
-    switch ((sin || 'NENHUM').toUpperCase()) {
-      case 'NENHUM': return '0';
-      case '01_SINISTRO': return '1';
-      case '02_SINISTROS': return '2';
-      case '03+':
-      case '03_OU_MAIS': return '3+';
-      default: return '0';
-    }
-  }
-
-  private asNumber(v: any): number | undefined {
-    const n = Number(v);
-    return Number.isFinite(n) ? n : undefined;
-  }
-
-  private listPaymentTypes(resp: any): string[] {
-    const opts = Array.isArray(resp?.paymentOptions) ? resp.paymentOptions : [];
-    const set = new Set<string>();
-    for (const o of opts) {
-      const t = String(o?.type ?? '').trim();
-      if (t) set.add(t);
-    }
-    return Array.from(set);
-  }
-
-  private pickInstallmentAmount(resp: any, n: number): number | undefined {
-    const opts = Array.isArray(resp?.paymentOptions) ? resp.paymentOptions : [];
-    let best: number | undefined;
-    for (const opt of opts) {
-      const insts = Array.isArray(opt?.installments) ? opt.installments : [];
-      const hit = insts.find((i: any) => Number(i?.installmentNumber) === n);
-      if (!hit) continue;
-      const val = Number(hit?.totalInstallment ?? hit?.totalValue);
-      if (!Number.isFinite(val)) continue;
-      best = best === undefined ? val : Math.min(best, val);
-    }
-    return best;
-  }
-
-  private findMaxNoInterest(resp: any): { n: number; amount: number } | null {
-    const opts = Array.isArray(resp?.paymentOptions) ? resp.paymentOptions : [];
-    let maxN = 0;
-    let bestAmount: number | undefined;
-
-    for (const opt of opts) {
-      const insts = Array.isArray(opt?.installments) ? opt.installments : [];
-      for (const it of insts) {
-        const n = Number(it?.installmentNumber);
-        const interest = Number(it?.interestValue ?? it?.insterestValue ?? 0);
-        if (!Number.isFinite(n)) continue;
-        if (interest === 0) {
-          const val = Number(it?.totalInstallment ?? it?.totalValue);
-          if (!Number.isFinite(val)) continue;
-          if (n > maxN) { maxN = n; bestAmount = val; }
-          else if (n === maxN) { bestAmount = Math.min(bestAmount ?? val, val); }
-        }
-      }
-    }
-    if (!maxN || bestAmount === undefined) return null;
-    return { n: maxN, amount: bestAmount };
   }
 
   private explainHttpError(e: any): string {

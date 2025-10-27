@@ -1,16 +1,30 @@
-.mat-expansion-panel:last-child{
-    margin-bottom: 16px !important;
+.mat-expansion-panel:last-child {
+  margin-bottom: 16px !important;
 }
 
 .form-apolice {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding: 5px;
-    gap: 12px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 5px;
+  gap: 12px;
 }
 
-// Estilos para os itens segurados
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 8px;
+}
+
+.inline-grid {
+  display: inline-grid;
+  justify-content: center;
+  align-items: baseline;
+}
+
 .item-segurado-container {
   border: 1px solid #e0e0e0;
   border-radius: 8px;
@@ -40,11 +54,25 @@
       gap: 16px;
       align-items: start;
 
-      .span-1 { grid-column: span 1; }
-      .span-2 { grid-column: span 2; }
-      .span-3 { grid-column: span 3; }
-      .span-4 { grid-column: span 4; }
-      .span-6 { grid-column: span 6; }
+      .span-1 {
+        grid-column: span 1;
+      }
+
+      .span-2 {
+        grid-column: span 2;
+      }
+
+      .span-3 {
+        grid-column: span 3;
+      }
+
+      .span-4 {
+        grid-column: span 4;
+      }
+
+      .span-6 {
+        grid-column: span 6;
+      }
     }
   }
 }
@@ -66,8 +94,12 @@
     .formulario-especifico {
       .form-grid {
         grid-template-columns: 1fr;
-        
-        .span-1, .span-2, .span-3, .span-4, .span-6 {
+
+        .span-1,
+        .span-2,
+        .span-3,
+        .span-4,
+        .span-6 {
           grid-column: span 1;
         }
       }

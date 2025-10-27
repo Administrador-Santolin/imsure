@@ -33,11 +33,11 @@
 
     <button mat-button (click)="onLogout()" [disabled]="isLoading()">
         @if (!isLoading()) {
-        <mat-icon>logout</mat-icon>
-        <span>Logout</span>
+        <mat-icon>logout<span>Logout</span></mat-icon>
+        
         } @else {
-        <mat-icon>hourglass_empty</mat-icon>
-        <span>Saindo...</span>
+        <mat-icon>hourglass_empty<span>Saindo...</span></mat-icon>
+        
         }
     </button>
 </mat-toolbar>

@@ -16,6 +16,13 @@ html {
       density: 0,
     ));
 
+    @include mat.expansion-overrides((
+    header-text-color: $surface,
+    header-hover-state-layer-color: $blue,
+    header-focus-state-layer-color: $blue,
+    header-indicator-color: $surface
+  ));
+
   @include mat.fab-overrides((container-color: $blue,
       foreground-color: $surface ));
 
@@ -69,12 +76,26 @@ fieldset {
   }
 }
 
+.mat-expansion-panel-header {
+  background-color: $blue;
+  &:hover {
+    background-color: $blue;
+    color: red;
+  }
+
+  &.mat-expanded:focus, 
+  &:hover.mat-expanded {
+    background: $blue !important;
+  }
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: 1rem;
   margin-bottom: 1.5rem;
   padding: 1.5rem;
+  align-items: baseline;
 }
 
 .form-grid-child {

@@ -212,10 +212,6 @@ export class AkadClient {
 
     // ====== validações de negócio básicas ======
     private prevalidate(input: RcQuoteInput): string | null {
-        // 3+ sinistros (5 anos) não aceita
-        if (input.sinistralidade5Anos === 'TRES_OU_MAIS') {
-            return 'Akad: 3 ou mais sinistros nos últimos 5 anos não é aceito.';
-        }
         // Reclamações 12m > 0 só se houve sinistro (regra de front da doc)
         if (input.reclamacoes12m !== 'NENHUM' && input.sinistralidade5Anos === 'NENHUM') {
             return 'Akad: Reclamações em 12 meses só quando houve sinistro nos últimos 5 anos.';
@@ -454,12 +450,11 @@ export class AkadClient {
     }
 
     // Sinistralidade 5 anos -> Q6
-    private mapSinistralidade(s: RcSinistralidade5Anos): '1' | '2' | '3' | '4' {
+    private mapSinistralidade(s: RcSinistralidade5Anos): '1' | '2' | '3' {
         switch (s) {
             case 'NENHUM': return '1';
             case 'UM': return '2';
             case 'DOIS': return '3';
-            case 'TRES_OU_MAIS': return '4';
         }
     }
 
@@ -468,7 +463,6 @@ export class AkadClient {
         switch (r) {
             case 'NENHUM': return '1';
             case 'UMA': return '2';
-            case 'DUAS_OU_MAIS': return '3';
         }
     }
 

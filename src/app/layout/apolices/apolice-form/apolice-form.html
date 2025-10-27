@@ -187,7 +187,7 @@
   </fieldset>
 
   <mat-accordion>
-    <mat-expansion-panel formGroupName="informacoesFinanceiras">
+    <mat-expansion-panel formGroupName="formaPagamento">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <mat-icon>attach_money</mat-icon>
@@ -196,8 +196,8 @@
       </mat-expansion-panel-header>
 
       <section class="form-grid">
-        <fieldset class="span-4">
-          <mat-form-field appearance="outline" class="span-4">
+        <fieldset class="span-6 form-grid">
+          <mat-form-field appearance="outline" class="span-12">
             <mat-label>Forma de Pagamento</mat-label>
             <mat-select formControlName="formaPagamento" required>
               <mat-option value="creditCard">Cartão de crédito</mat-option>
@@ -205,8 +205,8 @@
               <mat-option value="ticket">Boleto</mat-option>
               <mat-option value="pix">Pix</mat-option>
             </mat-select>
-            @if ( getControl('informacoesFinanceiras', 'formaPagamento').hasError('required') &&
-            getControl('informacoesFinanceiras', 'formaPagamento').touched ) {
+            @if ( getControl('formaPagamento', 'formaPagamento').hasError('required') &&
+            getControl('formaPagamento', 'formaPagamento').touched ) {
             <mat-error>
               Forma de Pagamento é obrigatória.
             </mat-error>
@@ -217,27 +217,27 @@
             <mat-label>Parcelas</mat-label>
             <input matInput type="number" placeholder="Número de Parcelas" formControlName="parcelas" min="1"
               required />
-            @if ( getControl('informacoesFinanceiras', 'parcelas').hasError('required') &&
-            getControl('informacoesFinanceiras', 'parcelas').touched ) {
+            @if ( getControl('formaPagamento', 'parcelas').hasError('required') &&
+            getControl('formaPagamento', 'parcelas').touched ) {
             <mat-error>
               Parcelas é obrigatório.
             </mat-error>
-            } @else if ( getControl('informacoesFinanceiras', 'parcelas').hasError('min') &&
-            getControl('informacoesFinanceiras', 'parcelas').touched ) {
+            } @else if ( getControl('formaPagamento', 'parcelas').hasError('min') &&
+            getControl('formaPagamento', 'parcelas').touched ) {
             <mat-error>
               Mínimo 1 parcela.
             </mat-error>
             }
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="span-2">
+          <mat-form-field appearance="outline" class="span-4">
             <mat-label>Vencimento da 1ª parcela</mat-label>
             <input matInput [matDatepicker]="vencimentoPrimeiraParcelaPicker" placeholder="Vencimento da 1ª parcela"
               formControlName="vencimentoPrimeiraParcela" required>
             <mat-datepicker-toggle matIconSuffix [for]="vencimentoPrimeiraParcelaPicker"></mat-datepicker-toggle>
             <mat-datepicker #vencimentoPrimeiraParcelaPicker></mat-datepicker>
-            @if ( getControl('informacoesFinanceiras', 'vencimentoPrimeiraParcela').hasError('required') &&
-            getControl('informacoesFinanceiras', 'vencimentoPrimeiraParcela').touched ) {
+            @if ( getControl('formaPagamento', 'vencimentoPrimeiraParcela').hasError('required') &&
+            getControl('formaPagamento', 'vencimentoPrimeiraParcela').touched ) {
             <mat-error>
               Vencimento é obrigatório.
             </mat-error>
@@ -245,15 +245,15 @@
           </mat-form-field>
         </fieldset>
 
-        <fieldset class="inline-grid">
+        <fieldset class="inline-grid span-6">
           <mat-form-field floatLabel="always" appearance="outline">
             <mat-label>Comissão</mat-label>
-            <input matInput type="number" style="text-align: right;" formControlName="comissaoPercentual" min="0"
+            <input matInput type="text" style="text-align: right;" formControlName="comissaoPercentual" min="0"
               max="100" />
             <span matTextSuffix>%</span>
-            @if ( getControl('informacoesFinanceiras', 'comissaoPercentual').hasError('min') ||
-            getControl('informacoesFinanceiras', 'comissaoPercentual').hasError('max') &&
-            getControl('informacoesFinanceiras', 'comissaoPercentual').touched) {
+            @if ( getControl('formaPagamento', 'comissaoPercentual').hasError('min') ||
+            getControl('formaPagamento', 'comissaoPercentual').hasError('max') &&
+            getControl('formaPagamento', 'comissaoPercentual').touched) {
             <mat-error>
               Deve ser entre 0 e 100.
             </mat-error>
@@ -265,8 +265,8 @@
             <input matInput type="text" formControlName="premioLiquido" min="0" mask="separator.2" thousandSeparator="."
               [decimalMarker]="','" />
             <span matTextPrefix>R$</span>
-            @if ( getControl('informacoesFinanceiras', 'premioLiquido').hasError('min') &&
-            getControl('informacoesFinanceiras', 'premioLiquido').touched) {
+            @if ( getControl('formaPagamento', 'premioLiquido').hasError('min') &&
+            getControl('formaPagamento', 'premioLiquido').touched) {
             <mat-error>
               Prêmio líquido deve ser positivo.
             </mat-error>
@@ -278,9 +278,9 @@
             <input matInput type="text" style="text-align: right;" formControlName="iofPercentual" min="0" max="100"
               [decimalMarker]="','" mask="percent.2" />
             <span matTextSuffix>%</span>
-            @if ( getControl('informacoesFinanceiras', 'iofPercentual').hasError('min') ||
-            getControl('informacoesFinanceiras', 'iofPercentual').hasError('max') &&
-            getControl('informacoesFinanceiras', 'iofPercentual').touched ) {
+            @if ( getControl('formaPagamento', 'iofPercentual').hasError('min') ||
+            getControl('formaPagamento', 'iofPercentual').hasError('max') &&
+            getControl('formaPagamento', 'iofPercentual').touched ) {
             <mat-error>
               Deve ser entre 0 e 100.
             </mat-error>
@@ -292,8 +292,8 @@
             <input matInput type="text" formControlName="premioTotal" min="0" mask="separator.2" thousandSeparator="."
               [decimalMarker]="','" />
             <span matTextPrefix>R$</span>
-            @if ( getControl('informacoesFinanceiras', 'premioTotal').hasError('min') &&
-            getControl('informacoesFinanceiras', 'premioTotal').touched ) {
+            @if ( getControl('formaPagamento', 'premioTotal').hasError('min') &&
+            getControl('formaPagamento', 'premioTotal').touched ) {
             <mat-error>
               Prêmio total deve ser positivo.
             </mat-error>
@@ -313,43 +313,21 @@
     <!-- Lista de itens segurados -->
     @for ( item of itensSegurados.controls; let i = $index; track item.value?.id) {
     <mat-expansion-panel [formGroup]="item">
-
       <mat-expansion-panel-header>
         <mat-panel-title>
           <mat-icon>assignment</mat-icon>
           Item Segurado #{{ i + 1 }}
         </mat-panel-title>
-        <mat-panel-description>
-          Produto: {{ item.value.produto || 'defina' }}
-        </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <!-- Produto por item -->
-      <mat-form-field appearance="outline" class="span-3">
-        <mat-label>Produto do item</mat-label>
-        <mat-select formControlName="produto">
-          <mat-option value="Automóvel">Automóvel</mat-option>
-          <mat-option value="Residencial">Residencial</mat-option>
-          <mat-option value="Responsabilidade Civil">Responsabilidade Civil</mat-option>
-          <!-- adicione outros aqui quando precisar -->
-        </mat-select>
-      </mat-form-field>
-
-      <!-- Área para o form específico do item (próximo passo será ligar via CVA) -->
       @switch (item.get('produto')?.value) {
       @case ('Automóvel') {
-      <!-- depois: <app-automovel formControlName="details"></app-automovel> -->
-      <pre class="p-2 bg-light">Automóvel (placeholder). Details: {{ item.value | json }}</pre>
       <app-automovel formControlName="details" />
       }
       @case ('Residencial') {
-      <!-- depois: <app-locais formControlName="details"></app-locais> -->
-      <pre class="p-2 bg-light">Residencial (placeholder). Details: {{ item.value | json }}</pre>
       <app-locais formControlName="details" />
       }
       @case ('Responsabilidade Civil') {
-      <!-- depois: <app-resp-civil formControlName="details"></app-resp-civil> -->
-      <pre class="p-2 bg-light">Resp. Civil (placeholder). Details: {{ item.value | json }}</pre>
       <app-resp-civil formControlName="details" />
       }
       @default {
@@ -370,23 +348,3 @@
     <button mat-button type="button" (click)="onCancel()">Cancelar</button>
   </div>
 </form>
-
-
-<!-- <mat-expansion-panel formGroupName="itemSegurado">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <mat-icon>assignment</mat-icon>
-          Item Segurado
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-
-      @if ( apoliceForm.get('produto')?.value === 'Automóvel' ) {
-      <app-automovel></app-automovel>
-      } @else if ( isProdutoLocais() ){
-      <app-locais></app-locais>
-      } @else if ( apoliceForm.get('produto')?.value === 'Responsabilidade Civil' ) {
-      <app-resp-civil></app-resp-civil>
-      }
-
-    </mat-expansion-panel>
-  </mat-accordion> -->

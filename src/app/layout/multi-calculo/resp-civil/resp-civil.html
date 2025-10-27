@@ -1,53 +1,109 @@
 <h1>Responsabilidade Civil Profissional</h1>
 
 <div class="form-grid">
-  <mat-form-field appearance="outline" class="span-4">
-    <mat-label>Especialidade:</mat-label>
-    <input type="text" aria-label="Especialidade" matInput [matAutocomplete]="auto" [formControl]="filtroEspecialidade">
+  <div class="span-4">
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Especialidade:</mat-label>
+      <input type="text" aria-label="Especialidade" matInput [matAutocomplete]="auto"
+        [formControl]="filtroEspecialidade">
 
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayEspecialidade"
-      (optionSelected)="onEspecialidadeSelected($event.option.value)">
-      @for (e of especialidadesFiltradas; track e.id) {
-      <mat-option [value]="e">
-        {{ e.nome }}
-      </mat-option>
-      }
-    </mat-autocomplete>
-  </mat-form-field>
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayEspecialidade"
+        (optionSelected)="onEspecialidadeSelected($event.option.value)">
+        @for (e of especialidadesFiltradas; track e.id) {
+        <mat-option [value]="e">
+          {{ e.nome }}
+        </mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
 
-  <div class="span-6">
     <label><strong>Cobertura: </strong> R$ {{ coberturaSelecionada | number:'1.2-2':'pt-BR' }}</label> <br>
-    <mat-slider class="slider-full-width" min="50000" max="500000" step="50000" showTickMarks>
+    <mat-slider class="slider-full-width" min="100000" max="500000" step="50000" showTickMarks>
       <input matSliderThumb [(ngModel)]="coberturaSelecionada">
     </mat-slider>
   </div>
 
-  <div class="span-4">
-    <mat-slide-toggle class="mat-mdc-slide-toggle" [(ngModel)]="temChefe" labelPosition="before">Possui chefe de equipe:
-    </mat-slide-toggle> <br>
-    <mat-slide-toggle [(ngModel)]="temDiretor" labelPosition="before">É diretor técnico: </mat-slide-toggle>
-  </div>
+  <span class="span-2"></span>
 
   <div class="span-4">
-    <mat-slide-toggle labelPosition="before" [(ngModel)]="peritoMedico">Atua como perito médico?</mat-slide-toggle><br>
-    <mat-slide-toggle labelPosition="before" [(ngModel)]="residente">Médico(a) residente</mat-slide-toggle>
+    <mat-slide-toggle class="mat-mdc-slide-toggle" [(ngModel)]="temChefe" labelPosition="before">(Unimed)Possui chefe de
+      equipe:
+    </mat-slide-toggle> <br>
+    <mat-slide-toggle [(ngModel)]="temDiretor" labelPosition="before">(Unimed)É diretor técnico: </mat-slide-toggle>
+
+    <mat-slide-toggle labelPosition="before" [(ngModel)]="peritoMedico">(Fairfax)Atua como perito
+      médico?</mat-slide-toggle><br>
+    <mat-slide-toggle labelPosition="before" [(ngModel)]="residente">(Fairfax)Atua como médico(a)
+      residente?</mat-slide-toggle>
   </div>
-  
-  <!-- 🎓 NOVA SEÇÃO: Procedimentos específicos da Fairfax -->
+
   @if (procedimentosVisiveis) {
-    <div class="span-4">
-      <h3>Procedimentos Específicos (Fairfax)</h3>
-      <div class="procedimentos-container">
-        @for (procedimento of procedimentosAtuais; track procedimento.id) {
-        <mat-checkbox
-          [(ngModel)]="procedimento.ativo"
-          class="procedimento-checkbox">
-          {{ procedimento.nome }}
-        </mat-checkbox>
-        }
+  <div class="span-6">
+    <h3>Procedimentos Específicos (Fairfax)</h3>
+    <div class="procedimentos-container">
+      @for (procedimento of procedimentosAtuais; track procedimento.id) {
+      <mat-checkbox [(ngModel)]="procedimento.ativo" class="procedimento-checkbox">
+        {{ procedimento.nome }}
+      </mat-checkbox>
+      }
+    </div>
+  </div>
+  }
+
+  <div class="span-4">
+    <h3>Sinistralidade</h3>
+    <label><strong>(Akad)Sinistralidade dos ultimos 5 anos: {{ sinistralidade5anos }}</strong> </label> <br>
+    <mat-slider class="slider-full-width" min="0" max="2" step="1" showTickMarks>
+      <input matSliderThumb [(ngModel)]="sinistralidade5anos">
+    </mat-slider>
+
+    @if (sinistralidade5anos > 0){
+    <div class="form-grid">
+      <div class="span-6">
+        <mat-form-field appearance="outline">
+          <mat-label>Soma do valor dos sinistros</mat-label>
+          <span matTextPrefix>R$ &nbsp;</span>
+          <input matInput type="number" min="0" thousandSeparator="." [(ngModel)]="somaSinistros">
+        </mat-form-field>
+      </div>
+
+      <div class="span-6">
+        <label><strong>Sinistralidade dos ultimos 12 meses: {{ sinistralidade12meses }}</strong> </label> <br>
+        <mat-slider class="slider-full-width" min="0" max="2" step="1" showTickMarks>
+          <input matSliderThumb [(ngModel)]="sinistralidade12meses">
+        </mat-slider>
+        @if ( sinistralidade12meses > 1 ) {
+          <mat-error>
+            Akad não aceita mais de 1 sinistro nos últimos 12 meses.
+          </mat-error>
+          }
       </div>
     </div>
     }
+
+    <label><strong>(Fairfax)Sinistralidade dos ultimos 24 meses: {{ sinistralidade24meses }}</strong> </label> <br>
+    <mat-slider class="slider-full-width" min="0" max="2" step="1" showTickMarks>
+      <input matSliderThumb [(ngModel)]="sinistralidade24meses">
+    </mat-slider>
+
+    <mat-slide-toggle labelPosition="before" [(ngModel)]="conhecimentoPrevio">Possui conhecimento
+      prévio?</mat-slide-toggle>
+    @if (conhecimentoPrevio) {
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Nome dos reclamantes</mat-label>
+      <textarea matInput [(ngModel)]="nomeReclamantes"></textarea>
+    </mat-form-field>
+    }
+  </div>
+
+  <span class="span-2"></span>
+
+  <div class="span-4">
+    <label><strong>Retroatividade: {{ retroatividade }} anos</strong> </label> <br>
+    <mat-slider class="slider-full-width" min="0" max="10" step="1" showTickMarks>
+      <input matSliderThumb [(ngModel)]="retroatividade">
+    </mat-slider>
+  </div>
 </div>
 
 <mat-card-actions>
@@ -67,7 +123,7 @@
         <strong>Pagamentos:</strong>
         {{ resultadoAkad.pagamentosDisponiveis?.join(' • ') }}
       </p>
-      @if (resultadoAkad?.maxSemJurosParcelas) {
+      @if (resultadoAkad.maxSemJurosParcelas) {
       <p>
         <strong>Sem juros até:</strong>
         {{ resultadoAkad.maxSemJurosParcelas }}x
@@ -91,7 +147,7 @@
         <strong>Pagamentos:</strong>
         {{ resultadoFF.pagamentosDisponiveis?.join(' • ') }}
       </p>
-      @if (resultadoFF?.maxSemJurosParcelas) {
+      @if (resultadoFF.maxSemJurosParcelas) {
       <p>
         <strong>Sem juros até:</strong>
         {{ resultadoFF.maxSemJurosParcelas }}x

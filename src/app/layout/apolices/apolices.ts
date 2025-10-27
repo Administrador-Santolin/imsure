@@ -16,7 +16,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatExpansionModule } from '@angular/material/expansion';
 
 import { Firestore, collection, query, orderBy, limit, where, collectionData, Timestamp, doc, deleteDoc } from '@angular/fire/firestore';
@@ -117,6 +117,18 @@ export class Apolices implements OnInit, AfterViewInit {
   private router = inject(Router);
   private firestore = inject(Firestore);
   private fb = inject(FormBuilder);
+  private convertToDate(value: any): Date | null {
+    if (!value) return null;
+    if (value instanceof Date) return value;
+    if (value && typeof value.toDate === 'function') {
+      return value.toDate();
+    }
+    if (typeof value === 'string' || typeof value === 'number') {
+      return new Date(value);
+    }
+    console.warn('⚠️ Tipo de data desconhecido:', value);
+    return null;
+  }
 
   constructor(
   ) {
@@ -131,6 +143,10 @@ export class Apolices implements OnInit, AfterViewInit {
       situacao: [''],
       searchText: ['']
     });
+
+    this.filterForm.valueChanges.subscribe(values => {
+      console.log('📝 Formulário mudou:', values);
+    });
   }
 
   ngOnInit(): void {
@@ -142,7 +158,10 @@ export class Apolices implements OnInit, AfterViewInit {
     // Agora `this.paginator` e `this.sort` estão garantidos a serem inicializados
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-
+  
+    // 🎓 EXPLICAÇÃO: Vamos ver se o valueChanges está disparando
+    console.log('🚀 ngAfterViewInit iniciado');
+  
     // Mova a lógica do combineLatest para cá
     combineLatest([
       this.filterForm.valueChanges.pipe(startWith(this.filterForm.value)),
@@ -151,9 +170,15 @@ export class Apolices implements OnInit, AfterViewInit {
     ]).pipe(
       debounceTime(300),
       switchMap(([filters, page, sort]) => {
+        // 🎓 EXPLICAÇÃO: Vamos ver se chegou aqui e quais filtros foram aplicados
+        console.log('🔍 Filtros recebidos no switchMap:', filters);
+        console.log('📄 Página:', page);
+        console.log('🔤 Ordenação:', sort);
         return this.getFilteredApolices(filters, page, sort);
       })
     ).subscribe(apolices => {
+      // 🎓 EXPLICAÇÃO: Vamos ver quantas apólices foram retornadas
+      console.log(`✅ ${apolices.length} apólices recebidas do Firestore`);
       this.dataSource.data = apolices;
       this.apolicesLength = apolices.length;
     });
@@ -161,44 +186,82 @@ export class Apolices implements OnInit, AfterViewInit {
 
   getFilteredApolices(filters: any, page: any, sort: any): Observable<Apolice[]> {
     const apolicesCollectionRef = collection(this.firestore, 'apolices').withConverter(apoliceConverter);
-
+  
+    // 🎓 EXPLICAÇÃO: Vamos remover os filtros do Firestore e só ordenar
     const queryConstraints = [];
     const activeSortField = sort.active || 'createdAt';
     const sortDirection = sort.direction || 'desc';
     queryConstraints.push(orderBy(activeSortField, sortDirection));
-
-    if (filters.tipoSeguro) {
-      queryConstraints.push(where('tipoSeguro', '==', filters.tipoSeguro)); // CORREÇÃO: era filters.tipoSegula
-    }
-    if (filters.seguradora) {
-      queryConstraints.push(where('seguradora', '==', filters.seguradora));
-    }
-    if (filters.produto) {
-      queryConstraints.push(where('produto', '==', filters.produto));
-    }
-    if (filters.situacao) {
-      queryConstraints.push(where('situacao', '==', filters.situacao));
-    }
-
-    let dateRangeApplied = false;
-    if (filters.dataEmissaoStart && filters.dataEmissaoEnd) {
-        queryConstraints.push(where('dataEmissao', '>=', filters.dataEmissaoStart));
-        queryConstraints.push(where('dataEmissao', '<=', filters.dataEmissaoEnd));
-        dateRangeApplied = true;
-    } else if (filters.inicioVigenciaStart && filters.inicioVigenciaEnd) {
-        queryConstraints.push(where('inicioVigencia', '>=', filters.inicioVigenciaStart));
-        queryConstraints.push(where('inicioVigencia', '<=', filters.inicioVigenciaEnd));
-        dateRangeApplied = true;
-    }
-
     queryConstraints.push(limit(100));
-
+  
+    // 🎓 EXPLICAÇÃO: Removemos os filtros daqui (eram linhas 170-192)
+    // Agora vamos filtrar no front, depois de receber os dados
+  
     const firestoreQuery = query(apolicesCollectionRef, ...queryConstraints);
-
+  
     return collectionData(firestoreQuery).pipe(
       map(apolices => {
+        console.log('📊 Apólices do Firestore:', apolices);
+        console.log('🔍 Filtros aplicados:', filters);
+        
         let filteredData = apolices;
-
+  
+        // 🎓 EXPLICAÇÃO: AGORA fazemos os filtros aqui no front
+        if (filters.tipoSeguro) {
+          const searchTerm = filters.tipoSeguro.toLowerCase().trim();
+          filteredData = filteredData.filter(apolice =>
+            apolice.tipoSeguro?.toLowerCase().trim() === searchTerm
+          );
+          console.log(`🔎 Filtrou por tipoSeguro '${filters.tipoSeguro}': ${filteredData.length} restantes`);
+        }
+  
+        if (filters.seguradora) {
+          const searchTerm = filters.seguradora.toLowerCase().trim();
+          filteredData = filteredData.filter(apolice =>
+            apolice.seguradora?.toLowerCase().trim() === searchTerm
+          );
+          console.log(`🔎 Filtrou por seguradora '${filters.seguradora}': ${filteredData.length} restantes`);
+        }
+  
+        if (filters.produto) {
+          const searchTerm = filters.produto.toLowerCase().trim();
+          filteredData = filteredData.filter(apolice =>
+            apolice.produto?.toLowerCase().trim() === searchTerm
+          );
+          console.log(`🔎 Filtrou por produto '${filters.produto}': ${filteredData.length} restantes`);
+        }
+  
+        if (filters.situacao) {
+          const searchTerm = filters.situacao.toLowerCase().trim();
+          filteredData = filteredData.filter(apolice =>
+            apolice.situacao?.toLowerCase().trim() === searchTerm
+          );
+          console.log(`🔎 Filtrou por situação '${filters.situacao}': ${filteredData.length} restantes`);
+        }
+  
+        // 🎓 EXPLICAÇÃO: Filtros de data
+        if (filters.dataEmissaoStart && filters.dataEmissaoEnd) {
+          filteredData = filteredData.filter(apolice => {
+            if (!apolice.dataEmissao) return false;
+            const dataEmissao = this.convertToDate(apolice.dataEmissao);
+            if(!dataEmissao) return false;
+            return dataEmissao >= filters.dataEmissaoStart && 
+                   dataEmissao <= filters.dataEmissaoEnd;
+          });
+          console.log(`🔎 Filtrou por data emissão: ${filteredData.length} restantes`);
+        }
+  
+        if (filters.inicioVigenciaStart && filters.inicioVigenciaEnd) {
+          filteredData = filteredData.filter(apolice => {
+            if (!apolice.inicioVigencia) return false;
+            const inicioVigencia = this.convertToDate(apolice.inicioVigencia);
+            if(!inicioVigencia) return false;
+            return inicioVigencia >= filters.inicioVigenciaStart && 
+                   inicioVigencia <= filters.inicioVigenciaEnd;
+          });
+          console.log(`🔎 Filtrou por início vigência: ${filteredData.length} restantes`);
+        }
+  
         if (filters.searchText) {
           const searchTerm = filters.searchText.toLowerCase();
           filteredData = filteredData.filter(apolice =>
@@ -209,7 +272,10 @@ export class Apolices implements OnInit, AfterViewInit {
             (apolice.subTipoDocumento && apolice.subTipoDocumento.toLowerCase().includes(searchTerm)) ||
             (apolice.proposta && apolice.proposta.toLowerCase().includes(searchTerm))
           );
+          console.log(`🔎 Filtrou por busca geral '${filters.searchText}': ${filteredData.length} restantes`);
         }
+  
+        console.log(`✅ ${filteredData.length} apólices após TODOS os filtros`);
         return filteredData;
       })
     );

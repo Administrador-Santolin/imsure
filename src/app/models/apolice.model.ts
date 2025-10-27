@@ -14,7 +14,7 @@ export interface Apolice {
     tipoSeguro: string, // Radio group: 'novo', 'renovacao', 'renovacaoOutra'
     situacao: string, // Radio group: 'ativo', 'vencido', etc.
     formaPagamento: FormaPagamento,
-    itemSegurado: ItemSegurado[],
+    itensSegurados: ItemSegurado[],
 }
 
 export interface ItemSegurado {

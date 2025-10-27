@@ -11,7 +11,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon'; 
 
 import { Firestore, collection, doc, getDoc, addDoc, updateDoc, query, orderBy, limit, collectionData, FirestoreDataConverter, Timestamp } from '@angular/fire/firestore';
 import { Cliente } from '../../../models/cliente.model';
@@ -102,7 +102,6 @@ export class ApoliceForm implements OnInit {
   ) {
     this.apoliceForm = this.fb.group({
       clienteId: ['', Validators.required],
-      // clienteNome: Armazena o nome do cliente. Será desnormalizado para exibição fácil.
       clienteNome: ['', Validators.required],
       apolice: ['', Validators.required],
       proposta: ['', Validators.required],
@@ -112,11 +111,9 @@ export class ApoliceForm implements OnInit {
       inicioVigencia: [null, Validators.required],
       fimVigencia: [null, Validators.required],
       dataEmissao: [null, Validators.required],
-      tipoSeguro: ['', Validators.required], // Radio group: 'novo', 'renovacao', 'renovacaoOutra'
-      situacao: ['', Validators.required], // Radio group: 'ativo', 'vencido', etc.
-
-      // Informações Financeiras (subgrupo aninhado, para o Expansion Panel)
-      informacoesFinanceiras: this.fb.group({
+      tipoSeguro: ['', Validators.required], 
+      situacao: ['', Validators.required], 
+      formaPagamento: this.fb.group({
         formaPagamento: ['', Validators.required],
         parcelas: [null, [Validators.required, Validators.min(1)]],
         vencimentoPrimeiraParcela: [null, Validators.required],
@@ -133,26 +130,24 @@ export class ApoliceForm implements OnInit {
 
   ngOnInit(): void {
     this.filteredClientes$ = this.clienteSearchControl.valueChanges.pipe(
-      startWith(''), // Começa com uma string vazia para exibir todos os clientes iniciais
-      debounceTime(300), // Espera 300ms após a última digitação
-      // Primeiro, busca um número limitado de clientes do Firestore (sem filtros complexos)
-      switchMap(() => { // Não precisamos do 'value' aqui, pois o filtro é local
+      startWith(''), 
+      debounceTime(300), 
+      switchMap(() => { 
         const clientesCollectionRef = collection(this.firestore, 'clientes').withConverter(clienteConverter);
-        // Ajuste o limit(50) se precisar de mais ou menos clientes pré-carregados
         return collectionData(query(clientesCollectionRef, orderBy('nome'), limit(50))) as Observable<Cliente[]>;
       }),
       // Em seguida, aplica o filtro localmente no cliente
       map(clientes => {
         const searchValue = this.clienteSearchControl.value;
-        const searchTerm = typeof searchValue === 'string' ? searchValue.toLowerCase() : ''; // Pega o texto atual do input
+        const searchTerm = typeof searchValue === 'string' ? searchValue.toLowerCase() : '';
 
         if (!searchTerm) {
-          return clientes; // Se o input estiver vazio, retorna todos os clientes buscados inicialmente
+          return clientes;
         }
 
         return clientes.filter(cliente =>
-          cliente.nome.toLowerCase().includes(searchTerm) || // Busca por nome (case-insensitive, "contém")
-          (cliente.cpf && cliente.cpf.toLowerCase().includes(searchTerm)) // Busca por CPF (case-insensitive, "contém")
+          cliente.nome.toLowerCase().includes(searchTerm) ||
+          (cliente.cpf && cliente.cpf.toLowerCase().includes(searchTerm))
         );
       })
     );
@@ -244,7 +239,6 @@ export class ApoliceForm implements OnInit {
       // Se salvar como string, você pode fazer: new Date(apoliceData.inicioVigencia as string)
 
       this.apoliceForm.patchValue({
-        // Preenche os campos principais
         clienteId: apoliceData.clienteId,
         clienteNome: apoliceData.clienteNome,
         apolice: apoliceData.apolice,
@@ -278,15 +272,14 @@ export class ApoliceForm implements OnInit {
         situacao: apoliceData.situacao,
 
         // Preenche os subgrupos
-        informacoesFinanceiras: apoliceData.formaPagamento ? {
+        formaPagamento: apoliceData.formaPagamento ? {
           formaPagamento: apoliceData.formaPagamento.formaPagamento,
           parcelas: apoliceData.formaPagamento.parcelas,
           // Converta a string de data para objeto Date
           vencimentoPrimeiraParcela:
             apoliceData.formaPagamento.vencimentoPrimeiraParcela instanceof Date
               ? apoliceData.formaPagamento.vencimentoPrimeiraParcela
-              : (apoliceData.formaPagamento.vencimentoPrimeiraParcela &&
-                typeof (apoliceData.formaPagamento.vencimentoPrimeiraParcela as any).toDate === 'function'
+              : (apoliceData.formaPagamento.vencimentoPrimeiraParcela && typeof (apoliceData.formaPagamento.vencimentoPrimeiraParcela as any).toDate === 'function'
                 ? (apoliceData.formaPagamento.vencimentoPrimeiraParcela as any).toDate()
                 : (typeof apoliceData.formaPagamento.vencimentoPrimeiraParcela === 'string' || typeof apoliceData.formaPagamento.vencimentoPrimeiraParcela === 'number'
                   ? new Date(apoliceData.formaPagamento.vencimentoPrimeiraParcela)
@@ -295,13 +288,31 @@ export class ApoliceForm implements OnInit {
           premioLiquido: apoliceData.formaPagamento.premioLiquido,
           iofPercentual: apoliceData.formaPagamento.iofPercentual,
           premioTotal: apoliceData.formaPagamento.premioTotal
-        } : {},
-        itemSegurado: apoliceData.itemSegurado || {}
+        } : {}
       });
 
       // Se estamos editando, o campo de busca de cliente precisa mostrar o nome atual.
       // (Isso é importante para quando o usuário abre o formulário de edição)
       this.clienteSearchControl.setValue(`${apoliceData.clienteNome}`);
+      if (apoliceData.itensSegurados && Array.isArray(apoliceData.itensSegurados)) {
+        // Limpa o array atual
+        this.itensSegurados.clear();
+        
+        // Adiciona cada item segurado ao FormArray
+        apoliceData.itensSegurados.forEach((item: any) => {
+          const itemGroup = this.createItem(item.produto, item.details);
+          itemGroup.patchValue({
+            id: item.id,
+            produto: item.produto,
+            details: item.details
+          });
+          this.itensSegurados.push(itemGroup);
+        });
+        
+        console.log(`✅ Carregados ${apoliceData.itensSegurados.length} itens segurados`);
+      } else {
+        console.log('ℹ️ Nenhum item segurado encontrado para esta apólice');
+      }
 
       // Opcional: Se quiser que seja somente leitura até o usuário clicar em "Editar"
       // this.apoliceForm.disable();
@@ -363,16 +374,23 @@ export class ApoliceForm implements OnInit {
       }
 
       try {
+        const apoliceDataToSave = {
+          ...apoliceData,
+          // 🎓 EXPLICAÇÃO: Converte o FormArray de itens segurados para array normal
+          itemSegurado: this.itensSegurados.value
+        };
+        
+        // Salva a apólice
         if (this.isEditing && this.apoliceId) {
-          // Se estiver editando, atualiza o documento existente.
+          // Atualizar apólice existente
           const apoliceDocRef = doc(this.firestore, `apolices/${this.apoliceId}`);
-          await updateDoc(apoliceDocRef, apoliceData as any); // 'as any' para evitar erro de tipo com o ID
-          console.log('Apólice atualizada com sucesso!');
+          await updateDoc(apoliceDocRef, apoliceDataToSave);
+          console.log('✅ Apólice atualizada com itens segurados');
         } else {
-          // Se estiver criando, adiciona um novo documento.
+          // Adicionar nova apólice
           const apolicesCollection = collection(this.firestore, 'apolices');
-          await addDoc(apolicesCollection, apoliceData as any); // 'as any' para evitar erro de tipo com o ID
-          console.log('Apólice adicionada com sucesso!');
+          await addDoc(apolicesCollection, apoliceDataToSave);
+          console.log('✅ Nova apólice criada com itens segurados');
         }
         this.router.navigate(['/apolices']); // Redireciona para a lista de apólices
       } catch (error) {

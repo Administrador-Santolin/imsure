@@ -1,7 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { EspecialidadeInfo, Precos, RcQuoteInput, RcQuoteResult } from '../../../models/respCivil.model';
+import {
+  EspecialidadeInfo,
+  Precos,
+  RcQuoteInput,
+  RcQuoteResult,
+  RcSinistralidade5Anos,
+  RcReclamacoes12m,
+  RcRetroatividadeAnos
+} from '../../../models/respCivil.model';
 import { RespCivilService } from './unimed.client';
 import { RouterModule } from '@angular/router';
 import { AkadClient } from '../../../services/akad.client';
@@ -11,7 +19,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { RCMultiService } from '../../../services/RCMulti.service';
 import { startWith } from 'rxjs/operators';
@@ -19,19 +27,26 @@ import { FairfaxClient } from '../../../services/fairfax.client';
 
 @Component({
   selector: 'app-resp-civil',
-  imports: [CommonModule, FormsModule, RouterModule, ReactiveFormsModule,
-    MatAutocompleteModule, MatInputModule, MatSliderModule, MatButtonModule, MatSlideToggleModule, MatCardModule, MatCheckboxModule],
+  imports: [ CommonModule, FormsModule, RouterModule, ReactiveFormsModule,
+    MatAutocompleteModule, MatInputModule, MatSliderModule, MatButtonModule, MatSlideToggleModule, MatCardModule, MatCheckboxModule ],
   templateUrl: './resp-civil.html',
   styleUrl: './resp-civil.scss'
 })
 
 export class RespCivil implements OnInit {
   especialidadeSelecionada: string = '';
-  coberturaSelecionada: number = 50000;
+  coberturaSelecionada: number = 300000;
   temChefe: boolean = false;
   temDiretor: boolean = false;
   residente: boolean = false;
   peritoMedico: boolean = false;
+  sinistralidade5anos: number = 0;
+  sinistralidade24meses: number = 0;
+  sinistralidade12meses: number = 0;
+  somaSinistros: number = 0;
+  conhecimentoPrevio: boolean = false;
+  nomeReclamantes: string = '';
+  retroatividade: number = 0;
 
   // Listas para os menus drop-down
   especialidades: EspecialidadeInfo[] = [];
@@ -53,11 +68,10 @@ export class RespCivil implements OnInit {
   }
 
   private getProcedimentosAtivos(): string[] {
-    // 🎓 EXPLICAÇÃO: Filtra só os procedimentos que estão marcados (ativo = true)
     const procedimentosAtivos = this.procedimentosAtuais
-      .filter(procedimento => procedimento.ativo) // ← Só os marcados
-      .map(procedimento => procedimento.id); // ← Pega só o ID
-    
+      .filter(procedimento => procedimento.ativo)
+      .map(procedimento => procedimento.id);
+
     return procedimentosAtivos;
   }
 
@@ -66,10 +80,7 @@ export class RespCivil implements OnInit {
   resultadoFF: RcQuoteResult | null = null;
 
   async cotarTodas(): Promise<void> {
-    // 🎓 EXPLICAÇÃO: Primeiro, vamos mostrar que está carregando
     this.carregando = true;
-
-    // 🎓 EXPLICAÇÃO: Limpamos os resultados anteriores
     this.resultadoAkad = null;
     this.resultadoFF = null;
     this.precosCalculados = null;
@@ -83,54 +94,66 @@ export class RespCivil implements OnInit {
     this.carregando = false;
   }
 
-  private _filter(value: string): EspecialidadeInfo[] {
-    const filterValue = value.toLowerCase();
-    return this.especialidades.filter(option => option.nome.toLowerCase().includes(filterValue));
+  private converterSinistralidade5Anos(valor: number): RcSinistralidade5Anos {
+    if (valor === 0) return 'NENHUM';
+    if (valor === 1) return 'UM';
+    if (valor === 2) return 'DOIS';
+    return 'NENHUM';
   }
 
+  private converterReclamacoes12m(valor: number): RcReclamacoes12m {
+    if (valor === 0) return 'NENHUM';
+    if (valor === 1) return 'UMA';
+    return 'NENHUM';
+  }
+
+  private converterRetroatividadeFairfax(valor: number): number {
+    if (valor < 0) return 0;
+    if (valor > 5) return 5;
+    return valor;
+  }
+
+  private converterRetroatividadeAkad(valor: number): RcRetroatividadeAnos {
+    if (valor < 0 || valor > 10) return 0;
+    return valor as RcRetroatividadeAnos;
+  }
 
   private async buildRcQuoteInputMinimo(): Promise<RcQuoteInput> {
     const especialidadeKey = this.especialidadeSelecionadaId || this.filtroEspecialidade.value || '';
     const procedimentosAtivos = this.getProcedimentosAtivos();
 
+    // 🎓 CONVERSÃO: Transforma os valores do formulário para o formato da API
+    const sinistralidade5 = this.converterSinistralidade5Anos(this.sinistralidade5anos);
+    const reclamacoes12 = this.converterReclamacoes12m(this.sinistralidade12meses);
+    const retroativAkad = this.converterRetroatividadeAkad(this.retroatividade);
+
     return {
-      // 1) da sua tela atual
-      especialidadeId: especialidadeKey, // qualquer id que mapeie p/ classe interna
+      especialidadeId: especialidadeKey,
       cobertura: Number(this.coberturaSelecionada || 100000),
-      // se você já tiver o CRM em algum input, troque aqui:
-      crm: '18999', // <-- TEMPORÁRIO para testar
-
-      // 2) defaults seguros (só p/ cotar agora)
-      sinistralidade5Anos: 'NENHUM',
-      totalSinistros5Anos: null,
-      reclamacoes12m: 'NENHUM',
-      conhecimentoPrevio: false,
-      reclamantes: null,
-      retroatividadeAnos: 0,        // 0 = sem retroatividade
-      congenere: 'NOVO',            // “novo segurado”
+      crm: '18999',
+      sinistralidade5Anos: sinistralidade5,
+      totalSinistros5Anos: sinistralidade5 !== 'NENHUM' ? this.somaSinistros : null,
+      reclamacoes12m: reclamacoes12,
+      conhecimentoPrevio: this.conhecimentoPrevio,
+      reclamantes: this.conhecimentoPrevio ? this.nomeReclamantes : null,
+      retroatividadeAnos: retroativAkad,
+      congenere: 'NOVO',
       custoDefesa: 'STANDARD',
-      dataInicioVigencia: new Date(), // hoje
-
-      // 3) alvos (por enquanto só Akad)
+      dataInicioVigencia: new Date(),
       targets: { akad: true, fairfax: true, local: true },
-
-      // 4) extras específicos da Akad (franquia 3 como sugerido na doc)
       extras: {
         fairfax: {
-          residente: this.residente,          // RESIDENT
-          peritoMedico: this.peritoMedico,       // MEDICAL-EXPERT
+          residente: this.residente,
+          peritoMedico: this.peritoMedico,
           territorialidade: 'BR',
           escopo: 'NATIONAL',
-          // Se precisar, você pode permitir override das categorias:
-          // Dedutível: a Fairfax manda um array de pares [ {LIMIT}, {DEDUCTIBLE} ].
-          // Vamos guardar o que a tela escolher e o service monta a estrutura.
-          dedutivel: 'MINIMUM', // DEDUCTIBLE code
+          dedutivel: 'MINIMUM',
           categories: [],
-          procedures: procedimentosAtivos
+          procedures: procedimentosAtivos,
+          sinistralidadeFF: this.sinistralidade24meses,
+          retroatividadeFF: this.converterRetroatividadeFairfax(this.retroatividade)
         }
       },
-
-      // 5) dados pessoais fixos (se quiser já mandar por aqui)
       dadosPessoaisFixos: {
         nome: 'Dr. Medico',
         email: 'apolices@santolinseguros.com.br',
@@ -141,7 +164,6 @@ export class RespCivil implements OnInit {
 
   async cotarAkad(): Promise<void> {
     this.resultadoAkad = null;
-
     const input = await this.buildRcQuoteInputMinimo();
 
     this.akad.cotar(input).subscribe({
@@ -207,15 +229,10 @@ export class RespCivil implements OnInit {
     ]
   };
 
-  // �� EXPLICAÇÃO: Variável que guarda os procedimentos da especialidade atual
   procedimentosAtuais: any[] = [];
-
-  // 🎓 EXPLICAÇÃO: Variável que controla se os procedimentos estão visíveis
   procedimentosVisiveis: boolean = false;
 
   ngOnInit(): void {
-    // Inscreve-se no Observable para garantir que os dados do serviço foram carregados
-    // Carrega as especialidades do enquadramento
     this.rcEnq.getEspecialidades().subscribe(list => {
       this.especialidadesOpcoes = list.map(x => ({ id: x.id, nome: x.nome }));
       this.especialidades = list;
@@ -244,10 +261,6 @@ export class RespCivil implements OnInit {
   };
 
   private atualizarProcedimentos(especialidadeId: string): void {
-    // 🎓 EXPLICAÇÃO: Primeiro, vamos descobrir qual é a classe da especialidade
-    // (MEDICO_SEM_CIRURGIA, MEDICO_COM_CIRURGIA, ou OBSTETRA)
-
-    // 🎓 EXPLICAÇÃO: Procura a especialidade na lista carregada
     const especialidade = this.especialidades.find(e => e.id === especialidadeId);
 
     if (!especialidade) {
@@ -256,10 +269,7 @@ export class RespCivil implements OnInit {
       return;
     }
 
-    // 🎓 EXPLICAÇÃO: Pega a classe da especialidade (ex: 'MEDICO_SEM_CIRURGIA')
     const classeEspecialidade = especialidade.classe;
-
-    // 🎓 EXPLICAÇÃO: Busca os procedimentos correspondentes na nossa tabela
     const procedimentos = this.procedimentosPorEspecialidade[classeEspecialidade];
 
     if (!procedimentos) {
@@ -267,15 +277,13 @@ export class RespCivil implements OnInit {
       this.procedimentosVisiveis = false;
       return;
     }
-    // 🎓 EXPLICAÇÃO: Atualiza a lista de procedimentos atuais
-    this.procedimentosAtuais = [...procedimentos]; // Cria uma cópia
-    // 🎓 EXPLICAÇÃO: Mostra os procedimentos na tela
+    this.procedimentosAtuais = [...procedimentos];
     this.procedimentosVisiveis = true;
   }
 
   onEspecialidadeSelected(espec: EspecialidadeInfo) {
-    this.especialidadeSelecionadaId = espec.id;                 // guardamos o id
-    this.filtroEspecialidade.setValue(espec.nome, { emitEvent: false }); // mantém o nome no input
+    this.especialidadeSelecionadaId = espec.id;
+    this.filtroEspecialidade.setValue(espec.nome, { emitEvent: false });
     this.atualizarProcedimentos(espec.id);
   }
 
@@ -283,7 +291,6 @@ export class RespCivil implements OnInit {
     this.especialidadeSelecionada = opcao.nome;
   }
 
-  // Método chamado pelo botão de cálculo
   calcularPreco(): void {
     this.precosCalculados = this.respCivilService.obterPrecos(
       this.filtroEspecialidade.value || '',
