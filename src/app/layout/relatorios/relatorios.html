@@ -1,1 +1,84 @@
-<p>relatorios works!</p>
+<div class="relatorios-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>description</mat-icon>
+        Gerador de Relatórios
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="relatorioForm" class="relatorio-form">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Tipo de Relatório</mat-label>
+            <mat-select formControlName="tipoRelatorio" required>
+              @for (tipo of tiposRelatorio; track tipo.value) {
+                <mat-option [value]="tipo.value">{{ tipo.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Data Início</mat-label>
+            <input matInput [matDatepicker]="pickerInicio" formControlName="dataInicio">
+            <mat-datepicker-toggle matIconSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+            <mat-datepicker #pickerInicio></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Data Fim</mat-label>
+            <input matInput [matDatepicker]="pickerFim" formControlName="dataFim">
+            <mat-datepicker-toggle matIconSuffix [for]="pickerFim"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFim></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Seguradora</mat-label>
+            <mat-select formControlName="seguradora">
+              <mat-option value="">Todas</mat-option>
+              <mat-option value="Yelum">Yelum</mat-option>
+              <mat-option value="Porto Seguro">Porto Seguro</mat-option>
+              <mat-option value="HDI">HDI</mat-option>
+              <mat-option value="Mapfre">Mapfre</mat-option>
+              <mat-option value="Bradesco">Bradesco</mat-option>
+              <mat-option value="Itaú">Itaú</mat-option>
+              <mat-option value="Zurich">Zurich</mat-option>
+              <mat-option value="Tokio Marine">Tokio Marine</mat-option>
+              <mat-option value="Allianz">Allianz</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Situação</mat-label>
+            <mat-select formControlName="situacao">
+              <mat-option value="">Todas</mat-option>
+              <mat-option value="ativo">Ativo</mat-option>
+              <mat-option value="vencido">Vencido</mat-option>
+              <mat-option value="cancelado">Cancelado</mat-option>
+              <mat-option value="pendente">Pendente</mat-option>
+              <mat-option value="suspenso">Suspenso</mat-option>
+              <mat-option value="naoRenovado">Não Renovado</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button 
+            mat-raised-button 
+            color="primary" 
+            type="button"
+            (click)="gerarRelatorio()"
+            [disabled]="relatorioForm.invalid">
+            <mat-icon>picture_as_pdf</mat-icon>
+            Gerar Relatório PDF
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

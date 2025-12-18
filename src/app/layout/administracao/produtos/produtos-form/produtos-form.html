@@ -1,0 +1,29 @@
+<form [formGroup]="produtosForm">
+    <div class="form-grid">
+        <mat-form-field appearance="fill" class="span-3">
+            <mat-label>Nome</mat-label>
+            <input matInput formControlName="nome" required />
+            @if (produtosForm.get('nome')?.hasError('required') && produtosForm.get('nome')?.touched) {
+            <mat-error>Nome é obrigatório</mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="span-3">
+            <mat-label>Tipo de Seguro</mat-label>
+            <input matInput formControlName="tipoSeguro" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="span-4">
+            <mat-label>Descrição</mat-label>
+            <textarea matInput formControlName="descricao"></textarea>
+        </mat-form-field>
+    </div>
+
+    <div class="form-actions">
+        <button matButton (click)="onCancel()" [disabled]="isLoading">Cancelar</button>
+        <button matButton="filled" (click)="onSubmit()"
+            [disabled]="isEditing ? produtosForm.invalid || produtosForm.pristine: produtosForm.invalid || isLoading">
+            {{ isEditing ? 'Atualizar' : 'Salvar' }}
+        </button>
+    </div>
+</form>

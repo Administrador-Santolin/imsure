@@ -1,45 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'; // Remova ViewChild
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Firestore, collection, collectionData, doc, deleteDoc, FirestoreDataConverter } from '@angular/fire/firestore';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { RouterModule } from '@angular/router';
 import { MascaraPipe } from '../../mascara-pipe';
-
-interface Cliente {
-  id?: string;
-  nome: string;
-  email: string;
-  telefone: string;
-  cpf?: string;
-  endereco?: string; 
-  dataNascimento?: string;
-}
-
-const clienteConverter: FirestoreDataConverter<Cliente> = {
-  toFirestore: (cliente: Cliente) => {
-    const { id, ...data } = cliente;
-    return data;
-  },
-  fromFirestore: (snapshot: any, options: any) => {
-    const data = snapshot.data(options);
-    return {
-      id: snapshot.id,
-      nome: data.nome,
-      email: data.email,
-      telefone: data.telefone,
-      cpf: data.cpf,
-      endereco: data.endereco,
-      dataNascimento: data.dataNascimento,
-      genero: data.genero,
-      estadoCivil: data.estadoCivil
-    } as Cliente;
-  }
-};
+import { Cliente } from '../../models/cliente.model';
+import { ClienteService } from '../../services/cliente.service'; // ⬅️ NOVO
 
 @Component({
   selector: 'app-clientes',
@@ -60,17 +31,14 @@ const clienteConverter: FirestoreDataConverter<Cliente> = {
 export class Clientes implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<Cliente>();
   displayedColumns: string[] = ['nome', 'email', 'telefone', 'actions'];
+  isLoading = true; // ⬅️ NOVO: para mostrar spinner
 
   private clientesSubscription: Subscription | undefined;
-
-  constructor(private firestore: Firestore) { } 
+  private clienteService = inject(ClienteService); // ⬅️ NOVO
+  private snackBar = inject(MatSnackBar);
 
   ngOnInit() {
-    const clientesCollection = collection(this.firestore, 'clientes').withConverter(clienteConverter);
-    this.clientesSubscription = collectionData<Cliente>(clientesCollection, { idField: 'id' })
-      .subscribe((clientes: Cliente[]) => {
-        this.dataSource.data = clientes;
-      });
+    this.loadClientes();
   }
 
   ngOnDestroy() {
@@ -79,19 +47,37 @@ export class Clientes implements OnInit, OnDestroy {
     }
   }
 
+  // 🎓 EXPLICAÇÃO: Carrega clientes do Supabase
+  loadClientes() {
+    this.isLoading = true;
+    this.clientesSubscription = this.clienteService.getClientes()
+      .subscribe({
+        next: (clientes: Cliente[]) => {
+          this.dataSource.data = clientes;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Erro ao carregar clientes:', error);
+          this.snackBar.open('Erro ao carregar clientes', 'Fechar', { duration: 3000 });
+          this.isLoading = false;
+        }
+      });
+  }
+
   async onDeleteCliente(clienteId: string | undefined) {
     if (!clienteId) {
       console.error('ID do cliente indefinido para exclusão.');
       return;
     }
+    
     if (confirm('Tem certeza que deseja excluir este cliente?')) {
       try {
-        const clienteDocRef = doc(this.firestore, `clientes/${clienteId}`).withConverter(clienteConverter);
-        await deleteDoc(clienteDocRef);
-        alert('Cliente excluído com sucesso!');
+        await this.clienteService.deleteCliente(clienteId);
+        this.snackBar.open('Cliente excluído com sucesso!', 'Fechar', { duration: 3000 });
+        this.loadClientes(); // Recarrega a lista
       } catch (error) {
         console.error('Erro ao excluir cliente:', error);
-        alert('Erro ao excluir cliente. Tente novamente.');
+        this.snackBar.open('Erro ao excluir cliente. Tente novamente.', 'Fechar', { duration: 3000 });
       }
     }
   }

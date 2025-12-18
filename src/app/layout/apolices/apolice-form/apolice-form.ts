@@ -11,9 +11,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatIconModule } from '@angular/material/icon'; 
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { Firestore, collection, doc, getDoc, addDoc, updateDoc, query, orderBy, limit, collectionData, FirestoreDataConverter, Timestamp } from '@angular/fire/firestore';
 import { Cliente } from '../../../models/cliente.model';
 import { MascaraPipe } from '../../../mascara-pipe';
 import { NgxMaskDirective } from 'ngx-mask';
@@ -21,26 +21,9 @@ import { Automovel } from './Produtos/automovel/automovel';
 import { Locais } from './Produtos/locais/locais';
 import { RespCivil } from './Produtos/resp-civil/resp-civil';
 import { Apolice } from '../../../models/apolice.model';
-
-// Converte os dados do Firestore para o formato da Interface Cliente.
-// Isso é útil para garantir que os dados lidos do banco correspondam à nossa tipagem.
-const clienteConverter: FirestoreDataConverter<Cliente> = {
-  toFirestore: (cliente: Cliente) => {
-    // Ao salvar no Firestore, removemos o ID pois ele já é o ID do documento.
-    const { id, ...data } = cliente;
-
-    return data;
-  },
-  fromFirestore: (snapshot: any, options: any) => {
-    // Ao ler do Firestore, pegamos o ID do snapshot e os dados do documento.
-    const data = snapshot.data(options);
-    return {
-      id: snapshot.id,
-      nome: data.nome,
-      cpf: data.cpf || '' // Garante que cpf sempre exista, mesmo se vazio no banco
-    } as Cliente;
-  }
-};
+import { ClienteService } from '../../../services/cliente.service';
+import { ApoliceService } from '../../../services/apolice.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 type ItemGroup = FormGroup<{
   id: FormControl<string>;
@@ -66,7 +49,8 @@ type ItemGroup = FormGroup<{
     NgxMaskDirective,
     Automovel,
     Locais,
-    RespCivil
+    RespCivil,
+    MatSnackBarModule
   ],
   templateUrl: './apolice-form.html',
   styleUrl: './apolice-form.scss'
@@ -95,7 +79,9 @@ export class ApoliceForm implements OnInit {
 
   private fb = inject(FormBuilder);
   private router = inject(Router);
-  private firestore = inject(Firestore);
+  private apoliceService = inject(ApoliceService);
+  private clienteService = inject(ClienteService);
+  private snackBar = inject(MatSnackBar);
 
   constructor(
     private route: ActivatedRoute
@@ -111,8 +97,8 @@ export class ApoliceForm implements OnInit {
       inicioVigencia: [null, Validators.required],
       fimVigencia: [null, Validators.required],
       dataEmissao: [null, Validators.required],
-      tipoSeguro: ['', Validators.required], 
-      situacao: ['', Validators.required], 
+      tipoSeguro: ['', Validators.required],
+      situacao: ['', Validators.required],
       formaPagamento: this.fb.group({
         formaPagamento: ['', Validators.required],
         parcelas: [null, [Validators.required, Validators.min(1)]],
@@ -130,27 +116,31 @@ export class ApoliceForm implements OnInit {
 
   ngOnInit(): void {
     this.filteredClientes$ = this.clienteSearchControl.valueChanges.pipe(
-      startWith(''), 
-      debounceTime(300), 
-      switchMap(() => { 
-        const clientesCollectionRef = collection(this.firestore, 'clientes').withConverter(clienteConverter);
-        return collectionData(query(clientesCollectionRef, orderBy('nome'), limit(50))) as Observable<Cliente[]>;
-      }),
-      // Em seguida, aplica o filtro localmente no cliente
-      map(clientes => {
-        const searchValue = this.clienteSearchControl.value;
-        const searchTerm = typeof searchValue === 'string' ? searchValue.toLowerCase() : '';
-
-        if (!searchTerm) {
-          return clientes;
+      startWith(''),
+      debounceTime(300),
+      switchMap((searchValue) => {
+        const searchTerm = typeof searchValue === 'string' ? searchValue : '';
+        if (!searchTerm || searchTerm.length < 2) {
+          return this.clienteService.getClientes().pipe(
+            map(clientes => clientes.slice(0, 50))
+          );
         }
-
-        return clientes.filter(cliente =>
-          cliente.nome.toLowerCase().includes(searchTerm) ||
-          (cliente.cpf && cliente.cpf.toLowerCase().includes(searchTerm))
-        );
+        return this.clienteService.searchClientes(searchTerm);
       })
     );
+
+    this.apoliceForm.get('produto')?.valueChanges.subscribe((novoProduto: string) => {
+      if (novoProduto) {
+        this.itensSegurados.controls.forEach(item => {
+          item.patchValue({ produto: novoProduto }, { emitEvent: false });
+        });
+
+        if (this.itensSegurados.controls.length === 0 && !this.isEditing) {
+          this.addItem(novoProduto);
+        }
+      }
+    });
+
 
     // Lógica para verificar o modo (criação vs. edição/visualização)
     this.route.paramMap.subscribe(params => {
@@ -160,6 +150,8 @@ export class ApoliceForm implements OnInit {
         this.loadApoliceData(this.apoliceId);
       } else {
         this.isEditing = false;
+        const produtoInicial = this.apoliceForm.get('produto')?.value;
+        this.addItem(produtoInicial);
       }
     });
   }
@@ -189,7 +181,7 @@ export class ApoliceForm implements OnInit {
   get itemGroups(): ItemGroup[] {
     return this.itensSegurados.controls as ItemGroup[];
   }
-  
+
   // 4) garanta que sua fábrica retorna ItemGroup
   private createItem(produto: string, details: any = {}): ItemGroup {
     return this.fb.group({
@@ -206,7 +198,9 @@ export class ApoliceForm implements OnInit {
 
   addItem(produto?: string) {
     const base = produto || this.apoliceForm.get('produto')?.value || '';
-    this.itensSegurados.push(this.createItem(base));
+    if (base) {
+      this.itensSegurados.push(this.createItem(base));
+    }
   }
 
   removeItem(i: number) {
@@ -214,192 +208,100 @@ export class ApoliceForm implements OnInit {
   }
 
   cloneItem(i: number) {
-    const {produto, details } = this.itensSegurados.at(i).getRawValue();
-    this.itensSegurados.push(this.createItem(produto, details)); 
+    const { produto, details } = this.itensSegurados.at(i).getRawValue();
+    this.itensSegurados.push(this.createItem(produto, details));
   }
 
   trackById = (_: number, ctrl: AbstractControl) => ctrl.value?.id ?? _;
 
-  // loadApoliceData: Carrega os dados de uma apólice específica do Firestore.
-  // É chamada quando o formulário está no modo de edição/visualização.
+  // loadApoliceData: Carrega os dados de uma apólice específica do Supabase.
   async loadApoliceData(id: string): Promise<void> {
-    const apoliceDocRef = doc(this.firestore, `apolices/${id}`); // Cria uma referência ao documento da apólice
-    const docSnap = await getDoc(apoliceDocRef); // Tenta buscar o documento
-
-    if (docSnap.exists()) {
-      // Se o documento existe, pega os dados e preenche o formulário.
-      const apoliceData = docSnap.data() as Apolice;
-
-      // Importante: MatDatepicker usa objetos Date, mas o Firestore salva timestamps ou strings.
-      // É preciso converter de volta para Date se necessário.
-      // Se o Firestore salva como timestamp (Firebase Timestamp), você faria:
-      // apoliceData.inicioVigencia = apoliceData.inicioVigencia ? apoliceData.inicioVigencia.toDate() : null;
-      // ... e para outros campos de data.
-      // Por simplicidade, assumindo que já está em um formato que o MatDatepicker aceita ou será convertido na leitura.
-      // Se salvar como string, você pode fazer: new Date(apoliceData.inicioVigencia as string)
-
-      this.apoliceForm.patchValue({
-        clienteId: apoliceData.clienteId,
-        clienteNome: apoliceData.clienteNome,
-        apolice: apoliceData.apolice,
-        proposta: apoliceData.proposta,
-        seguradora: apoliceData.seguradora,
-        produto: apoliceData.produto,
-        subTipoDocumento: apoliceData.subTipoDocumento,
-        // Converta as strings de data para objetos Date
-        inicioVigencia: apoliceData.inicioVigencia instanceof Date
-          ? apoliceData.inicioVigencia
-          : (apoliceData.inicioVigencia && typeof (apoliceData.inicioVigencia as any).toDate === 'function'
-            ? (apoliceData.inicioVigencia as any).toDate()
-            : (typeof apoliceData.inicioVigencia === 'string' || typeof apoliceData.inicioVigencia === 'number'
-              ? new Date(apoliceData.inicioVigencia)
-              : null)),
-        fimVigencia: apoliceData.fimVigencia instanceof Date
-          ? apoliceData.fimVigencia
-          : (apoliceData.fimVigencia && typeof (apoliceData.fimVigencia as any).toDate === 'function'
-            ? (apoliceData.fimVigencia as any).toDate()
-            : (typeof apoliceData.fimVigencia === 'string' || typeof apoliceData.fimVigencia === 'number'
-              ? new Date(apoliceData.fimVigencia)
-              : null)),
-        dataEmissao: apoliceData.dataEmissao instanceof Date
-          ? apoliceData.dataEmissao
-          : (apoliceData.dataEmissao && typeof (apoliceData.dataEmissao as any).toDate === 'function'
-            ? (apoliceData.dataEmissao as any).toDate()
-            : (typeof apoliceData.dataEmissao === 'string' || typeof apoliceData.dataEmissao === 'number'
-              ? new Date(apoliceData.dataEmissao)
-              : null)),
-        tipoSeguro: apoliceData.tipoSeguro,
-        situacao: apoliceData.situacao,
-
-        // Preenche os subgrupos
-        formaPagamento: apoliceData.formaPagamento ? {
-          formaPagamento: apoliceData.formaPagamento.formaPagamento,
-          parcelas: apoliceData.formaPagamento.parcelas,
-          // Converta a string de data para objeto Date
-          vencimentoPrimeiraParcela:
-            apoliceData.formaPagamento.vencimentoPrimeiraParcela instanceof Date
-              ? apoliceData.formaPagamento.vencimentoPrimeiraParcela
-              : (apoliceData.formaPagamento.vencimentoPrimeiraParcela && typeof (apoliceData.formaPagamento.vencimentoPrimeiraParcela as any).toDate === 'function'
-                ? (apoliceData.formaPagamento.vencimentoPrimeiraParcela as any).toDate()
-                : (typeof apoliceData.formaPagamento.vencimentoPrimeiraParcela === 'string' || typeof apoliceData.formaPagamento.vencimentoPrimeiraParcela === 'number'
-                  ? new Date(apoliceData.formaPagamento.vencimentoPrimeiraParcela)
-                  : null)),
-          comissaoPercentual: apoliceData.formaPagamento.comissaoPercentual,
-          premioLiquido: apoliceData.formaPagamento.premioLiquido,
-          iofPercentual: apoliceData.formaPagamento.iofPercentual,
-          premioTotal: apoliceData.formaPagamento.premioTotal
-        } : {}
-      });
-
-      // Se estamos editando, o campo de busca de cliente precisa mostrar o nome atual.
-      // (Isso é importante para quando o usuário abre o formulário de edição)
-      this.clienteSearchControl.setValue(`${apoliceData.clienteNome}`);
-      if (apoliceData.itensSegurados && Array.isArray(apoliceData.itensSegurados)) {
-        // Limpa o array atual
-        this.itensSegurados.clear();
-        
-        // Adiciona cada item segurado ao FormArray
-        apoliceData.itensSegurados.forEach((item: any) => {
-          const itemGroup = this.createItem(item.produto, item.details);
-          itemGroup.patchValue({
-            id: item.id,
-            produto: item.produto,
-            details: item.details
+    this.apoliceService.getApoliceById(id).subscribe({
+      next: (apoliceData) => {
+        if (apoliceData) {
+          this.apoliceForm.patchValue({
+            clienteId: apoliceData.clienteId,
+            clienteNome: apoliceData.clienteNome,
+            apolice: apoliceData.apolice,
+            proposta: apoliceData.proposta,
+            seguradora: apoliceData.seguradora,
+            produto: apoliceData.produto,
+            subTipoDocumento: apoliceData.subTipoDocumento,
+            inicioVigencia: apoliceData.inicioVigencia instanceof Date 
+              ? apoliceData.inicioVigencia.toISOString() 
+              : new Date(apoliceData.inicioVigencia).toISOString(),
+            fimVigencia: apoliceData.fimVigencia instanceof Date 
+              ? apoliceData.fimVigencia 
+              : new Date(apoliceData.fimVigencia).toISOString(),
+            dataEmissao: apoliceData.dataEmissao instanceof Date 
+              ? apoliceData.dataEmissao 
+              : new Date(apoliceData.dataEmissao).toISOString(),
+            tipoSeguro: apoliceData.tipoSeguro,
+            situacao: apoliceData.situacao,
+            formaPagamento: apoliceData.formaPagamento ? {
+              formaPagamento: apoliceData.formaPagamento.formaPagamento,
+              parcelas: apoliceData.formaPagamento.parcelas,
+              vencimentoPrimeiraParcela: apoliceData.formaPagamento.vencimentoPrimeiraParcela instanceof Date
+                ? apoliceData.formaPagamento.vencimentoPrimeiraParcela
+                : new Date(apoliceData.formaPagamento.vencimentoPrimeiraParcela).toISOString(),
+              comissaoPercentual: apoliceData.formaPagamento.comissaoPercentual,
+              premioLiquido: apoliceData.formaPagamento.premioLiquido,
+              iofPercentual: apoliceData.formaPagamento.iofPercentual,
+              premioTotal: apoliceData.formaPagamento.premioTotal
+            } : {}
           });
-          this.itensSegurados.push(itemGroup);
-        });
-        
-        console.log(`✅ Carregados ${apoliceData.itensSegurados.length} itens segurados`);
-      } else {
-        console.log('ℹ️ Nenhum item segurado encontrado para esta apólice');
-      }
 
-      // Opcional: Se quiser que seja somente leitura até o usuário clicar em "Editar"
-      // this.apoliceForm.disable();
-    } else {
-      console.error('Apólice não encontrada! Redirecionando para a lista de apólices.');
-      this.router.navigate(['/apolices']); // Redireciona se não encontrar
-    }
+          this.clienteSearchControl.setValue(`${apoliceData.clienteNome}`);
+          
+          if (apoliceData.itensSegurados && Array.isArray(apoliceData.itensSegurados)) {
+            this.itensSegurados.clear();
+            apoliceData.itensSegurados.forEach((item: any) => {
+              const itemGroup = this.createItem(item.produto, item.details);
+              itemGroup.patchValue({
+                id: item.id,
+                produto: item.produto,
+                details: item.details
+              });
+              this.itensSegurados.push(itemGroup);
+            });
+            console.log(`✅ Carregados ${apoliceData.itensSegurados.length} itens segurados`);
+          }
+        } else {
+          this.snackBar.open('Apólice não encontrada!', 'Fechar', { duration: 3000 });
+          this.router.navigate(['/apolices']);
+        }
+      },
+      error: (error) => {
+        console.error('Erro ao carregar apólice:', error);
+        this.snackBar.open('Erro ao carregar apólice!', 'Fechar', { duration: 3000 });
+        this.router.navigate(['/apolices']);
+      }
+    });
   }
 
   // onSubmit: Lida com o envio do formulário, seja para criar ou atualizar uma apólice.
   async onSubmit(): Promise<void> {
     if (this.apoliceForm.valid) {
-      // Pega os valores do formulário.
-      const apoliceData = this.apoliceForm.value as Apolice;
-
-      // Limpa o ID se estiver criando, para o Firestore gerar um novo.
-      if (!this.isEditing) {
-        delete apoliceData.id;
-      }
-
-      // Converte objetos Date de volta para string ISO ou Timestamp antes de salvar no Firestore.
-      // O Firestore aceita objetos Date nativos do JS, mas salva como Timestamp.
-      if (apoliceData.inicioVigencia instanceof Date) {
-        apoliceData.inicioVigencia = Timestamp.fromDate(apoliceData.inicioVigencia);
-      } else if (apoliceData.inicioVigencia && (apoliceData.inicioVigencia as any).toDate) {
-        apoliceData.inicioVigencia = (apoliceData.inicioVigencia as any).toDate();
-      } else {
-        apoliceData.inicioVigencia = null;
-      }
-
-      if (apoliceData.fimVigencia instanceof Date) {
-        apoliceData.fimVigencia = Timestamp.fromDate(apoliceData.fimVigencia);
-      } else if (apoliceData.fimVigencia && (apoliceData.fimVigencia as any).toDate) {
-        apoliceData.fimVigencia = (apoliceData.fimVigencia as any).toDate();
-      } else {
-        apoliceData.fimVigencia = null;
-      }
-
-      if (apoliceData.dataEmissao instanceof Date) {
-        apoliceData.dataEmissao = Timestamp.fromDate(apoliceData.dataEmissao);
-      } else if (apoliceData.dataEmissao && (apoliceData.dataEmissao as any).toDate) {
-        apoliceData.dataEmissao = (apoliceData.dataEmissao as any).toDate();
-      } else {
-        apoliceData.dataEmissao = null;
-      }
-
-      if (apoliceData.formaPagamento.vencimentoPrimeiraParcela) {
-        if (apoliceData.formaPagamento.vencimentoPrimeiraParcela instanceof Date) {
-          apoliceData.formaPagamento.vencimentoPrimeiraParcela = Timestamp.fromDate(apoliceData.formaPagamento.vencimentoPrimeiraParcela);
-        } else if ((apoliceData.formaPagamento.vencimentoPrimeiraParcela as any).toDate) {
-          apoliceData.formaPagamento.vencimentoPrimeiraParcela = (apoliceData.formaPagamento.vencimentoPrimeiraParcela as any).toDate();
-        } else {
-          apoliceData.formaPagamento.vencimentoPrimeiraParcela = null;
-        }
-      }
-
-      if (!this.isEditing) {
-        apoliceData.createdAt = new Date(); // Define a data de criação apenas para novas apólices
-      }
+      const apoliceData = {
+        ...this.apoliceForm.value,
+        itensSegurados: this.itensSegurados.value
+      } as Apolice;
 
       try {
-        const apoliceDataToSave = {
-          ...apoliceData,
-          // 🎓 EXPLICAÇÃO: Converte o FormArray de itens segurados para array normal
-          itemSegurado: this.itensSegurados.value
-        };
-        
-        // Salva a apólice
         if (this.isEditing && this.apoliceId) {
-          // Atualizar apólice existente
-          const apoliceDocRef = doc(this.firestore, `apolices/${this.apoliceId}`);
-          await updateDoc(apoliceDocRef, apoliceDataToSave);
-          console.log('✅ Apólice atualizada com itens segurados');
+          await this.apoliceService.updateApolice(this.apoliceId, apoliceData);
+          this.snackBar.open('Apólice atualizada com sucesso!', 'Fechar', { duration: 3000 });
         } else {
-          // Adicionar nova apólice
-          const apolicesCollection = collection(this.firestore, 'apolices');
-          await addDoc(apolicesCollection, apoliceDataToSave);
-          console.log('✅ Nova apólice criada com itens segurados');
+          await this.apoliceService.createApolice(apoliceData);
+          this.snackBar.open('Nova apólice criada com sucesso!', 'Fechar', { duration: 3000 });
         }
-        this.router.navigate(['/apolices']); // Redireciona para a lista de apólices
+        this.router.navigate(['/apolices']);
       } catch (error) {
         console.error('Erro ao salvar apólice:', error);
-        // Implementar MatSnackBar para feedback ao usuário
+        this.snackBar.open('Erro ao salvar apólice. Tente novamente.', 'Fechar', { duration: 3000 });
       }
     } else {
-      console.warn('Formulário inválido. Verifique os campos.');
-      // Opcional: Marcar todos os campos como "touched" para exibir mensagens de validação
+      this.snackBar.open('Por favor, preencha todos os campos obrigatórios.', 'Fechar', { duration: 3000 });
       this.apoliceForm.markAllAsTouched();
     }
   }

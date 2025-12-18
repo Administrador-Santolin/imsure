@@ -10,7 +10,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
 }
 
 .table-container {
@@ -100,36 +100,83 @@ mat-header-cell {
   }
 }
 
-.filter-panel {
-  margin-bottom: 24px;
-  // Opcional: Remova o background-color padrão do header se quiser um visual mais limpo
-  .mat-expansion-panel-header {
-    background-color: transparent; // Fundo transparente
-    height: auto; // Permite que a altura se ajuste ao conteúdo
-    padding: 8px 16px; // Ajuste o padding para o conteúdo do header
-      .mat-content{
-        align-items: center;
-      }
-  }
+.apolice-list-container {
+  padding: 24px;
 
-  .custom-expansion-header {
+  .header {
     display: flex;
-    align-items: center;
-    // Remova o flex-grow padrão para não ocupar toda a largura se você só quer o ícone
-    // Este `flex-basis` de 0 impede que o conteúdo cresça demais se houver outro conteúdo.
-    // O `flex-shrink` de 0 impede que encolha.
-    // O `flex-grow` de 0 impede que cresça para preencher espaço.
-    // Isso em conjunto faz com que o header ocupe apenas o espaço necessário para o ícone e texto.
-    flex: 0 0 auto;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 24px;
 
-    .header-text {
-        margin-left: 8px; // Espaço entre o ícone e o texto
-        font-weight: bold;
-        color: #3f51b5; // Cor que você já usa para títulos
+    .header-actions {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+
+      .search-field {
+        width: 300px;
+      }
+
+      button[mat-icon-button] {
+        position: relative;
+
+        &.active {
+          background-color: rgba(66, 139, 202, 0.1);
+        }
+
+        .filter-badge {
+          position: absolute;
+          top: -4px;
+          right: -4px;
+          background-color: #f44336;
+          color: white;
+          border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          font-size: 11px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
     }
   }
 
-  // Se você quiser que o header pareça apenas o ícone, você pode esconder o texto do header por padrão
-  // e exibi-lo apenas quando o painel estiver expandido ou em hover.
-  // Neste exemplo, o texto estará sempre visível ao lado do ícone.
+  .active-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 8px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+  }
+
+  .filter-indicator {
+    margin-left: auto;
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+  }
+
+  .date-menu-content {
+    padding: 16px;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .table-container {
+    margin-top: 16px;
+  }
+}
+
+::ng-deep {
+  .mat-mdc-menu-item {
+    &.selected {
+      background-color: rgba(66, 139, 202, 0.1);
+    }
+  }
 }

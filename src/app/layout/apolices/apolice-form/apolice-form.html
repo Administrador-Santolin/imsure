@@ -193,6 +193,12 @@
           <mat-icon>attach_money</mat-icon>
           Informações Financeiras
         </mat-panel-title>
+
+        <div class="form-actions" style="margin: 1rem 0;">
+          <button mat-raised-button color="primary" type="button" (click)="addItem()">
+            Adicionar item segurado
+          </button>
+        </div>
       </mat-expansion-panel-header>
 
       <section class="form-grid">
@@ -304,11 +310,7 @@
       </section>
     </mat-expansion-panel>
 
-    <div class="form-actions" style="margin: 1rem 0;">
-      <button mat-raised-button color="primary" type="button" (click)="addItem()">
-        Adicionar item segurado
-      </button>
-    </div>
+
 
     <!-- Lista de itens segurados -->
     @for ( item of itensSegurados.controls; let i = $index; track item.value?.id) {
@@ -316,11 +318,11 @@
       <mat-expansion-panel-header>
         <mat-panel-title>
           <mat-icon>assignment</mat-icon>
-          Item Segurado #{{ i + 1 }}
+          {{ item.get('produto')?.value }} - {{ i+1 }}
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      @switch (item.get('produto')?.value) {
+      @switch (apoliceForm.get('produto')?.value) {
       @case ('Automóvel') {
       <app-automovel formControlName="details" />
       }

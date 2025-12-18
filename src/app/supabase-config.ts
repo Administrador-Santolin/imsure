@@ -1,0 +1,4 @@
+export const supabaseConfig = {
+  supabaseUrl: 'https://kltirhronhxmxrqddwny.supabase.co',
+  supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtsdGlyaHJvbmh4bXhycWRkd255Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2OTQ4MTcsImV4cCI6MjA4MDI3MDgxN30.Yze1LcycuGlr4Ou-Du2KwzCEHH0TIVWCdulakN_e7tE'
+}

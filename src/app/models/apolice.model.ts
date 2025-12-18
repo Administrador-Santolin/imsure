@@ -59,7 +59,30 @@ export interface LocaisDetails {
     bairro: string;
     cidade: string;
     estado: string;
-  }
-  
+}
 
+export enum SituacaoApolice {
+    ATIVA = 'Ativa',
+    CANCELADA = 'Cancelada',
+    RENOVADA = 'Renovada',
+    VENCIDA = 'Vencida',
+    NAO_RENOVADA = 'Não Renovada',
+    PERDA_TOTAL = 'Perda Total',
+    PENDENTE = 'Pendente'
+}
+
+export enum tipoNegocio {
+    NOVO = 'Novo',
+    RENOVACAO = 'Renovação',
+    RENOVACAO_OUTRA = 'Renovação Outra'
+}
+
+// 🎓 EXPLICAÇÃO: Helper functions para converter Enum para Array
+export function getEnumValues(enumObj: any): string[] {
+    return Object.values(enumObj);
+}
+
+export function getEnumKeys(enumObj: any): string[] {
+    return Object.keys(enumObj);
+}
 

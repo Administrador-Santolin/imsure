@@ -2,11 +2,6 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChang
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { getAuth, provideAuth } from '@angular/fire/auth';
-import { firebaseConfig } from './firebase-Credentials';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { provideHttpClient } from '@angular/common/http';
 import { provideNgxMask } from 'ngx-mask';
@@ -26,9 +21,6 @@ export const appConfig: ApplicationConfig = {
         monthYearA11yLabel: 'MMMM YYYY'
       },
     }),
-    provideFirebaseApp(() => initializeApp(firebaseConfig)),
-    provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
     provideRouter(routes),
     provideHttpClient(),
     provideNgxMask()

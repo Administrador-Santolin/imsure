@@ -20,7 +20,7 @@
             [displayWith]="displayCliente">
             @for (cliente of filteredClientes$ | async; track cliente.id) {
             <mat-option [value]="cliente">
-                {{ cliente.nome }} - {{ cliente.cpf || 'CPF não informado' }}
+                {{ cliente.nome }} - {{ cliente.cpf | cpf }}
             </mat-option>
             }
             @if ( !(filteredClientes$ | async)?.length && searchControl.value ) {
@@ -34,10 +34,10 @@
     <button mat-button (click)="onLogout()" [disabled]="isLoading()">
         @if (!isLoading()) {
         <mat-icon>logout<span>Logout</span></mat-icon>
-        
+
         } @else {
         <mat-icon>hourglass_empty<span>Saindo...</span></mat-icon>
-        
+
         }
     </button>
 </mat-toolbar>
@@ -45,21 +45,30 @@
 <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #sidenav mode="side" class="sidenav">
         <mat-nav-list>
-            <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link">
-                <mat-icon>analytics</mat-icon> Dashboard
+            @for (item of menuItems; track item.route) {
+            <a mat-list-item [routerLink]="item.route" routerLinkActive="active-link" (click)="toggleNestedMenu(item)">
+                <mat-icon>{{ item.icon }}</mat-icon> {{ item.label }}
+                @if (item.subMenu) {
+                    <span matListItemMeta>
+                        @if (nestedMenuOpen()) {
+                        <mat-icon>expand_less</mat-icon>
+                        } @else {
+                            <mat-icon>expand_more</mat-icon>
+                        }
+                    </span>
+                }
             </a>
-            <a mat-list-item routerLink="/clientes" routerLinkActive="active-link">
-                <mat-icon>people</mat-icon> Clientes
-            </a>
-            <a mat-list-item routerLink="/apolices" routerLinkActive="active-link">
-                <mat-icon>description</mat-icon> Apólices
-            </a>
-            <a mat-list-item routerLink="/relatorios" routerLinkActive="active-link">
-                <mat-icon>bar_chart</mat-icon> Relatórios
-            </a>
-            <a mat-list-item routerLink="/multi-calculo" routerLinkActive="active-link">
-                <mat-icon>calculate</mat-icon> Multi Cálculo
-            </a>
+
+            @if (item.subMenu && nestedMenuOpen()) {
+            <mat-nav-list class="subMenu">
+                @for (child of item.children; track child.route) {
+                <a mat-list-item [routerLink]="child.route" routerLinkActive="active-link">
+                    <mat-icon>{{ child.icon }}</mat-icon> {{ child.label }}
+                </a>
+                }
+            </mat-nav-list>
+            }
+            }
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content class="sidenav-content">

@@ -3,14 +3,16 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { Observable, combineLatest, debounceTime, startWith, switchMap } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 // Angular Material
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -18,64 +20,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { Firestore, collection, query, orderBy, limit, where, collectionData, Timestamp, doc, deleteDoc } from '@angular/fire/firestore';
-
-// Interface e Conversor (coloque aqui se não estiver em arquivo separado)
-interface Apolice {
-  id?: string;
-  clienteId: string;
-  clienteNome: string;
-  apolice: string;
-  proposta: string;
-  seguradora: string;
-  produto: string;
-  subTipoDocumento: string;
-  inicioVigencia: Date | Timestamp | null;
-  fimVigencia: Date | Timestamp | null;
-  dataEmissao: Date | Timestamp | null;
-  tipoSeguro: string;
-  situacao: string;
-  createdAt?: Date | Timestamp;
-  informacoesFinanceiras: {
-    formaPagamento: string;
-    parcelas: number | null;
-    vencimentoPrimeiraParcela: Date | Timestamp | null;
-    comissaoPercentual: number | null;
-    premioLiquido: number | null;
-    iofPercentual: number | null;
-    premioTotal: number | null;
-  };
-  itemSegurado: {
-    descricao: string;
-  };
-}
-
-const apoliceConverter = {
-  toFirestore: (apolice: Apolice) => {
-    const { id, ...data } = apolice;
-    return data;
-  },
-  fromFirestore: (snapshot: any, options: any) => {
-    const data = snapshot.data(options);
-    const convertTimestampToDate = (ts: any): Date | null => {
-      return ts instanceof Timestamp ? ts.toDate() : (ts instanceof Date ? ts : null);
-    };
-
-    return {
-      id: snapshot.id,
-      ...data,
-      inicioVigencia: convertTimestampToDate(data.inicioVigencia),
-      fimVigencia: convertTimestampToDate(data.fimVigencia),
-      dataEmissao: convertTimestampToDate(data.dataEmissao),
-      informacoesFinanceiras: {
-        ...data.informacoesFinanceiras,
-        vencimentoPrimeiraParcela: convertTimestampToDate(data.informacoesFinanceiras?.vencimentoPrimeiraParcela),
-      },
-      createdAt: convertTimestampToDate(data.createdAt),
-    } as Apolice;
-  }
-};
+import { Apolice } from '../../models/apolice.model';
+import { ApoliceService } from '../../services/apolice.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-apolices',
@@ -95,7 +44,11 @@ const apoliceConverter = {
     MatIconModule,
     MatExpansionModule,
     RouterModule,
-    MatMenuModule
+    MatMenuModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatDividerModule,
+    MatSnackBarModule
   ],
   templateUrl: './apolices.html',
   styleUrl: './apolices.scss'
@@ -115,20 +68,9 @@ export class Apolices implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   private router = inject(Router);
-  private firestore = inject(Firestore);
+  private apoliceService = inject(ApoliceService);
+  private snackBar = inject(MatSnackBar);
   private fb = inject(FormBuilder);
-  private convertToDate(value: any): Date | null {
-    if (!value) return null;
-    if (value instanceof Date) return value;
-    if (value && typeof value.toDate === 'function') {
-      return value.toDate();
-    }
-    if (typeof value === 'string' || typeof value === 'number') {
-      return new Date(value);
-    }
-    console.warn('⚠️ Tipo de data desconhecido:', value);
-    return null;
-  }
 
   constructor(
   ) {
@@ -158,10 +100,10 @@ export class Apolices implements OnInit, AfterViewInit {
     // Agora `this.paginator` e `this.sort` estão garantidos a serem inicializados
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-  
+
     // 🎓 EXPLICAÇÃO: Vamos ver se o valueChanges está disparando
     console.log('🚀 ngAfterViewInit iniciado');
-  
+
     // Mova a lógica do combineLatest para cá
     combineLatest([
       this.filterForm.valueChanges.pipe(startWith(this.filterForm.value)),
@@ -176,109 +118,68 @@ export class Apolices implements OnInit, AfterViewInit {
         console.log('🔤 Ordenação:', sort);
         return this.getFilteredApolices(filters, page, sort);
       })
-    ).subscribe(apolices => {
-      // 🎓 EXPLICAÇÃO: Vamos ver quantas apólices foram retornadas
-      console.log(`✅ ${apolices.length} apólices recebidas do Firestore`);
-      this.dataSource.data = apolices;
-      this.apolicesLength = apolices.length;
+    ).subscribe({
+      next: (apolices) => {
+        console.log(`✅ ${apolices.length} apólices recebidas do Supabase`);
+        this.dataSource.data = apolices;
+        this.apolicesLength = apolices.length;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar apólices:', error);
+        this.snackBar.open('Erro ao carregar apólices', 'Fechar', { duration: 3000 });
+      }
     });
   }
 
-  getFilteredApolices(filters: any, page: any, sort: any): Observable<Apolice[]> {
-    const apolicesCollectionRef = collection(this.firestore, 'apolices').withConverter(apoliceConverter);
-  
-    // 🎓 EXPLICAÇÃO: Vamos remover os filtros do Firestore e só ordenar
-    const queryConstraints = [];
-    const activeSortField = sort.active || 'createdAt';
-    const sortDirection = sort.direction || 'desc';
-    queryConstraints.push(orderBy(activeSortField, sortDirection));
-    queryConstraints.push(limit(100));
-  
-    // 🎓 EXPLICAÇÃO: Removemos os filtros daqui (eram linhas 170-192)
-    // Agora vamos filtrar no front, depois de receber os dados
-  
-    const firestoreQuery = query(apolicesCollectionRef, ...queryConstraints);
-  
-    return collectionData(firestoreQuery).pipe(
-      map(apolices => {
-        console.log('📊 Apólices do Firestore:', apolices);
-        console.log('🔍 Filtros aplicados:', filters);
-        
-        let filteredData = apolices;
-  
-        // 🎓 EXPLICAÇÃO: AGORA fazemos os filtros aqui no front
-        if (filters.tipoSeguro) {
-          const searchTerm = filters.tipoSeguro.toLowerCase().trim();
-          filteredData = filteredData.filter(apolice =>
-            apolice.tipoSeguro?.toLowerCase().trim() === searchTerm
-          );
-          console.log(`🔎 Filtrou por tipoSeguro '${filters.tipoSeguro}': ${filteredData.length} restantes`);
-        }
-  
-        if (filters.seguradora) {
-          const searchTerm = filters.seguradora.toLowerCase().trim();
-          filteredData = filteredData.filter(apolice =>
-            apolice.seguradora?.toLowerCase().trim() === searchTerm
-          );
-          console.log(`🔎 Filtrou por seguradora '${filters.seguradora}': ${filteredData.length} restantes`);
-        }
-  
-        if (filters.produto) {
-          const searchTerm = filters.produto.toLowerCase().trim();
-          filteredData = filteredData.filter(apolice =>
-            apolice.produto?.toLowerCase().trim() === searchTerm
-          );
-          console.log(`🔎 Filtrou por produto '${filters.produto}': ${filteredData.length} restantes`);
-        }
-  
-        if (filters.situacao) {
-          const searchTerm = filters.situacao.toLowerCase().trim();
-          filteredData = filteredData.filter(apolice =>
-            apolice.situacao?.toLowerCase().trim() === searchTerm
-          );
-          console.log(`🔎 Filtrou por situação '${filters.situacao}': ${filteredData.length} restantes`);
-        }
-  
-        // 🎓 EXPLICAÇÃO: Filtros de data
-        if (filters.dataEmissaoStart && filters.dataEmissaoEnd) {
-          filteredData = filteredData.filter(apolice => {
-            if (!apolice.dataEmissao) return false;
-            const dataEmissao = this.convertToDate(apolice.dataEmissao);
-            if(!dataEmissao) return false;
-            return dataEmissao >= filters.dataEmissaoStart && 
-                   dataEmissao <= filters.dataEmissaoEnd;
-          });
-          console.log(`🔎 Filtrou por data emissão: ${filteredData.length} restantes`);
-        }
-  
-        if (filters.inicioVigenciaStart && filters.inicioVigenciaEnd) {
-          filteredData = filteredData.filter(apolice => {
-            if (!apolice.inicioVigencia) return false;
-            const inicioVigencia = this.convertToDate(apolice.inicioVigencia);
-            if(!inicioVigencia) return false;
-            return inicioVigencia >= filters.inicioVigenciaStart && 
-                   inicioVigencia <= filters.inicioVigenciaEnd;
-          });
-          console.log(`🔎 Filtrou por início vigência: ${filteredData.length} restantes`);
-        }
-  
-        if (filters.searchText) {
-          const searchTerm = filters.searchText.toLowerCase();
-          filteredData = filteredData.filter(apolice =>
-            apolice.apolice.toLowerCase().includes(searchTerm) ||
-            apolice.clienteNome.toLowerCase().includes(searchTerm) ||
-            apolice.seguradora.toLowerCase().includes(searchTerm) ||
-            apolice.produto.toLowerCase().includes(searchTerm) ||
-            (apolice.subTipoDocumento && apolice.subTipoDocumento.toLowerCase().includes(searchTerm)) ||
-            (apolice.proposta && apolice.proposta.toLowerCase().includes(searchTerm))
-          );
-          console.log(`🔎 Filtrou por busca geral '${filters.searchText}': ${filteredData.length} restantes`);
-        }
-  
-        console.log(`✅ ${filteredData.length} apólices após TODOS os filtros`);
-        return filteredData;
+  applyFilter(field: string, value: string): void {
+    this.filterForm.patchValue({ [field]: value }, { emitEvent: true });
+  }
+
+  clearDateFilter(type: 'dataEmissao' | 'vigencia'): void {
+    if (type === 'dataEmissao') {
+      this.filterForm.patchValue({
+        dataEmissaoStart: null,
+        dataEmissaoEnd: null
+      });
+    } else {
+      this.filterForm.patchValue({
+        inicioVigenciaStart: null,
+        inicioVigenciaEnd: null
       })
+    }
+  }
+
+  hasActiveFilters(): boolean {
+    const formValue = this.filterForm.value;
+    return !!(
+      formValue.situacao ||
+      formValue.seguradora ||
+      formValue.tipoSeguro ||
+      formValue.produto ||
+      formValue.dataEmissaoStart ||
+      formValue.dataEmissaoEnd ||
+      formValue.inicioVigenciaStart ||
+      formValue.inicioVigenciaEnd ||
+      formValue.searchText
     );
+  }
+
+  getActiveFiltersCount(): number {
+    let count = 0;
+    const formValue = this.filterForm.value;
+    if (formValue.situacao) count++;
+    if (formValue.seguradora) count++;
+    if (formValue.tipoSeguro) count++;
+    if (formValue.produto) count++;
+    if (formValue.dataEmissaoStart || formValue.dataEmissaoEnd) count++;
+    if (formValue.inicioVigenciaStart || formValue.inicioVigenciaEnd) count++;
+    if (formValue.searchText) count++;
+    return count;
+  }
+
+  getFilteredApolices(filters: any, page: any, sort: any): Observable<Apolice[]> {
+    // 🎓 EXPLICAÇÃO: O serviço já aplica os filtros no Supabase (server-side)
+    return this.apoliceService.getApolices(filters, sort);
   }
 
   clearFilters(): void {
@@ -306,10 +207,13 @@ export class Apolices implements OnInit, AfterViewInit {
   async deleteApolice(id: string | undefined): Promise<void> {
     if (id && confirm('Tem certeza que deseja excluir esta apólice?')) {
       try {
-        await deleteDoc(doc(this.firestore, `apolices/${id}`));
-        console.log('Apólice excluída com sucesso!');
+        await this.apoliceService.deleteApolice(id);
+        this.snackBar.open('Apólice excluída com sucesso!', 'Fechar', { duration: 3000 });
+        // Recarrega os dados
+        this.filterForm.patchValue(this.filterForm.value);
       } catch (error) {
         console.error('Erro ao excluir apólice:', error);
+        this.snackBar.open('Erro ao excluir apólice', 'Fechar', { duration: 3000 });
       }
     }
   }

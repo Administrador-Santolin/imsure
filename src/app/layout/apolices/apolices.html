@@ -1,101 +1,230 @@
 <div class="apolice-list-container">
-  <div class="header">
-    <h2>Lista de Apólices</h2>
-    <button mat-raised-button color="primary" routerLink="./novo">
-      <mat-icon>add</mat-icon> Adicionar Nova Apólice
-    </button>
-  </div>
-
-  <mat-accordion class="filter-panel">
-    <mat-expansion-panel #filterExpansionPanel class="custom-expansion-panel">
-      <mat-expansion-panel-header class="custom-expansion-header">
-        <button mat-icon-button (click)="filterExpansionPanel.toggle(); $event.stopPropagation()"
-          aria-label="Toggle filtros">
-          <mat-icon>{{ filterExpansionPanel.expanded ? 'filter_alt_off' : 'filter_alt' }}</mat-icon>
+  <form [formGroup]="filterForm">
+    <div class="header">
+      <h2>Lista de Apólices</h2>
+      <div class="header-actions">
+        <mat-form-field class="search-field">
+          <mat-label>Busca Geral</mat-label>
+          <input matInput formControlName="searchText" placeholder="Nome, Apólice, Proposta...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Filtros" [class.active]="hasActiveFilters()">
+          <mat-icon>filter_alt</mat-icon>
+          @if (hasActiveFilters()) {
+          <span class="filter-badge">{{ getActiveFiltersCount() }}</span>
+          }
         </button>
-        <span class="header-text">Filtros de Busca</span>
-      </mat-expansion-panel-header>
 
-      <form [formGroup]="filterForm" class="filter-form">
-        <mat-form-field appearance="outline">
-          <mat-label>Tipo de Seguro</mat-label>
-          <mat-select formControlName="tipoSeguro">
-            <mat-option value="">-- Todos --</mat-option>
-            @for (option of tipoSeguroOptions; track option) {
-              <mat-option [value]="option">{{ option }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+        <button mat-raised-button color="primary" routerLink="./novo">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Seguradora</mat-label>
-          <mat-select formControlName="seguradora">
-            <mat-option value="">-- Todas --</mat-option>
-            @for (option of seguradoraOptions; track option) {
-            <mat-option [value]="option">{{ option }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+    <!-- Menu de Filtros -->
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item [matMenuTriggerFor]="situacaoMenu">
+        <mat-icon>flag</mat-icon>
+        <span>Situação</span>
+        @if (filterForm.get('situacao')?.value) {
+        <span class="filter-indicator">{{ filterForm.get('situacao')?.value }}</span>
+        }
+      </button>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Produto</mat-label>
-          <mat-select formControlName="produto">
-            <mat-option value="">-- Todos --</mat-option>
-            @for (option of produtoOptions ; track option) {
-            <mat-option [value]="option">{{ option }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+      <button mat-menu-item [matMenuTriggerFor]="seguradoraMenu">
+        <mat-icon>business</mat-icon>
+        <span>Seguradora</span>
+        @if (filterForm.get('seguradora')?.value) {
+        <span class="filter-indicator">{{ filterForm.get('seguradora')?.value }}</span>
+        }
+      </button>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Situação do Seguro</mat-label>
-          <mat-select formControlName="situacao">
-            <mat-option value="">-- Todas --</mat-option>
-            @for (option of situacaoOptions; track option) {
-            <mat-option [value]="option">{{ option }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+      <button mat-menu-item [matMenuTriggerFor]="tipoSeguroMenu">
+        <mat-icon>category</mat-icon>
+        <span>Tipo de Seguro</span>
+        @if (filterForm.get('tipoSeguro')?.value) {
+        <span class="filter-indicator">{{ filterForm.get('tipoSeguro')?.value }}</span>
+        }
+      </button>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Início Vigência (De)</mat-label>
-          <input matInput [matDatepicker]="inicioVigenciaPickerStart" formControlName="inicioVigenciaStart">
-          <mat-datepicker-toggle matSuffix [for]="inicioVigenciaPickerStart"></mat-datepicker-toggle>
-          <mat-datepicker #inicioVigenciaPickerStart></mat-datepicker>
-        </mat-form-field>
+      <button mat-menu-item [matMenuTriggerFor]="produtoMenu">
+        <mat-icon>inventory</mat-icon>
+        <span>Produto</span>
+        @if (filterForm.get('produto')?.value) {
+        <span class="filter-indicator">{{ filterForm.get('produto')?.value }}</span>
+        }
+      </button>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Início Vigência (Até)</mat-label>
-          <input matInput [matDatepicker]="inicioVigenciaPickerEnd" formControlName="inicioVigenciaEnd">
-          <mat-datepicker-toggle matSuffix [for]="inicioVigenciaPickerEnd"></mat-datepicker-toggle>
-          <mat-datepicker #inicioVigenciaPickerEnd></mat-datepicker>
-        </mat-form-field>
+      <mat-divider></mat-divider>
 
+      <button mat-menu-item [matMenuTriggerFor]="dataEmissaoMenu">
+        <mat-icon>calendar_today</mat-icon>
+        <span>Data de Emissão</span>
+        @if (filterForm.get('dataEmissaoStart')?.value || filterForm.get('dataEmissaoEnd')?.value) {
+        <span class="filter-indicator">Ativo</span>
+        }
+      </button>
+
+      <button mat-menu-item [matMenuTriggerFor]="vigenciaMenu">
+        <mat-icon>event</mat-icon>
+        <span>Início de Vigência</span>
+        @if (filterForm.get('inicioVigenciaStart')?.value || filterForm.get('inicioVigenciaEnd')?.value) {
+        <span class="filter-indicator">Ativo</span>
+        }
+      </button>
+
+      <mat-divider></mat-divider>
+
+      <button mat-menu-item (click)="clearFilters()">
+        <mat-icon>restart_alt</mat-icon>
+        <span>Limpar Filtros</span>
+      </button>
+    </mat-menu>
+
+    <!-- Submenu Situação -->
+    <mat-menu #situacaoMenu="matMenu">
+      <button mat-menu-item (click)="applyFilter('situacao', '')">
+        <mat-icon>clear</mat-icon>
+        <span>Todas</span>
+      </button>
+      <mat-divider></mat-divider>
+      @for (option of situacaoOptions; track option) {
+      <button mat-menu-item (click)="applyFilter('situacao', option)"
+        [class.selected]="filterForm.get('situacao')?.value === option">
+        <mat-icon>{{ filterForm.get('situacao')?.value === option ? 'check' : '' }}</mat-icon>
+        <span>{{ option }}</span>
+      </button>
+      }
+    </mat-menu>
+
+    <!-- Submenu Seguradora -->
+    <mat-menu #seguradoraMenu="matMenu">
+      <button mat-menu-item (click)="applyFilter('seguradora', '')">
+        <mat-icon>clear</mat-icon>
+        <span>Todas</span>
+      </button>
+      <mat-divider></mat-divider>
+      @for (option of seguradoraOptions; track option) {
+      <button mat-menu-item (click)="applyFilter('seguradora', option)"
+        [class.selected]="filterForm.get('seguradora')?.value === option">
+        <mat-icon>{{ filterForm.get('seguradora')?.value === option ? 'check' : '' }}</mat-icon>
+        <span>{{ option }}</span>
+      </button>
+      }
+    </mat-menu>
+
+    <!-- Submenu Tipo de Seguro -->
+    <mat-menu #tipoSeguroMenu="matMenu">
+      <button mat-menu-item (click)="applyFilter('tipoSeguro', '')">
+        <mat-icon>clear</mat-icon>
+        <span>Todos</span>
+      </button>
+      <mat-divider></mat-divider>
+      @for (option of tipoSeguroOptions; track option) {
+      <button mat-menu-item (click)="applyFilter('tipoSeguro', option)"
+        [class.selected]="filterForm.get('tipoSeguro')?.value === option">
+        <mat-icon>{{ filterForm.get('tipoSeguro')?.value === option ? 'check' : '' }}</mat-icon>
+        <span>{{ option }}</span>
+      </button>
+      }
+    </mat-menu>
+
+    <!-- Submenu Produto -->
+    <mat-menu #produtoMenu="matMenu">
+      <button mat-menu-item (click)="applyFilter('produto', '')">
+        <mat-icon>clear</mat-icon>
+        <span>Todos</span>
+      </button>
+      <mat-divider></mat-divider>
+      @for (option of produtoOptions; track option) {
+      <button mat-menu-item (click)="applyFilter('produto', option)"
+        [class.selected]="filterForm.get('produto')?.value === option">
+        <mat-icon>{{ filterForm.get('produto')?.value === option ? 'check' : '' }}</mat-icon>
+        <span>{{ option }}</span>
+      </button>
+      }
+    </mat-menu>
+
+    <!-- Submenu Data de Emissão -->
+    <mat-menu #dataEmissaoMenu="matMenu" class="date-menu">
+      <div class="date-menu-content" [formGroup]="filterForm">
         <mat-form-field appearance="outline">
-          <mat-label>Data Emissão (De)</mat-label>
+          <mat-label>Data Início</mat-label>
           <input matInput [matDatepicker]="dataEmissaoPickerStart" formControlName="dataEmissaoStart">
           <mat-datepicker-toggle matSuffix [for]="dataEmissaoPickerStart"></mat-datepicker-toggle>
           <mat-datepicker #dataEmissaoPickerStart></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Data Emissão (Até)</mat-label>
+          <mat-label>Data Fim</mat-label>
           <input matInput [matDatepicker]="dataEmissaoPickerEnd" formControlName="dataEmissaoEnd">
           <mat-datepicker-toggle matSuffix [for]="dataEmissaoPickerEnd"></mat-datepicker-toggle>
           <mat-datepicker #dataEmissaoPickerEnd></mat-datepicker>
         </mat-form-field>
+      </div>
+    </mat-menu>
 
+    <!-- Submenu Vigência -->
+    <mat-menu #vigenciaMenu="matMenu" class="date-menu">
+      <div class="date-menu-content" [formGroup]="filterForm">
         <mat-form-field appearance="outline">
-          <mat-label>Busca Geral</mat-label>
-          <input matInput formControlName="searchText" placeholder="Nome, Apólice, Proposta...">
+          <mat-label>Data Início</mat-label>
+          <input matInput [matDatepicker]="inicioVigenciaPickerStart" formControlName="inicioVigenciaStart">
+          <mat-datepicker-toggle matSuffix [for]="inicioVigenciaPickerStart"></mat-datepicker-toggle>
+          <mat-datepicker #inicioVigenciaPickerStart></mat-datepicker>
         </mat-form-field>
 
-        <button mat-raised-button color="warn" (click)="clearFilters()">
-          <mat-icon>clear</mat-icon> Limpar Filtros
-        </button>
-      </form>
-    </mat-expansion-panel>
-  </mat-accordion>
+        <mat-form-field appearance="outline">
+          <mat-label>Data Fim</mat-label>
+          <input matInput [matDatepicker]="inicioVigenciaPickerEnd" formControlName="inicioVigenciaEnd">
+          <mat-datepicker-toggle matSuffix [for]="inicioVigenciaPickerEnd"></mat-datepicker-toggle>
+          <mat-datepicker #inicioVigenciaPickerEnd></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </mat-menu>
+
+    <!-- Chips de filtros ativos -->
+    @if (hasActiveFilters()) {
+    <div class="active-filters">
+      @if (filterForm.get('situacao')?.value) {
+      <mat-chip (removed)="applyFilter('situacao', '')">
+        Situação: {{ filterForm.get('situacao')?.value }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      }
+      @if (filterForm.get('seguradora')?.value) {
+      <mat-chip (removed)="applyFilter('seguradora', '')">
+        Seguradora: {{ filterForm.get('seguradora')?.value }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      }
+      @if (filterForm.get('tipoSeguro')?.value) {
+      <mat-chip (removed)="applyFilter('tipoSeguro', '')">
+        Tipo: {{ filterForm.get('tipoSeguro')?.value }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      }
+      @if (filterForm.get('produto')?.value) {
+      <mat-chip (removed)="applyFilter('produto', '')">
+        Produto: {{ filterForm.get('produto')?.value }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      }
+      @if (filterForm.get('dataEmissaoStart')?.value || filterForm.get('dataEmissaoEnd')?.value) {
+      <mat-chip (removed)="clearDateFilter('dataEmissao')">
+        Data Emissão
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      }
+      @if (filterForm.get('inicioVigenciaStart')?.value || filterForm.get('inicioVigenciaEnd')?.value) {
+      <mat-chip (removed)="clearDateFilter('vigencia')">
+        Vigência
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      }
+    </div>
+    }
+  </form>
 
   <div class="mat-elevation-z2 table-container">
     <mat-table [dataSource]="dataSource" matSort>

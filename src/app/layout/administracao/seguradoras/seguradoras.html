@@ -1,0 +1,109 @@
+<div class="page-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <div class="header-content">
+          <div class="title-section">
+            <mat-icon>business</mat-icon>
+            <h2>Seguradoras</h2>
+          </div>
+          <button mat-raised-button color="primary" routerLink="novo">
+            <mat-icon>add</mat-icon>
+            Nova Seguradora
+          </button>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (isLoading) {
+        <div class="loading-container">
+          <mat-spinner diameter="50"></mat-spinner>
+          <p>Carregando seguradoras...</p>
+        </div>
+      } @else {
+        @if (dataSource.data.length === 0) {
+          <div class="empty-state">
+            <mat-icon>business</mat-icon>
+            <h3>Nenhuma seguradora cadastrada</h3>
+            <p>Comece adicionando sua primeira seguradora</p>
+            <button mat-raised-button color="primary" routerLink="nova">
+              <mat-icon>add</mat-icon>
+              Adicionar Seguradora
+            </button>
+          </div>
+        } @else {
+          <table mat-table [dataSource]="dataSource" class="seguradoras-table">
+            <!-- Coluna Nome -->
+            <ng-container matColumnDef="nome">
+              <th mat-header-cell *matHeaderCellDef>Nome</th>
+              <td mat-cell *matCellDef="let seguradora">
+                <strong>{{ seguradora.nome }}</strong>
+              </td>
+            </ng-container>
+
+            <!-- Coluna CNPJ -->
+            <ng-container matColumnDef="cnpj">
+              <th mat-header-cell *matHeaderCellDef>CNPJ</th>
+              <td mat-cell *matCellDef="let seguradora">
+                {{ seguradora.cnpj | mascara: '00.000.000/0000-00' }}
+              </td>
+            </ng-container>
+
+            <!-- Coluna Contato -->
+            <ng-container matColumnDef="contato">
+              <th mat-header-cell *matHeaderCellDef>Contato</th>
+              <td mat-cell *matCellDef="let seguradora">
+                <div class="contato-info">
+                  @if (seguradora.contatoComercial) {
+                    <div>{{ seguradora.contatoComercial }}</div>
+                  }
+                  @if (seguradora.telefone) {
+                    <div class="secondary-text">{{ seguradora.telefone | mascara: 'telefone' }}</div>
+                  }
+                  @if (seguradora.email) {
+                    <div class="secondary-text">{{ seguradora.email }}</div>
+                  }
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Coluna Status -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let seguradora">
+                <mat-chip 
+                  [class.status-ativa]="seguradora.ativa"
+                  [class.status-inativa]="!seguradora.ativa"
+                  (click)="toggleStatus(seguradora)">
+                  {{ seguradora.ativa ? 'Ativa' : 'Inativa' }}
+                </mat-chip>
+              </td>
+            </ng-container>
+
+            <!-- Coluna Ações -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Ações</th>
+              <td mat-cell *matCellDef="let seguradora">
+                <button mat-icon-button 
+                        [routerLink]="[seguradora.id]" 
+                        matTooltip="Editar">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button 
+                        color="warn"
+                        (click)="onDelete(seguradora.id)"
+                        matTooltip="Excluir">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        }
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

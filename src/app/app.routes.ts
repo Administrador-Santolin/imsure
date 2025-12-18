@@ -3,6 +3,7 @@ import { Login } from './login/login';
 import { authGuard } from './auth-guard';
 import { Relatorios } from './layout/relatorios/relatorios';
 import { Layout } from './layout/layout';
+import { Administracao } from './layout/administracao/administracao';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -28,12 +29,19 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./layout/apolices/apolices.routes').then((m) => m.APOLICES_ROUTES),
       },
-      { path: 'relatorios', canActivate: [authGuard], component: Relatorios },
+      { path: 'relatorios', component: Relatorios },
       {
         path: 'multi-calculo',
         loadChildren: () =>
           import('./layout/multi-calculo/multi-calculo.routes').then(
             (m) => m.MULTI_CALCULO_ROUTES
+          ),
+      },
+      {
+        path: 'administracao',
+        loadChildren: () =>
+          import('./layout/administracao/administracao.routes').then(
+            (c) => c.ADMINISTRACAO_ROUTES
           ),
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
